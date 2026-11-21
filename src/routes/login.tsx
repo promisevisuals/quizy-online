@@ -84,7 +84,7 @@ function Login() {
         const { data, error: signUpError } = await supabase.auth.signUp({
           email: email.trim(),
           password,
-          options: { data: { display_name: name.trim() || "Explorer" }, emailRedirectTo: `${window.location.origin}/` },
+          options: { data: { display_name: name.trim() || "Explorer", signup_app: "quizy" }, emailRedirectTo: `${window.location.origin}/` },
         });
         if (signUpError) throw signUpError;
         if (!data.session) {

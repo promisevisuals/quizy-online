@@ -10,6 +10,7 @@ import {
   Flame,
   Heart,
   Lightbulb,
+  Medal,
   Shield,
   Swords,
   Tent,
@@ -21,7 +22,7 @@ import {
 } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { acknowledgeMessage, listMessages, signOut, useQuizSession, type PublicFlags, type QuizMessage } from "@/lib/quiz/cloud";
+import { acknowledgeMessage, listMessages, signOut, trackVisit, useQuizSession, type PublicFlags, type QuizMessage } from "@/lib/quiz/cloud";
 import {
   ADVANCED_MODES,
   BADGES,
@@ -30,6 +31,7 @@ import {
   speak,
   stopSpeak,
   todayKey,
+  weekKey,
   type Age,
   type Difficulty,
   type PlayItem,
@@ -39,6 +41,7 @@ import { BattleRoom } from "@/components/quiz/BattleRoom";
 import { CloudSync } from "@/components/quiz/CloudSync";
 import { CommandCenter } from "@/components/quiz/CommandCenter";
 import { HelpMap } from "@/components/quiz/HelpMap";
+import { Weekly } from "@/components/quiz/WeeklyChallenge";
 import { BannerCreatures, JungleIntro, JungleLife } from "@/components/quiz/JungleLife";
 
 /** Screens where a child is answering: no moving creatures there, so nothing competes with the question. */
@@ -83,10 +86,19 @@ export function QuizApp() {
   const onFlags = useCallback((next: PublicFlags) => setFlags(next), []);
 
   useEffect(() => {
+    const t = window.setTimeout(trackVisit, 800);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
     const ready = useQuiz.persist.rehydrate();
     void Promise.resolve(ready).then(() => {
-      if (new URLSearchParams(window.location.search).has("room")) {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has("room")) {
         useQuiz.getState().go("battle");
+      } else if (params.has("weekly") && !useQuiz.getState().round) {
+        // Friends arrive here from a shared score card.
+        useQuiz.getState().go("weekly");
       }
     });
   }, []);
@@ -141,6 +153,7 @@ export function QuizApp() {
           {screen === "break" && <Break />}
           {screen === "badges" && <Badges />}
           {screen === "daily" && <Daily />}
+          {screen === "weekly" && <Weekly />}
           {screen === "board" && <Board />}
           {screen === "academy" && <Academy />}
           {screen === "summary" && <Summary />}
@@ -463,7 +476,7 @@ function Stats() {
       value: String(hints),
       icon: Lightbulb,
       onClick: () => {
-        if (screen === "play" && round && round.mode !== "battle" && round.mode !== "daily") useHint();
+        if (screen === "play" && round && round.mode !== "battle" && round.mode !== "daily" && round.mode !== "weekly") useHint();
         else go("shop");
       },
     },
@@ -624,7 +637,8 @@ function Trail({ flags }: { flags: PublicFlags }) {
   const go = useQuiz((s) => s.go);
   const cleared = lands.filter((land) => landDone[land.id]).length;
 
-  const shortcuts: { label: string; icon: LucideIcon; screen: "daily" | "academy" | "badges" | "board" | "battle" }[] = [
+  const shortcuts: { label: string; icon: LucideIcon; screen: "daily" | "weekly" | "academy" | "badges" | "board" | "battle" }[] = [
+    { label: "Weekly", icon: Medal, screen: "weekly" },
     ...(flags.featureDaily ? [{ label: "Daily", icon: CalendarDays, screen: "daily" as const }] : []),
     ...(flags.featureAcademy ? [{ label: "Academy", icon: BookOpen, screen: "academy" as const }] : []),
     { label: "Badges", icon: Award, screen: "badges" },
@@ -658,6 +672,7 @@ function Trail({ flags }: { flags: PublicFlags }) {
           </button>
         ))}
       </div>
+      <WeeklyBanner />
       <ResumeCard />
       <Duel />
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -693,6 +708,31 @@ function Trail({ flags }: { flags: PublicFlags }) {
         })}
       </div>
     </section>
+  );
+}
+
+function WeeklyBanner() {
+  const weekly = useQuiz((s) => s.weekly);
+  const startWeekly = useQuiz((s) => s.startWeekly);
+  const go = useQuiz((s) => s.go);
+  const done = weekly?.week === weekKey() ? weekly : null;
+  return (
+    <button
+      type="button"
+      onClick={() => (done ? go("weekly") : startWeekly())}
+      className="mt-4 flex w-full items-center gap-3 rounded-card border-2 border-gold bg-surface p-4 text-left"
+    >
+      <Medal className="size-8 shrink-0 text-gold" aria-hidden />
+      <span className="min-w-0 flex-1">
+        <span className="block font-display text-xl font-semibold">This week's challenge</span>
+        <span className="block text-sm text-muted">
+          {done
+            ? `You scored ${done.correct}/${done.total}. Share your card and dare a friend.`
+            : "Ten questions, the same for every explorer. Score it, share it."}
+        </span>
+      </span>
+      <span className="shrink-0 rounded-2xl bg-gold px-3 py-2 text-sm font-extrabold text-gold-fg">{done ? "My card" : "Play"}</span>
+    </button>
   );
 }
 
@@ -818,7 +858,7 @@ function Play() {
       <div className="mt-2 h-2 overflow-hidden rounded-full bg-surface-2" aria-hidden>
         <div className="progress-fill h-full bg-gold" style={{ width: `${progress}%` }} />
       </div>
-      {round.mode !== "battle" && round.mode !== "daily" && round.mode !== "academy" && (
+      {round.mode !== "battle" && round.mode !== "daily" && round.mode !== "weekly" && round.mode !== "academy" && (
         <div className="mt-4">
           <Stats />
         </div>
