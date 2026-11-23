@@ -14,6 +14,7 @@ import {
   Lightbulb,
   Map as MapIcon,
   Play as PlayIcon,
+  Medal,
   Shield,
   Sparkles,
   Swords,
@@ -27,7 +28,7 @@ import {
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ShareQuizyButton } from "@/components/quiz/ShareQuizy";
-import { acknowledgeMessage, listMessages, signOut, useQuizSession, type PublicFlags, type QuizMessage } from "@/lib/quiz/cloud";
+import { acknowledgeMessage, listMessages, signOut, trackVisit, useQuizSession, type PublicFlags, type QuizMessage } from "@/lib/quiz/cloud";
 import {
   ADVANCED_MODES,
   BADGES,
@@ -36,6 +37,7 @@ import {
   speak,
   stopSpeak,
   todayKey,
+  weekKey,
   type Age,
   type Difficulty,
   type PlayItem,
@@ -47,6 +49,7 @@ import { CommandCenter } from "@/components/quiz/CommandCenter";
 import { HelpMap } from "@/components/quiz/HelpMap";
 import { MemoryMatch } from "@/components/quiz/MemoryMatch";
 import { WordSnake } from "@/components/quiz/WordSnake";
+import { Weekly } from "@/components/quiz/WeeklyChallenge";
 import { BannerCreatures, JungleIntro, JungleLife } from "@/components/quiz/JungleLife";
 
 /** Screens where a child is answering: no moving creatures there, so nothing competes with the question. */
@@ -91,10 +94,19 @@ export function QuizApp() {
   const onFlags = useCallback((next: PublicFlags) => setFlags(next), []);
 
   useEffect(() => {
+    const t = window.setTimeout(trackVisit, 800);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
     const ready = useQuiz.persist.rehydrate();
     void Promise.resolve(ready).then(() => {
-      if (new URLSearchParams(window.location.search).has("room")) {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has("room")) {
         useQuiz.getState().go("battle");
+      } else if (params.has("weekly") && !useQuiz.getState().round) {
+        // Friends arrive here from a shared score card.
+        useQuiz.getState().go("weekly");
       }
     });
   }, []);
@@ -149,6 +161,7 @@ export function QuizApp() {
           {screen === "break" && <Break />}
           {screen === "badges" && <Badges />}
           {screen === "daily" && <Daily />}
+          {screen === "weekly" && <Weekly />}
           {screen === "board" && <Board />}
           {screen === "academy" && <Academy />}
           {screen === "summary" && <Summary />}
@@ -474,7 +487,7 @@ function Stats() {
       value: String(hints),
       icon: Lightbulb,
       onClick: () => {
-        if (screen === "play" && round && round.mode !== "battle" && round.mode !== "daily") useHint();
+        if (screen === "play" && round && round.mode !== "battle" && round.mode !== "daily" && round.mode !== "weekly") useHint();
         else go("shop");
       },
     },
@@ -649,7 +662,7 @@ function landArt(id: string) {
   return id === "body" ? "/art/lands/body.svg" : `/art/lands/${id}.jpg`;
 }
 
-type TrailTab = "lands" | "games" | "more";
+type TrailTab = "lands" | "weekly" | "games" | "more";
 
 function Trail({ flags }: { flags: PublicFlags }) {
   const name = useQuiz((s) => s.name);
@@ -667,6 +680,7 @@ function Trail({ flags }: { flags: PublicFlags }) {
 
   const tabs: { id: TrailTab; label: string; icon: LucideIcon }[] = [
     { id: "lands", label: "Lands", icon: MapIcon },
+    { id: "weekly", label: "Weekly", icon: Medal },
     { id: "games", label: "Games", icon: Gamepad2 },
     { id: "more", label: "More", icon: Sparkles },
   ];
@@ -701,12 +715,13 @@ function Trail({ flags }: { flags: PublicFlags }) {
           >
             <item.icon className="size-4" aria-hidden />
             {item.label}
-            {item.id === "games" && <span className="trail-new">New</span>}
+            {item.id === "weekly" && <span className="trail-new">New</span>}
           </button>
         ))}
       </div>
       <div key={tab} className="tab-in mt-3">
         {tab === "lands" && <LandPicker lands={visible} landDone={landDone} landCorrect={landCorrect} />}
+        {tab === "weekly" && <WeeklyBanner />}
         {tab === "games" && <GameCorner />}
         {tab === "more" && (
           <div>
@@ -886,6 +901,31 @@ function GameCorner() {
   );
 }
 
+function WeeklyBanner() {
+  const weekly = useQuiz((s) => s.weekly);
+  const startWeekly = useQuiz((s) => s.startWeekly);
+  const go = useQuiz((s) => s.go);
+  const done = weekly?.week === weekKey() ? weekly : null;
+  return (
+    <button
+      type="button"
+      onClick={() => (done ? go("weekly") : startWeekly())}
+      className="flex w-full items-center gap-3 rounded-card border-2 border-gold bg-surface p-4 text-left"
+    >
+      <Medal className="size-8 shrink-0 text-gold" aria-hidden />
+      <span className="min-w-0 flex-1">
+        <span className="block font-display text-xl font-semibold">This week's challenge</span>
+        <span className="block text-sm text-muted">
+          {done
+            ? `You scored ${done.correct}/${done.total}. Share your card and dare a friend.`
+            : "Ten questions, the same for every explorer. Score it, share it."}
+        </span>
+      </span>
+      <span className="shrink-0 rounded-2xl bg-gold px-3 py-2 text-sm font-extrabold text-gold-fg">{done ? "My card" : "Play"}</span>
+    </button>
+  );
+}
+
 function Duel() {
   const startBattle = useQuiz((s) => s.startBattle);
   const [open, setOpen] = useState(false);
@@ -1008,7 +1048,7 @@ function Play() {
       <div className="mt-2 h-2 overflow-hidden rounded-full bg-surface-2" aria-hidden>
         <div className="progress-fill h-full bg-gold" style={{ width: `${progress}%` }} />
       </div>
-      {round.mode !== "battle" && round.mode !== "daily" && round.mode !== "academy" && (
+      {round.mode !== "battle" && round.mode !== "daily" && round.mode !== "weekly" && round.mode !== "academy" && (
         <div className="mt-4">
           <Stats />
         </div>

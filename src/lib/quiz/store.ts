@@ -13,6 +13,8 @@ import {
   pickDaily,
   pickLandQuestions,
   pickMixed,
+  pickWeekly,
+  weekKey,
   playTone,
   randomBreak,
   shuffle,
@@ -27,6 +29,7 @@ export type Screen =
   | "shop"
   | "badges"
   | "daily"
+  | "weekly"
   | "board"
   | "academy"
   | "bonus"
@@ -37,7 +40,7 @@ export type Screen =
   | "snake"
   | "memory";
 
-export type RoundMode = "land" | "daily" | "academy" | "battle";
+export type RoundMode = "land" | "daily" | "weekly" | "academy" | "battle";
 
 export type Round = {
   mode: RoundMode;
@@ -54,9 +57,14 @@ export type Round = {
   p2Score?: number;
   p1Pick?: number | null;
   phase?: "p1" | "pass" | "p2" | "reveal";
+  /** Weekly challenge: when the first question was shown, for the time on the score card */
+  startedAt?: number;
 };
 
 export type BoardEntry = { name: string; stars: number; coins: number; at: number };
+
+/** The finished weekly challenge for one week, kept for the score card. */
+export type WeeklyResult = { week: string; age: Age; correct: number; total: number; seconds: number; at: number };
 
 type State = {
   name: string;
@@ -74,6 +82,7 @@ type State = {
   dailyDate: string;
   dailyDone: boolean;
   dailyScore: number;
+  weekly: WeeklyResult | null;
   board: BoardEntry[];
   voiceOn: boolean;
   role: "" | "explorer" | "owner";
@@ -117,6 +126,7 @@ type State = {
   revealBreak: () => void;
   continueBreak: () => void;
   startDaily: () => void;
+  startWeekly: () => void;
   startAcademy: (subject: string) => void;
   startBattle: (p1: string, p2: string) => void;
   battlePick: (index: number) => void;
@@ -172,6 +182,7 @@ export const useQuiz = create<State>()(
       dailyDate: "",
       dailyDone: false,
       dailyScore: 0,
+      weekly: null,
       board: [],
       voiceOn: true,
       role: "",
@@ -332,7 +343,7 @@ export const useQuiz = create<State>()(
       useHint: () => {
         const s = get();
         const round = s.round;
-        if (!round || s.hints <= 0 || round.revealed) return;
+        if (!round || s.hints <= 0 || round.revealed || round.mode === "weekly") return;
         const item = round.items[round.index];
         if (!item || item.kind !== "choice") return;
         const wrong = item.opts.map((_, i) => i).filter((i) => i !== item.a && !item.hidden.includes(i));
@@ -400,6 +411,17 @@ export const useQuiz = create<State>()(
             badges: unlock(s.badges, "daily"),
             screen: "summary",
             summaryNote: `Daily challenge complete. ${round.correct} of ${round.items.length} correct. 75 coins added.`,
+            round: null,
+          });
+          return;
+        }
+        if (round.mode === "weekly") {
+          const seconds = Math.max(1, Math.round((Date.now() - (round.startedAt ?? Date.now())) / 1000));
+          set({
+            weekly: { week: weekKey(), age: s.age, correct: round.correct, total: round.items.length, seconds, at: Date.now() },
+            coins: s.coins + 50 + round.correct * 5,
+            badges: unlock(s.badges, "weekly"),
+            screen: "weekly",
             round: null,
           });
           return;
@@ -486,6 +508,33 @@ export const useQuiz = create<State>()(
             picks: items.map(() => null),
             revealed: false,
             correct: 0,
+          },
+        });
+      },
+      startWeekly: () => {
+        const s = get();
+        const week = weekKey();
+        if (s.weekly?.week === week) {
+          set({ screen: "weekly" });
+          return;
+        }
+        if (s.round?.mode === "weekly") {
+          set({ screen: "play" });
+          return;
+        }
+        const items = pickWeekly(s.age, week);
+        if (!items.length) return;
+        set({
+          screen: "play",
+          round: {
+            mode: "weekly",
+            title: "Weekly challenge",
+            items,
+            index: 0,
+            picks: items.map(() => null),
+            revealed: false,
+            correct: 0,
+            startedAt: Date.now(),
           },
         });
       },
@@ -607,6 +656,7 @@ export const useQuiz = create<State>()(
         dailyDate: s.dailyDate,
         dailyDone: s.dailyDone,
         dailyScore: s.dailyScore,
+        weekly: s.weekly,
         board: s.board,
         voiceOn: s.voiceOn,
         screen: s.screen,

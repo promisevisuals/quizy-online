@@ -114,6 +114,7 @@ export const BADGES: { id: string; name: string; detail: string }[] = [
   { id: "spell", name: "Word keeper", detail: "Finish Spelling Bee." },
   { id: "scholar", name: "Year one scholar", detail: "Finish an Academy set." },
   { id: "duel", name: "Table champion", detail: "Win a pass-and-play duel." },
+  { id: "weekly", name: "Weekly challenger", detail: "Finish a weekly challenge." },
 ];
 
 export function landById(id: string) {
@@ -255,8 +256,12 @@ export function pickLandQuestions(
   return takeFresh(groups, avoid, land.count, Math.random).map((question) => toPlayItem(question));
 }
 
-function choicePool(age: Age, difficulty: Difficulty) {
-  const all = lands.flatMap((land) => questionsFor(land)).filter((q): q is ChoiceQ => q.kind === "choice");
+function choicePool(age: Age, difficulty: Difficulty, localOnly = false) {
+  const all = lands
+    // The weekly set skips current affairs and sports: those can be switched off and go out of date.
+    .filter((land) => !localOnly || (land.id !== "news" && land.id !== "sports"))
+    .flatMap((land) => (localOnly ? land.questions : questionsFor(land)))
+    .filter((q): q is ChoiceQ => q.kind === "choice");
   if (difficulty === "advanced") {
     const advanced = all.filter((q) => q.difficulty === "advanced");
     if (advanced.length >= 6) return advanced;
@@ -283,6 +288,60 @@ export function pickMixed(
 
 export function pickDaily(age: Age, difficulty: Difficulty, key: string, blocked: Set<string> = new Set()) {
   return pickMixed(age, difficulty, 5, mulberry32(Number(key.replaceAll("-", "")) || 1), blocked);
+}
+
+/** ISO week key, e.g. "2026-W47". Weeks start on Monday, in the device's local time. */
+export function weekKey(d = new Date()) {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const day = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  const week = Math.ceil(((date.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  return `${date.getUTCFullYear()}-W${String(week).padStart(2, "0")}`;
+}
+
+/** Days left until the weekly challenge resets (next Monday). */
+export function daysUntilNextWeek(d = new Date()) {
+  const day = d.getDay() || 7;
+  return 8 - day;
+}
+
+export const WEEKLY_COUNT = 10;
+
+function seedFrom(text: string) {
+  let h = 2166136261;
+  for (let i = 0; i < text.length; i++) h = Math.imul(h ^ text.charCodeAt(i), 16777619);
+  return h >>> 0;
+}
+
+/**
+ * The weekly challenge: the same ten questions for every explorer in an age group,
+ * climbing from easy to difficult. It ignores personal history on purpose, so scores compare fairly.
+ */
+export function pickWeekly(age: Age, key: string) {
+  const rnd = mulberry32(seedFrom(`weekly|${key}|${age}`));
+  const plan: [Difficulty, number][] = [
+    ["easy", 3],
+    ["medium", 4],
+    ["difficult", 3],
+  ];
+  const chosen: PlayItem[] = [];
+  const taken = new Set<string>();
+  for (const [level, count] of plan) {
+    // Built-in bank only: cloud questions differ per device, and everyone must get the same set.
+    const pool = choicePool(age, level, true).filter((q) => !taken.has(sentenceKey(q)));
+    for (const question of takeFresh([pool], new Set(taken), count, rnd)) {
+      if (question.kind !== "choice") continue;
+      taken.add(sentenceKey(question));
+      chosen.push(prepareChoice(question, rnd));
+    }
+  }
+  if (chosen.length < WEEKLY_COUNT) {
+    for (const question of takeFresh([choicePool(age, "easy", true)], new Set(taken), WEEKLY_COUNT - chosen.length, rnd)) {
+      if (question.kind === "choice") chosen.push(prepareChoice(question, rnd));
+    }
+  }
+  return chosen.slice(0, WEEKLY_COUNT);
 }
 
 export function pickBonus(age: Age, difficulty: Difficulty, blocked: Set<string> = new Set()) {
