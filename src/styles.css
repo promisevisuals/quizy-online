@@ -1588,3 +1588,64 @@ textarea {
 .memory-grid.cols-6 .memory-face { font-size: clamp(1.3rem, 6vw, 2.2rem); }
 .memory-grid.cols-6 .memory-back { font-size: 1.4rem; }
 .memory-grid.is-square .memory-card { aspect-ratio: 1 / 1; }
+
+/* ───────────────── Full-screen game stage ───────────────── */
+.game-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(120% 80% at 50% 0%, #fffaf1 0%, #f6ead0 70%, #efdcb2 100%);
+  padding: max(0.5rem, env(safe-area-inset-top)) max(0.6rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.6rem, env(safe-area-inset-left));
+  color: var(--color-fg);
+}
+.game-stage-bar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 2.75rem;
+  max-width: 64rem;
+  width: 100%;
+  margin: 0 auto;
+}
+.game-back {
+  display: inline-flex;
+  flex: none;
+  min-height: 2.5rem;
+  align-items: center;
+  gap: 0.3rem;
+  border: 1px solid var(--color-line);
+  border-radius: 0.9rem;
+  background: var(--color-surface);
+  padding: 0 0.7rem;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+.game-stage-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 40rem;
+  margin: 0.4rem auto 0;
+}
+.game-stage-body.is-wide { max-width: 64rem; }
+.snake-wrap {
+  position: relative;
+  display: grid;
+  flex: 1;
+  min-height: 0;
+  place-items: center;
+}
+.game-stage .snake-pad { width: 10.5rem; gap: 0.3rem; }
+.game-stage .snake-pad button { height: 2.9rem; }
+@media (min-width: 900px) and (min-height: 700px) {
+  /* laptops: arrow keys do the work, so the pad shrinks */
+  .game-stage .snake-pad { width: 8.5rem; }
+  .game-stage .snake-pad button { height: 2.4rem; }
+}
+.game-stage .arcade-levels button { min-height: 2.3rem; font-size: 0.85rem; }
