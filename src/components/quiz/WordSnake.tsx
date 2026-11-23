@@ -67,7 +67,8 @@ export function WordSnake() {
   const park = useQuiz((s) => s.park);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const wrapRef = useRef<HTMLDivElement | null>(null);
+  // a state ref, so sizing starts as soon as the full-screen stage has mounted the board
+  const [wrapEl, setWrapEl] = useState<HTMLDivElement | null>(null);
   const [level, setLevel] = useState<ArcadeLevel>(() => loadLevel("snake", age));
   const cfg = SNAKE_LEVELS[level];
   const game = useRef<Game>(freshGame(SNAKE_LEVELS[level]));
@@ -301,7 +302,7 @@ export function WordSnake() {
 
   /* ---------- canvas sizing ---------- */
   useEffect(() => {
-    const wrap = wrapRef.current;
+    const wrap = wrapEl;
     const canvas = canvasRef.current;
     if (!wrap || !canvas) return;
     const fit = () => {
@@ -318,7 +319,7 @@ export function WordSnake() {
     const ro = new ResizeObserver(fit);
     ro.observe(wrap);
     return () => ro.disconnect();
-  }, [draw]);
+  }, [draw, wrapEl]);
 
   /* ---------- input ---------- */
   const steer = useCallback(
@@ -505,7 +506,7 @@ export function WordSnake() {
         ) : null}
       </div>
 
-      <div ref={wrapRef} className="snake-wrap">
+      <div ref={setWrapEl} className="snake-wrap">
         <canvas
           ref={canvasRef}
           className="snake-board mx-auto block rounded-card"
