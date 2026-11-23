@@ -81,10 +81,12 @@ function deal(pairs: number, deckIndex: number): Card[] {
   );
 }
 
+/** More cards → more columns and square cards, so even 30 cards fit on a phone screen. */
 function columnsFor(cards: number) {
-  if (cards <= 16) return "";
-  if (cards <= 20) return "cols-5";
-  return "cols-6";
+  if (cards <= 12) return "";
+  if (cards <= 16) return "is-square";
+  if (cards <= 20) return "cols-5 is-square";
+  return "cols-6 is-square";
 }
 
 export function MemoryMatch() {

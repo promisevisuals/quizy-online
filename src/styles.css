@@ -1587,3 +1587,4 @@ textarea {
 .memory-grid.cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.35rem; }
 .memory-grid.cols-6 .memory-face { font-size: clamp(1.3rem, 6vw, 2.2rem); }
 .memory-grid.cols-6 .memory-back { font-size: 1.4rem; }
+.memory-grid.is-square .memory-card { aspect-ratio: 1 / 1; }
