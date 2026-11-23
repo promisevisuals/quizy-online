@@ -1542,3 +1542,48 @@ textarea {
   .trail-tab svg { display: none; }
   .trail-new { position: absolute; top: -0.35rem; right: -0.1rem; font-size: 0.55rem; }
 }
+
+/* ───────────────── Side-game difficulty levels ───────────────── */
+.arcade-levels {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid var(--color-line);
+  border-radius: 1.1rem;
+  background: #f3e2bd;
+}
+.arcade-levels button {
+  min-height: 2.6rem;
+  border-radius: 0.85rem;
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+.arcade-levels button.is-active {
+  background: #fffaf1;
+  color: var(--color-fg);
+  box-shadow: 0 3px 0 rgba(196, 146, 48, 0.25);
+}
+.snake-word .is-hidden { color: var(--color-muted); }
+.peek-bar {
+  display: block;
+  height: 0.4rem;
+  margin-top: 0.35rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #efdcb2;
+}
+.peek-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-gold);
+  transition: width 100ms linear;
+}
+.memory-timer { font-variant-numeric: tabular-nums; }
+.memory-timer.is-low { color: var(--color-bad); }
+.memory-grid.cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.memory-grid.cols-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.35rem; }
+.memory-grid.cols-6 .memory-face { font-size: clamp(1.3rem, 6vw, 2.2rem); }
+.memory-grid.cols-6 .memory-back { font-size: 1.4rem; }

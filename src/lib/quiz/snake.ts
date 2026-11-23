@@ -7,6 +7,8 @@
  * The board wraps at the edges, so young players never crash into a wall.
  */
 
+import { SNAKE_LEVELS, type SnakeLevel } from "./arcade.ts";
+
 export type Dir = "up" | "down" | "left" | "right";
 export type Cell = { x: number; y: number };
 export type Tile = Cell & { letter: string; id: number };
@@ -65,6 +67,18 @@ export const SNAKE_WORDS: SnakeWord[][] = [
     { word: "PENGUIN", emoji: "🐧", hint: "A bird that cannot fly." },
     { word: "RAINBOW", emoji: "🌈", hint: "Seven colours in the sky." },
   ],
+  [
+    { word: "ELEPHANT", emoji: "🐘", hint: "It has a long trunk." },
+    { word: "KANGAROO", emoji: "🦘", hint: "It hops and has a pouch." },
+    { word: "DINOSAUR", emoji: "🦕", hint: "It lived long, long ago." },
+    { word: "UMBRELLA", emoji: "☂️", hint: "It keeps the rain off you." },
+    { word: "BUTTERFLY", emoji: "🦋", hint: "It has colourful wings." },
+    { word: "CROCODILE", emoji: "🐊", hint: "It has a long snout and sharp teeth." },
+    { word: "PINEAPPLE", emoji: "🍍", hint: "A spiky, sweet fruit." },
+    { word: "SANDWICH", emoji: "🥪", hint: "Bread with something inside." },
+    { word: "CHAMELEON", emoji: "🦎", hint: "It changes colour." },
+    { word: "SNOWFLAKE", emoji: "❄️", hint: "Frozen and falls from the sky." },
+  ],
 ];
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -96,8 +110,8 @@ function inSpawnLane(cell: Cell, size = GRID) {
   return cell.y === Math.floor(size / 2) && cell.x <= 6;
 }
 
-export function decoyCount(wordIndex: number) {
-  return Math.min(3 + wordIndex, 9);
+export function decoyCount(wordIndex: number, level: SnakeLevel = SNAKE_LEVELS.easy) {
+  return Math.min(level.baseDecoys + wordIndex, level.maxDecoys);
 }
 
 /** Scatter the word's letters and some decoys on free cells. */
@@ -157,15 +171,19 @@ export function oopsMessage(bite: Bite, word: string) {
     : `"${bite.tile.letter}" is in ${word}, but "${bite.needed}" comes first.`;
 }
 
-export function tickMs(age: "young" | "old", wordsDone: number) {
-  const base = age === "young" ? 300 : 230;
-  return Math.max(130, base - wordsDone * 10);
+export function tickMs(level: SnakeLevel, wordsDone: number) {
+  return Math.max(level.minMs, level.baseMs - wordsDone * level.msPerWord);
 }
 
-/** Young explorers start on 3-letter words, older ones on 4-letter words; every 3 words climbs a tier. */
-export function wordFor(age: "young" | "old", wordsDone: number, rnd: () => number = Math.random): SnakeWord {
-  const start = age === "young" ? 0 : 1;
-  const tier = Math.min(SNAKE_WORDS.length - 1, start + Math.floor(wordsDone / 3));
-  const list = SNAKE_WORDS[tier] ?? SNAKE_WORDS[0]!;
+/** How long the word shows before hiding on memory levels; shorter as the game goes on. */
+export function flashMsFor(level: SnakeLevel, wordsDone: number) {
+  if (level.word !== "flash") return 0;
+  return Math.max(level.minFlashMs, level.flashMs - wordsDone * 250);
+}
+
+/** Starts on the level's tier and climbs to longer words as words are finished. */
+export function wordFor(level: SnakeLevel, wordsDone: number, rnd: () => number = Math.random, avoid = ""): SnakeWord {
+  const tier = Math.min(SNAKE_WORDS.length - 1, level.startTier + Math.floor(wordsDone / level.wordsPerTier));
+  const list = (SNAKE_WORDS[tier] ?? SNAKE_WORDS[0]!).filter((w) => w.word !== avoid);
   return list[Math.floor(rnd() * list.length)] ?? list[0]!;
 }

@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Heart, Volume2 } from "lucide-react";
+import { ARCADE_LEVELS, LEVEL_NAMES, SNAKE_LEVELS, loadLevel, saveLevel, type ArcadeLevel, type SnakeLevel } from "@/lib/quiz/arcade";
 import { playTone, speak } from "@/lib/quiz/logic";
 import {
   GRID,
   OPPOSITE,
   decoyCount,
+  flashMsFor,
   judge,
   layTiles,
   oopsMessage,
@@ -38,8 +40,8 @@ type Game = {
 
 const START_LIVES = 3;
 
-function newWordState(age: "young" | "old", wordsDone: number): Pick<Game, "word" | "progress" | "snake" | "dir" | "queue" | "tiles" | "grow"> {
-  const word = wordFor(age, wordsDone);
+function newWordState(cfg: SnakeLevel, wordsDone: number, last = ""): Pick<Game, "word" | "progress" | "snake" | "dir" | "queue" | "tiles" | "grow"> {
+  const word = wordFor(cfg, wordsDone, Math.random, last);
   const snake = spawnSnake();
   return {
     word,
@@ -47,13 +49,13 @@ function newWordState(age: "young" | "old", wordsDone: number): Pick<Game, "word
     snake,
     dir: "right",
     queue: [],
-    tiles: layTiles(word.word, decoyCount(wordsDone), snake),
+    tiles: layTiles(word.word, decoyCount(wordsDone, cfg), snake),
     grow: 0,
   };
 }
 
-function freshGame(age: "young" | "old"): Game {
-  return { ...newWordState(age, 0), lives: START_LIVES, wordsDone: 0, coins: 0, flash: null };
+function freshGame(cfg: SnakeLevel): Game {
+  return { ...newWordState(cfg, 0), lives: START_LIVES, wordsDone: 0, coins: 0, flash: null };
 }
 
 export function WordSnake() {
@@ -66,7 +68,15 @@ export function WordSnake() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const playAreaRef = useRef<HTMLDivElement | null>(null);
-  const game = useRef<Game>(freshGame(age));
+  const [level, setLevel] = useState<ArcadeLevel>(() => loadLevel("snake", age));
+  const cfg = SNAKE_LEVELS[level];
+  const game = useRef<Game>(freshGame(SNAKE_LEVELS[level]));
+  // Memory levels: the word shows until this time, then hides.
+  const [revealUntil, setRevealUntil] = useState(0);
+  const [now, setNow] = useState(() => Date.now());
+  const revealing = cfg.word === "flash" && now < revealUntil;
+  const revealingRef = useRef(false);
+  revealingRef.current = revealing;
   const phaseRef = useRef<Phase>("ready");
   const [phase, setPhaseState] = useState<Phase>("ready");
   const [message, setMessage] = useState("");
@@ -217,6 +227,7 @@ export function WordSnake() {
         g.wordsDone += 1;
         g.coins += g.word.word.length;
         arcadeReward("snake", g.wordsDone, g.word.word.length);
+        arcadeReward(`snake-${level}`, g.wordsDone, 0);
         setMessage(`${g.word.emoji} ${g.word.word}! +${g.word.word.length} coins`);
         say(`Well done! ${g.word.word.toLowerCase()}`);
         setPhase("word");
@@ -225,7 +236,7 @@ export function WordSnake() {
     }
     if (g.grow > 0) g.grow -= 1;
     else g.snake.pop();
-  }, [arcadeReward, loseLife, say, setPhase, syncHud]);
+  }, [arcadeReward, level, loseLife, say, setPhase, syncHud]);
 
   /* ---------- loop ---------- */
   useEffect(() => {
@@ -237,7 +248,7 @@ export function WordSnake() {
       last = now;
       if (phaseRef.current === "playing") {
         acc += dt;
-        const ms = tickMs(age, game.current.wordsDone);
+        const ms = tickMs(cfg, game.current.wordsDone);
         while (acc >= ms && phaseRef.current === "playing") {
           acc -= ms;
           tick();
@@ -250,21 +261,43 @@ export function WordSnake() {
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [age, draw, tick]);
+  }, [cfg, draw, tick]);
+
+  /** A new word is up: say it (where the level allows) and start the memory peek. */
+  const beginWord = useCallback(() => {
+    const g = game.current;
+    if (cfg.canHear) say(g.word.word.toLowerCase());
+    const ms = flashMsFor(cfg, g.wordsDone);
+    if (ms) {
+      const until = Date.now() + ms;
+      setNow(Date.now());
+      setRevealUntil(until);
+    } else setRevealUntil(0);
+  }, [cfg, say]);
 
   // after a finished word, roll on to the next one
   useEffect(() => {
     if (phase !== "word") return;
     const id = window.setTimeout(() => {
       const g = game.current;
-      Object.assign(g, newWordState(age, g.wordsDone));
+      Object.assign(g, newWordState(cfg, g.wordsDone, g.word.word));
       syncHud();
       setMessage("");
       setPhase("ready");
-      say(g.word.word.toLowerCase());
+      beginWord();
     }, 1500);
     return () => window.clearTimeout(id);
-  }, [age, phase, say, setPhase, syncHud]);
+  }, [beginWord, cfg, phase, setPhase, syncHud]);
+
+  // count down the memory peek
+  useEffect(() => {
+    if (!revealUntil) return;
+    const id = window.setInterval(() => {
+      setNow(Date.now());
+      if (Date.now() >= revealUntil) window.clearInterval(id);
+    }, 100);
+    return () => window.clearInterval(id);
+  }, [revealUntil]);
 
   // On small screens, bring the word, board and steering buttons into view together.
   useEffect(() => {
@@ -298,6 +331,7 @@ export function WordSnake() {
       const g = game.current;
       const p = phaseRef.current;
       if (p === "over" || p === "word") return;
+      if (revealingRef.current) return;
       if (p === "ready" || p === "oops") {
         if (p === "oops") {
           // respawn, keeping the letters already collected
@@ -366,16 +400,38 @@ export function WordSnake() {
     swipe.current = null;
   };
 
-  const restart = () => {
-    game.current = freshGame(age);
+  const restart = (nextLevel: ArcadeLevel = level) => {
+    game.current = freshGame(SNAKE_LEVELS[nextLevel]);
     syncHud();
     setMessage("");
     setPhase("ready");
-    say(game.current.word.word.toLowerCase());
   };
+
+  // start (or restart) the first word whenever the level changes
+  const firstWordFor = useRef<string>("");
+  useEffect(() => {
+    const key = `${level}:${game.current.word.word}:${game.current.wordsDone}`;
+    if (phase === "ready" && hud.wordsDone === 0 && hud.progress === 0 && firstWordFor.current !== key) {
+      firstWordFor.current = key;
+      beginWord();
+    }
+  });
+
+  const chooseLevel = (next: ArcadeLevel) => {
+    if (next === level) return;
+    setLevel(next);
+    saveLevel("snake", next);
+    restart(next);
+  };
+  const canChooseLevel = phase === "over" || (phase === "ready" && hud.wordsDone === 0 && hud.progress === 0 && hud.lives === START_LIVES);
+  const levelBest = useQuiz((s) => s.arcadeBest[`snake-${level}`] ?? 0);
 
   const { word, progress, lives, wordsDone, coins } = hud;
   const needed = word.word[progress] ?? "";
+  // On memory levels the word is hidden after the peek: only eaten letters show.
+  const hidden = cfg.word === "flash" && !revealing;
+  const peekLeft = revealing ? Math.max(0, revealUntil - now) : 0;
+  const peekTotal = flashMsFor(cfg, wordsDone) || 1;
 
   return (
     <section className="mx-auto max-w-xl">
@@ -388,35 +444,68 @@ export function WordSnake() {
             <Heart key={i} className={i < lives ? "size-6 fill-bad text-bad" : "size-6 text-line"} aria-hidden />
           ))}
         </div>
-        <p className="text-sm font-extrabold text-muted">
-          Words {wordsDone} · Best {Math.max(best, wordsDone)}
+        <p className="text-right text-sm font-extrabold text-muted">
+          {LEVEL_NAMES[level]} · Words {wordsDone}
+          <span className="block text-xs">Best {Math.max(levelBest, wordsDone)} · All levels {Math.max(best, wordsDone)}</span>
         </p>
       </div>
+
+      {canChooseLevel ? (
+        <div className="mt-3">
+          <div className="arcade-levels" role="radiogroup" aria-label="Difficulty">
+            {ARCADE_LEVELS.map((item) => (
+              <button
+                key={item}
+                type="button"
+                role="radio"
+                aria-checked={item === level}
+                onClick={() => chooseLevel(item)}
+                className={item === level ? "is-active" : ""}
+              >
+                {LEVEL_NAMES[item]}
+              </button>
+            ))}
+          </div>
+          <p className="mt-1 text-center text-xs font-bold text-muted">{cfg.blurb}. It speeds up and the words get longer as you go.</p>
+        </div>
+      ) : null}
 
       <div ref={playAreaRef} className="mt-3 flex scroll-mt-2 items-center justify-between gap-3 rounded-card border border-line bg-surface px-4 py-3">
         <div className="flex items-center gap-3">
           <span className="text-4xl" aria-hidden>
-            {word.emoji}
+            {cfg.showPicture ? word.emoji : "🧠"}
           </span>
-          <div>
-            <p className="text-xs font-extrabold uppercase tracking-widest text-gold">Eat the letters in order</p>
-            <p className="snake-word font-display text-3xl font-semibold tracking-[0.18em]" aria-label={`Word: ${word.word}. Next letter ${needed}`}>
+          <div className="min-w-0">
+            <p className="text-xs font-extrabold uppercase tracking-widest text-gold">
+              {revealing ? "Remember this word!" : hidden ? "Spell it from memory" : "Eat the letters in order"}
+            </p>
+            <p
+              className="snake-word font-display text-3xl font-semibold tracking-[0.18em]"
+              aria-label={hidden ? `Word hidden. ${progress} of ${word.word.length} letters eaten` : `Word: ${word.word}. Next letter ${needed}`}
+            >
               {word.word.split("").map((letter, i) => (
-                <span key={i} className={i < progress ? "is-eaten" : i === progress ? "is-next" : ""}>
-                  {letter}
+                <span key={i} className={i < progress ? "is-eaten" : i === progress && cfg.highlightNext ? "is-next" : hidden ? "is-hidden" : ""}>
+                  {hidden && i >= progress ? "_" : letter}
                 </span>
               ))}
             </p>
+            {revealing ? (
+              <span className="peek-bar" aria-hidden>
+                <span style={{ width: `${(peekLeft / peekTotal) * 100}%` }} />
+              </span>
+            ) : null}
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => speak(`${word.word.toLowerCase()}. ${word.hint}`)}
-          className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl border border-line"
-          aria-label="Hear the word"
-        >
-          <Volume2 className="size-5 text-gold" aria-hidden />
-        </button>
+        {cfg.canHear ? (
+          <button
+            type="button"
+            onClick={() => speak(hidden ? word.word.toLowerCase() : `${word.word.toLowerCase()}. ${word.hint}`)}
+            className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl border border-line"
+            aria-label="Hear the word"
+          >
+            <Volume2 className="size-5 text-gold" aria-hidden />
+          </button>
+        ) : null}
       </div>
 
       <div ref={wrapRef} className="relative mt-3 w-full">
@@ -431,12 +520,19 @@ export function WordSnake() {
         />
         {phase !== "playing" && (
           <div className="snake-overlay" role="status">
-            {phase === "ready" && (
+            {phase === "ready" && revealing && (
+              <>
+                <p className="text-xs font-extrabold uppercase tracking-widest text-gold">Remember it!</p>
+                <p className="font-display text-4xl font-semibold tracking-[0.15em]">{word.word}</p>
+                <p className="mt-2 text-sm text-muted">It hides in {Math.ceil(peekLeft / 1000)}…</p>
+              </>
+            )}
+            {phase === "ready" && !revealing && (
               <>
                 <p className="font-display text-2xl font-semibold">
-                  {word.emoji} Spell {word.word}
+                  {hidden ? "Now spell it from memory" : `${word.emoji} Spell ${word.word}`}
                 </p>
-                <p className="mt-1 text-sm text-muted">{word.hint}</p>
+                {cfg.showPicture ? <p className="mt-1 text-sm text-muted">{word.hint}</p> : null}
                 <p className="mt-3 text-sm font-bold">Swipe, use the arrows, or tap Go!</p>
                 <button type="button" onClick={() => steer("right")} className="mt-3 min-h-12 rounded-2xl bg-primary px-8 font-extrabold text-primary-fg">
                   Go!
@@ -460,7 +556,7 @@ export function WordSnake() {
                 <p className="mt-2 font-extrabold">
                   {wordsDone} {wordsDone === 1 ? "word" : "words"} · {coins} coins earned
                 </p>
-                <button type="button" onClick={restart} className="mt-3 min-h-12 rounded-2xl bg-primary px-8 font-extrabold text-primary-fg">
+                <button type="button" onClick={() => restart()} className="mt-3 min-h-12 rounded-2xl bg-primary px-8 font-extrabold text-primary-fg">
                   Play again
                 </button>
               </>
