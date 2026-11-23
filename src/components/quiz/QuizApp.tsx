@@ -51,7 +51,7 @@ import { LabelLab } from "@/components/quiz/LabelLab";
 import { MemoryMatch } from "@/components/quiz/MemoryMatch";
 import { WordSnake } from "@/components/quiz/WordSnake";
 import { Weekly } from "@/components/quiz/WeeklyChallenge";
-import { BannerCreatures, JungleIntro, JungleLife } from "@/components/quiz/JungleLife";
+import { BannerCreatures, JungleLife } from "@/components/quiz/JungleLife";
 
 /** Screens where a child is answering: no moving creatures there, so nothing competes with the question. */
 const QUIET_SCREENS = new Set(["play", "battle", "command", "certificate", "snake", "memory", "label"]);
@@ -89,8 +89,8 @@ export function QuizApp() {
   const screen = useQuiz((s) => s.screen);
   const round = useQuiz((s) => s.round);
   const [help, setHelp] = useState(false);
-  // Opening: first the PROMISEVISUALS jungle, then the Quizy card, then the app.
-  const [gate, setGate] = useState<"intro" | "card" | null>("intro");
+  // Opening: the Quizy card ("The trail is open"), then the app.
+  const [gate, setGate] = useState<"card" | null>("card");
   const [flags, setFlags] = useState<PublicFlags>(OPEN_FLAGS);
   const onFlags = useCallback((next: PublicFlags) => setFlags(next), []);
 
@@ -114,13 +114,8 @@ export function QuizApp() {
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const step = reduce ? 1600 : 3600;
-    const toCard = window.setTimeout(() => setGate((g) => (g === "intro" ? "card" : g)), step);
-    const done = window.setTimeout(() => setGate(null), step * 2);
-    return () => {
-      window.clearTimeout(toCard);
-      window.clearTimeout(done);
-    };
+    const done = window.setTimeout(() => setGate(null), reduce ? 1600 : 3200);
+    return () => window.clearTimeout(done);
   }, []);
 
   return (
@@ -145,15 +140,14 @@ export function QuizApp() {
             you can. This page still opens.
           </p>
         )}
-        {(screen === "camp" || screen === "map") && (
-          <figure className={cn("scenic-banner", screen === "camp" && "is-alive", screen === "map" && "is-trail")}>
-            <img src={screen === "camp" ? "/art/horizon.jpg" : "/art/table.jpg"} alt="" />
-            {screen === "camp" && <LivingSky />}
-            {screen === "map" && <TrailDrift />}
-            <BannerCreatures scene={screen === "camp" ? "camp" : "trail"} />
+        {screen === "map" && (
+          <figure className="scenic-banner is-trail">
+            <img src="/art/table.jpg" alt="" />
+            <TrailDrift />
+            <BannerCreatures scene="trail" />
           </figure>
         )}
-        <div key={`${screen}-${round?.index ?? "x"}-${round?.title ?? ""}`} className="screen-in mt-4 flex-1">
+        <div key={`${screen}-${round?.index ?? "x"}-${round?.title ?? ""}`} className={cn("screen-in flex-1", screen === "camp" ? "mt-2" : "mt-4")}>
           {screen === "camp" && <Camp flags={flags} />}
           {screen === "map" && <Trail flags={flags} />}
           {screen === "play" && <Play />}
@@ -176,7 +170,7 @@ export function QuizApp() {
         <PvCredit className="app-footer-credit" />
       </div>
       {!QUIET_SCREENS.has(screen) && <JungleLife />}
-      {gate && <TrailGate stage={gate} onEnter={() => setGate((g) => (g === "intro" ? "card" : null))} />}
+      {gate && <TrailGate onEnter={() => setGate(null)} />}
       {help && <HelpMap onClose={() => setHelp(false)} />}
     </main>
   );
@@ -194,59 +188,7 @@ function TrailDrift() {
   );
 }
 
-function LivingSky() {
-  return (
-    <div className="living-sky" aria-hidden="true">
-      <span className="sky-cloud c1" />
-      <span className="sky-cloud c2" />
-      <span className="sky-cloud c3" />
-      <span className="sky-bird b1">
-        <span className="sky-bird-bob">
-          <BirdMark />
-        </span>
-      </span>
-      <span className="sky-bird b2">
-        <span className="sky-bird-bob">
-          <BirdMark />
-        </span>
-      </span>
-      <span className="sky-bird b3">
-        <span className="sky-bird-bob">
-          <BirdMark />
-        </span>
-      </span>
-      <span className="sky-butterfly">
-        <i />
-        <i />
-      </span>
-      <span className="sky-grass">
-        {GRASS.map((height, index) => (
-          <i key={index} style={{ height }} />
-        ))}
-      </span>
-    </div>
-  );
-}
-
-const GRASS = ["1.15rem", "1.55rem", "0.95rem", "1.4rem", "1.7rem", "1.05rem", "1.45rem", "0.85rem", "1.6rem", "1.2rem", "1.5rem", "1rem", "1.65rem", "1.25rem", "0.9rem", "1.4rem", "1.15rem", "1.55rem"];
-
-function BirdMark() {
-  return (
-    <svg viewBox="0 0 64 28">
-      <path className="wing" d="M4 16c8-12 20-10 28-2-8-2-18 0-28 2z" />
-      <path className="wing right" d="M60 16C52 4 40 6 32 14c8-2 18 0 28 2z" />
-    </svg>
-  );
-}
-
-function TrailGate({ stage, onEnter }: { stage: "intro" | "card"; onEnter: () => void }) {
-  if (stage === "intro") {
-    return (
-      <button type="button" className="trail-gate is-intro" onClick={onEnter} aria-label="Quizy, a product of PROMISEVISUALS. Tap to continue.">
-        <JungleIntro />
-      </button>
-    );
-  }
+function TrailGate({ onEnter }: { onEnter: () => void }) {
   return (
     <button type="button" className="trail-gate" onClick={onEnter}>
       <span className="trail-gate-card">
@@ -528,118 +470,90 @@ function Camp({ flags }: { flags: PublicFlags }) {
   const begin = useQuiz((s) => s.begin);
 
   return (
-    <section className="grid items-start gap-6 lg:grid-cols-[1.15fr_.85fr]">
-      <div className="order-2 border-t-4 border-gold pt-5 lg:order-1">
-        <p className="text-sm font-extrabold uppercase tracking-widest text-gold">Expedition</p>
-        <h1 className="mt-2 font-display text-4xl font-semibold leading-tight sm:text-5xl">
-          Little minds.
-          <br />
-          A brighter trail.
-        </h1>
-        <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted">
-          Thirteen lands, spelling, Word Snake and Memory Match, a daily challenge, and a Year 1 academy. Sign in and the same stars —
-          and an unfinished question — follow you to another device.
-        </p>
-        <Inbox />
-        <InstallButton />
-        <div className="max-w-xl">
-          <ShareQuizyButton variant="card" />
-        </div>
-      </div>
+    <section className="camp-compact mx-auto w-full max-w-xl">
       <form
-        className="order-1 rounded-card border border-line bg-surface p-5 lg:order-2"
+        className="rounded-card border border-line bg-surface p-4"
         onSubmit={(event) => {
           event.preventDefault();
           begin();
         }}
       >
-        <label className="block text-sm font-extrabold uppercase tracking-wide text-muted" htmlFor="explorer">
-          Explorer name
-        </label>
-        <input
-          id="explorer"
-          value={name}
-          maxLength={24}
-          onChange={(event) => setName(event.target.value)}
-          placeholder="Your name"
-          className="mt-2 w-full rounded-2xl border border-line bg-surface-2 px-4 py-3 text-lg font-bold text-fg"
-        />
-        <fieldset className="mt-5">
-          <legend className="text-sm font-extrabold uppercase tracking-wide text-muted">Level</legend>
-          <div className="mt-2 grid grid-cols-2 gap-2">
-            {AGES.map((item) => (
+        <div className="flex items-center gap-3">
+          <img src="/quizy-mark.png" alt="" className="size-12 shrink-0 rounded-xl" />
+          <div className="min-w-0 flex-1">
+            <label className="block text-xs font-extrabold uppercase tracking-wide text-muted" htmlFor="explorer">
+              Explorer name
+            </label>
+            <input
+              id="explorer"
+              value={name}
+              maxLength={24}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="Your name"
+              className="mt-1 w-full rounded-xl border border-line bg-surface-2 px-3 py-2 text-base font-bold text-fg"
+            />
+          </div>
+        </div>
+        <p className="mt-3 text-xs font-extrabold uppercase tracking-wide text-muted">Level</p>
+        <div className="mt-1 grid grid-cols-2 gap-2">
+          {AGES.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              aria-pressed={age === item.id}
+              onClick={() => setAge(item.id)}
+              className={cn("min-h-10 rounded-xl border px-3 text-sm font-extrabold", age === item.id ? "border-gold bg-surface-2 text-fg" : "border-line text-muted")}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+        <p className="mt-3 text-xs font-extrabold uppercase tracking-wide text-muted">Difficulty</p>
+        <div className="mt-1 grid grid-cols-4 gap-1.5">
+          {LEVELS.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              aria-pressed={difficulty === item.id}
+              onClick={() => setDifficulty(item.id)}
+              className={cn(
+                "min-h-10 rounded-xl border px-1 text-[0.8rem] font-extrabold",
+                difficulty === item.id ? "border-primary bg-primary text-primary-fg" : "border-line text-muted",
+              )}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+        {difficulty === "advanced" && (
+          <div className="mt-2 grid grid-cols-2 gap-1.5">
+            {ADVANCED_MODES.map((mode) => (
               <button
-                key={item.id}
+                key={mode}
                 type="button"
-                aria-pressed={age === item.id}
-                onClick={() => setAge(item.id)}
-                className={cn(
-                  "min-h-11 rounded-2xl border px-3 py-3 text-left font-extrabold",
-                  age === item.id ? "border-gold bg-surface-2 text-fg" : "border-line text-muted",
-                )}
+                aria-pressed={challenge === mode}
+                onClick={() => setChallenge(mode)}
+                className={cn("min-h-9 rounded-xl border px-2 text-left text-xs font-extrabold", challenge === mode ? "border-gold bg-surface-2 text-fg" : "border-line text-muted")}
               >
-                {item.label}
+                {mode}
               </button>
             ))}
           </div>
-          <p className="mt-2 text-sm text-muted">{AGES.find((item) => item.id === age)?.note}</p>
-        </fieldset>
-        <fieldset className="mt-5">
-          <legend className="text-sm font-extrabold uppercase tracking-wide text-muted">Difficulty</legend>
-          <div className="mt-2 grid grid-cols-2 gap-2">
-            {LEVELS.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                aria-pressed={difficulty === item.id}
-                onClick={() => setDifficulty(item.id)}
-                className={cn(
-                  "min-h-11 rounded-2xl border px-2 py-3 font-extrabold",
-                  difficulty === item.id ? "border-primary bg-primary text-primary-fg" : "border-line text-muted",
-                )}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-          {difficulty === "advanced" && (
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              {ADVANCED_MODES.map((mode, index) => (
-                <button
-                  key={mode}
-                  type="button"
-                  aria-pressed={challenge === mode}
-                  onClick={() => setChallenge(mode)}
-                  className={cn(
-                    "stagger-item min-h-11 rounded-2xl border px-3 py-2 text-left text-sm font-extrabold",
-                    challenge === mode ? "border-gold bg-surface-2 text-fg" : "border-line text-muted",
-                  )}
-                  style={{ animationDelay: `${index * 40}ms` }}
-                >
-                  {mode}
-                </button>
-              ))}
-            </div>
-          )}
-          <p className="mt-2 text-sm text-muted">
-            {LEVELS.find((item) => item.id === difficulty)?.note}
-            {difficulty === "advanced" && challenge ? ` Selected: ${challenge}.` : ""}
-            {age === "young" && difficulty === "difficult"
-              ? " Ages 5–7 use the harder bank when a warm-up set has no difficult questions."
-              : ""}
-          </p>
-        </fieldset>
-        <ResumeCard />
-        {!flags.registrationsEnabled && (
-          <p className="mt-3 text-sm text-muted">New accounts are paused. Explorers who already have an account can still sign in.</p>
         )}
+        <ResumeCard />
+        {!flags.registrationsEnabled && <p className="mt-2 text-xs text-muted">New accounts are paused. Explorers who already have an account can still sign in.</p>}
         <button
           type="submit"
-          className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-primary px-4 py-3 text-lg font-extrabold text-primary-fg"
+          className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-primary px-4 py-2 text-lg font-extrabold text-primary-fg"
         >
           {round ? "Open this question" : "Set out"}
         </button>
       </form>
+      <div className="camp-extras mt-3">
+        <Inbox />
+        <InstallButton />
+        <ShareQuizyButton variant="card" />
+      </div>
     </section>
   );
 }
