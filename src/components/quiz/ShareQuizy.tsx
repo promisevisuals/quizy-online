@@ -6,9 +6,10 @@ export const QUIZY_URL = "https://quizy.promisevisuals.com";
 
 /** A few warm invitations; one is picked each time so repeat shares don't feel copy-pasted. */
 const MESSAGES = [
-  "🌴 Come explore Quizy with me! It's a free jungle quiz adventure for kids — answer fun questions, collect shiny stars and unlock new lands. Learning has never felt this exciting! 🦜✨",
-  "🦜 Psst… I found the sweetest learning game! Quizy turns quizzes into a jungle adventure full of stars, badges and brain-boosting fun for ages 5–10. And it's free! 🌟",
-  "✨ Little explorers, the jungle is calling! Quizy is a free quiz adventure where every right answer earns a star and every land holds a surprise. Come play and learn with us! 🐒🌿",
+  "🌴 Come explore Quizy with me! A free jungle quiz adventure for kids aged 5–10: 13 lands to conquer (animals, space, the human body and more), stars and badges to collect, and a brand-new weekly challenge to brag about. 🏆🦜",
+  "🐍 Can you spell from memory? Quizy's new Word Snake shows you a word, hides it, and you steer the snake to eat the letters in order! Plus Memory Match, 13 quiz lands and a weekly challenge. Free and so much fun! ✨",
+  "✨ Little explorers, the jungle is calling! Quizy turns learning into an adventure: answer questions, unlock lands, play Word Snake and Memory Match, then share your weekly score card. Easy to Expert, there's a level for everyone! 🐒🌿",
+  "🧠 Screen time that actually teaches! Quizy is a free quiz game for kids with 13 colourful lands, brain games that get harder as you grow, and a weekly challenge the whole family can play. Come and beat my score! 🌟",
 ];
 
 function pickMessage() {
