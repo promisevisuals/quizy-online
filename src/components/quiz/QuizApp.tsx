@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { ShareQuizyButton } from "@/components/quiz/ShareQuizy";
 import { acknowledgeMessage, listMessages, signOut, useQuizSession, type PublicFlags, type QuizMessage } from "@/lib/quiz/cloud";
 import {
   ADVANCED_MODES,
@@ -303,6 +304,7 @@ function TopBar({ onHelp }: { onHelp: () => void }) {
         >
           <CircleHelp className="size-5" />
         </button>
+        <ShareQuizyButton />
         <button
           type="button"
           aria-pressed={voiceOn}
@@ -516,6 +518,9 @@ function Camp({ flags }: { flags: PublicFlags }) {
         </p>
         <Inbox />
         <InstallButton />
+        <div className="max-w-xl">
+          <ShareQuizyButton variant="card" />
+        </div>
       </div>
       <form
         className="order-1 rounded-card border border-line bg-surface p-5 lg:order-2"
@@ -1272,6 +1277,11 @@ function Summary() {
       >
         Back to the trail
       </button>
+      <ShareQuizyButton
+        variant="card"
+        title="Loved this land?"
+        note="Share Quizy with a friend and explore the jungle together. It's free!"
+      />
     </section>
   );
 }
