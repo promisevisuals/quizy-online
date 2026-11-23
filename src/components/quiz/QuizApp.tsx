@@ -231,8 +231,8 @@ function TopBar({ onHelp }: { onHelp: () => void }) {
   const onTrail = screen !== "camp";
 
   return (
-    <header className="trail-bar flex flex-wrap items-center justify-between gap-3">
-      <button type="button" className="flex items-center gap-3" onClick={() => park(name ? "map" : "camp")}>
+    <header className="trail-bar flex flex-nowrap items-center justify-between gap-2">
+      <button type="button" className="flex shrink-0 items-center gap-3" onClick={() => park(name ? "map" : "camp")}>
         <span className="logo-plate">
           <img src="/quizy-mark.png" alt="" />
         </span>
@@ -241,7 +241,7 @@ function TopBar({ onHelp }: { onHelp: () => void }) {
           <span className="hidden text-sm text-muted sm:block">One question at a time</span>
         </span>
       </button>
-      <div className="flex flex-wrap items-center justify-end gap-2">
+      <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
         {role === "owner" && (
           <button
             type="button"
@@ -478,9 +478,8 @@ function Camp({ flags }: { flags: PublicFlags }) {
           begin();
         }}
       >
-        <div className="flex items-center gap-3">
-          <img src="/quizy-mark.png" alt="" className="size-12 shrink-0 rounded-xl" />
-          <div className="min-w-0 flex-1">
+        <div>
+          <div>
             <label className="block text-xs font-extrabold uppercase tracking-wide text-muted" htmlFor="explorer">
               Explorer name
             </label>
