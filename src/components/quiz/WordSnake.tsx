@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Heart, Volume2 } from "lucide-react";
+import { Heart, Volume2 } from "lucide-react";
 import { ARCADE_LEVELS, LEVEL_NAMES, SNAKE_LEVELS, loadLevel, saveLevel, type ArcadeLevel, type SnakeLevel } from "@/lib/quiz/arcade";
 import { playTone, speak } from "@/lib/quiz/logic";
 import {
   GRID,
   OPPOSITE,
+  boardFor,
   decoyCount,
   flashMsFor,
   judge,
@@ -25,7 +26,10 @@ import { GameStage } from "@/components/quiz/GameStage";
 
 type Phase = "ready" | "playing" | "oops" | "word" | "over";
 
+type BoardSize = { cols: number; rows: number };
+
 type Game = {
+  board: BoardSize;
   word: SnakeWord;
   progress: number;
   snake: Cell[];
@@ -41,22 +45,27 @@ type Game = {
 
 const START_LIVES = 3;
 
-function newWordState(cfg: SnakeLevel, wordsDone: number, last = ""): Pick<Game, "word" | "progress" | "snake" | "dir" | "queue" | "tiles" | "grow"> {
+function newWordState(cfg: SnakeLevel, wordsDone: number, last: string, board: BoardSize): Pick<Game, "board" | "word" | "progress" | "snake" | "dir" | "queue" | "tiles" | "grow"> {
   const word = wordFor(cfg, wordsDone, Math.random, last);
-  const snake = spawnSnake();
+  return { ...layoutFor(word, cfg, wordsDone, board), word };
+}
+
+/** Snake and letters for a word on a board of this size. */
+function layoutFor(word: SnakeWord, cfg: SnakeLevel, wordsDone: number, board: BoardSize) {
+  const snake = spawnSnake(board);
   return {
-    word,
+    board,
     progress: 0,
     snake,
-    dir: "right",
+    dir: "right" as Dir,
     queue: [],
-    tiles: layTiles(word.word, decoyCount(wordsDone, cfg), snake),
+    tiles: layTiles(word.word, decoyCount(wordsDone, cfg), snake, Math.random, board),
     grow: 0,
   };
 }
 
-function freshGame(cfg: SnakeLevel): Game {
-  return { ...newWordState(cfg, 0), lives: START_LIVES, wordsDone: 0, coins: 0, flash: null };
+function freshGame(cfg: SnakeLevel, board: BoardSize): Game {
+  return { ...newWordState(cfg, 0, "", board), lives: START_LIVES, wordsDone: 0, coins: 0, flash: null };
 }
 
 export function WordSnake() {
@@ -71,7 +80,9 @@ export function WordSnake() {
   const [wrapEl, setWrapEl] = useState<HTMLDivElement | null>(null);
   const [level, setLevel] = useState<ArcadeLevel>(() => loadLevel("snake", age));
   const cfg = SNAKE_LEVELS[level];
-  const game = useRef<Game>(freshGame(SNAKE_LEVELS[level]));
+  // the board's shape follows the screen: tall on phones, wide on laptops
+  const boardRef = useRef<BoardSize>({ cols: GRID, rows: GRID });
+  const game = useRef<Game>(freshGame(SNAKE_LEVELS[level], boardRef.current));
   // Memory levels: the word shows until this time, then hides.
   const [revealUntil, setRevealUntil] = useState(0);
   const [now, setNow] = useState(() => Date.now());
@@ -107,14 +118,14 @@ export function WordSnake() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    const size = canvas.width;
-    const cell = size / GRID;
     const g = game.current;
-    ctx.clearRect(0, 0, size, size);
+    const { cols, rows } = g.board;
+    const cell = canvas.width / cols;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // board: soft checker grass
-    for (let y = 0; y < GRID; y++) {
-      for (let x = 0; x < GRID; x++) {
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
         ctx.fillStyle = (x + y) % 2 === 0 ? "#f3f9e7" : "#e8f3d6";
         ctx.fillRect(x * cell, y * cell, cell, cell);
       }
@@ -208,7 +219,7 @@ export function WordSnake() {
     if (queued && queued !== OPPOSITE[g.dir]) g.dir = queued;
     const head = g.snake[0];
     if (!head) return;
-    const next = step(head, g.dir);
+    const next = step(head, g.dir, g.board);
     const bite = judge(next, g.snake, g.tiles, g.word.word, g.progress);
 
     if (bite.kind === "self" || bite.kind === "wrong") {
@@ -281,10 +292,11 @@ export function WordSnake() {
     if (phase !== "word") return;
     const id = window.setTimeout(() => {
       const g = game.current;
-      Object.assign(g, newWordState(cfg, g.wordsDone, g.word.word));
+      Object.assign(g, newWordState(cfg, g.wordsDone, g.word.word, boardRef.current));
       syncHud();
       setMessage("");
       setPhase("ready");
+      fitRef.current();
       beginWord();
     }, 1500);
     return () => window.clearTimeout(id);
@@ -301,25 +313,39 @@ export function WordSnake() {
   }, [revealUntil]);
 
   /* ---------- canvas sizing ---------- */
+  const fitRef = useRef<() => void>(() => {});
   useEffect(() => {
     const wrap = wrapEl;
     const canvas = canvasRef.current;
     if (!wrap || !canvas) return;
     const fit = () => {
-      // the board is the biggest square that fits the space left between the word and the buttons
-      const css = Math.max(200, Math.floor(Math.min(wrap.clientWidth, wrap.clientHeight, 640)));
+      const w = wrap.clientWidth;
+      const h = wrap.clientHeight;
+      if (w < 50 || h < 50) return;
+      // The board fills the whole play area. Its shape is picked from the screen,
+      // and only changed between words so letters never jump mid-word.
+      const want = boardFor(w, h);
+      boardRef.current = want;
+      const g = game.current;
+      const fresh = phaseRef.current === "ready" && g.progress === 0;
+      if (fresh && (g.board.cols !== want.cols || g.board.rows !== want.rows)) {
+        Object.assign(g, layoutFor(g.word, cfg, g.wordsDone, want));
+      }
+      const { cols, rows } = g.board;
+      const cellPx = Math.max(8, Math.floor(Math.min(w / cols, h / rows)));
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.style.width = `${css}px`;
-      canvas.style.height = `${css}px`;
-      canvas.width = Math.floor(css * dpr);
-      canvas.height = Math.floor(css * dpr);
+      canvas.style.width = `${cellPx * cols}px`;
+      canvas.style.height = `${cellPx * rows}px`;
+      canvas.width = Math.floor(cellPx * cols * dpr);
+      canvas.height = Math.floor(cellPx * rows * dpr);
       draw();
     };
     fit();
     const ro = new ResizeObserver(fit);
     ro.observe(wrap);
+    fitRef.current = fit;
     return () => ro.disconnect();
-  }, [draw, wrapEl]);
+  }, [cfg, draw, wrapEl]);
 
   /* ---------- input ---------- */
   const steer = useCallback(
@@ -331,9 +357,9 @@ export function WordSnake() {
       if (p === "ready" || p === "oops") {
         if (p === "oops") {
           // respawn, keeping the letters already collected
-          g.snake = spawnSnake();
+          g.snake = spawnSnake(g.board);
           g.grow = Math.max(0, g.progress);
-          g.tiles = g.tiles.map((t) => (g.snake.some((c) => same(c, t)) ? { ...t, x: (t.x + 5) % GRID } : t));
+          g.tiles = g.tiles.map((t) => (g.snake.some((c) => same(c, t)) ? { ...t, x: (t.x + 5) % g.board.cols } : t));
           g.dir = "right";
           setMessage("");
         }
@@ -397,7 +423,7 @@ export function WordSnake() {
   };
 
   const restart = (nextLevel: ArcadeLevel = level) => {
-    game.current = freshGame(SNAKE_LEVELS[nextLevel]);
+    game.current = freshGame(SNAKE_LEVELS[nextLevel], boardRef.current);
     syncHud();
     setMessage("");
     setPhase("ready");
@@ -429,121 +455,124 @@ export function WordSnake() {
   const peekLeft = revealing ? Math.max(0, revealUntil - now) : 0;
   const peekTotal = flashMsFor(cfg, wordsDone) || 1;
 
+  const hearButton = cfg.canHear ? (
+    <button
+      type="button"
+      onClick={() => speak(hidden ? word.word.toLowerCase() : `${word.word.toLowerCase()}. ${word.hint}`)}
+      className="snake-hear"
+      aria-label="Hear the word"
+    >
+      <Volume2 className="size-5 text-gold" aria-hidden />
+    </button>
+  ) : null;
+
   return (
     <GameStage
       title="Word Snake"
+      full
       onBack={() => park("map")}
+      heading={
+        <div className="snake-heading min-w-0">
+          <span className="text-2xl leading-none" aria-hidden>
+            {cfg.showPicture ? word.emoji : "🧠"}
+          </span>
+          <p
+            className="snake-word font-display font-semibold"
+            data-len={word.word.length > 7 ? "long" : "short"}
+            aria-label={hidden ? `Word hidden. ${progress} of ${word.word.length} letters eaten` : `Word: ${word.word}. Next letter ${needed}`}
+          >
+            {word.word.split("").map((letter, i) => (
+              <span key={i} className={i < progress ? "is-eaten" : i === progress && cfg.highlightNext ? "is-next" : hidden ? "is-hidden" : ""}>
+                {hidden && i >= progress ? "_" : letter}
+              </span>
+            ))}
+          </p>
+        </div>
+      }
       stats={
         <>
-          <span className="flex items-center gap-0.5" aria-label={`${lives} lives left`}>
+          <span className="flex items-center" aria-label={`${lives} lives left`}>
             {Array.from({ length: START_LIVES }, (_, i) => (
-              <Heart key={i} className={i < lives ? "size-5 fill-bad text-bad" : "size-5 text-line"} aria-hidden />
+              <Heart key={i} className={i < lives ? "size-[1.15rem] fill-bad text-bad" : "size-[1.15rem] text-line"} aria-hidden />
             ))}
           </span>
-          <span>
-            {LEVEL_NAMES[level]} · {wordsDone} {wordsDone === 1 ? "word" : "words"}
-            <span className="block font-bold">Best {Math.max(levelBest, wordsDone)}{best > levelBest ? ` · all ${best}` : ""}</span>
+          <span className="snake-score" aria-label={`${wordsDone} words spelled`}>
+            <b>{wordsDone}</b>
+            <small>{wordsDone === 1 ? "word" : "words"}</small>
           </span>
         </>
       }
     >
-
-      {canChooseLevel ? (
-        <div className="shrink-0">
-          <div className="arcade-levels" role="radiogroup" aria-label="Difficulty">
-            {ARCADE_LEVELS.map((item) => (
-              <button
-                key={item}
-                type="button"
-                role="radio"
-                aria-checked={item === level}
-                onClick={() => chooseLevel(item)}
-                className={item === level ? "is-active" : ""}
-              >
-                {LEVEL_NAMES[item]}
-              </button>
-            ))}
-          </div>
-          <p className="mt-1 truncate text-center text-xs font-bold text-muted">{cfg.blurb}. Gets harder as you go.</p>
-        </div>
-      ) : null}
-
-      <div className="flex shrink-0 items-center justify-between gap-3 rounded-2xl border border-line bg-surface px-3 py-2">
-        <div className="flex items-center gap-3">
-          <span className="text-3xl" aria-hidden>
-            {cfg.showPicture ? word.emoji : "🧠"}
-          </span>
-          <div className="min-w-0">
-            <p className="text-xs font-extrabold uppercase tracking-widest text-gold">
-              {revealing ? "Remember this word!" : hidden ? "Spell it from memory" : "Eat the letters in order"}
-            </p>
-            <p
-              className="snake-word font-display text-2xl font-semibold tracking-[0.16em] sm:text-3xl"
-              aria-label={hidden ? `Word hidden. ${progress} of ${word.word.length} letters eaten` : `Word: ${word.word}. Next letter ${needed}`}
-            >
-              {word.word.split("").map((letter, i) => (
-                <span key={i} className={i < progress ? "is-eaten" : i === progress && cfg.highlightNext ? "is-next" : hidden ? "is-hidden" : ""}>
-                  {hidden && i >= progress ? "_" : letter}
-                </span>
-              ))}
-            </p>
-            {revealing ? (
-              <span className="peek-bar" aria-hidden>
-                <span style={{ width: `${(peekLeft / peekTotal) * 100}%` }} />
-              </span>
-            ) : null}
-          </div>
-        </div>
-        {cfg.canHear ? (
-          <button
-            type="button"
-            onClick={() => speak(hidden ? word.word.toLowerCase() : `${word.word.toLowerCase()}. ${word.hint}`)}
-            className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl border border-line"
-            aria-label="Hear the word"
-          >
-            <Volume2 className="size-5 text-gold" aria-hidden />
-          </button>
-        ) : null}
-      </div>
-
       <div ref={setWrapEl} className="snake-wrap">
         <canvas
           ref={canvasRef}
-          className="snake-board mx-auto block rounded-card"
+          className="snake-board block"
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={() => (swipe.current = null)}
-          aria-label="Word Snake board. Use arrow keys, swipe, or the buttons below."
+          aria-label="Word Snake board. Swipe on the board, or use the arrow keys."
         />
         {phase !== "playing" && (
           <div className="snake-overlay" role="status">
+            <div className="snake-card">
             {phase === "ready" && revealing && (
               <>
                 <p className="text-xs font-extrabold uppercase tracking-widest text-gold">Remember it!</p>
                 <p className="font-display text-4xl font-semibold tracking-[0.15em]">{word.word}</p>
+                <span className="peek-bar mx-auto mt-2 w-40" aria-hidden>
+                  <span style={{ width: `${(peekLeft / peekTotal) * 100}%` }} />
+                </span>
                 <p className="mt-2 text-sm text-muted">It hides in {Math.ceil(peekLeft / 1000)}…</p>
               </>
             )}
             {phase === "ready" && !revealing && (
               <>
+                {canChooseLevel ? (
+                  <div className="mb-3 w-full">
+                    <div className="arcade-levels" role="radiogroup" aria-label="Difficulty">
+                      {ARCADE_LEVELS.map((item) => (
+                        <button
+                          key={item}
+                          type="button"
+                          role="radio"
+                          aria-checked={item === level}
+                          onClick={() => chooseLevel(item)}
+                          className={item === level ? "is-active" : ""}
+                        >
+                          {LEVEL_NAMES[item]}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="mt-1 text-xs font-bold text-muted">
+                      {cfg.blurb}. Best {Math.max(levelBest, wordsDone)}
+                      {best > levelBest ? ` · all levels ${best}` : ""}
+                    </p>
+                  </div>
+                ) : null}
                 <p className="font-display text-2xl font-semibold">
                   {hidden ? "Now spell it from memory" : `${word.emoji} Spell ${word.word}`}
                 </p>
                 {cfg.showPicture ? <p className="mt-1 text-sm text-muted">{word.hint}</p> : null}
-                <p className="mt-3 text-sm font-bold">Swipe, use the arrows, or tap Go!</p>
-                <button type="button" onClick={() => steer("right")} className="mt-3 min-h-12 rounded-2xl bg-primary px-8 font-extrabold text-primary-fg">
-                  Go!
-                </button>
+                <p className="mt-2 text-sm font-bold">Swipe on the board to steer · arrow keys on a computer</p>
+                <div className="mt-3 flex items-center justify-center gap-2">
+                  {hearButton}
+                  <button type="button" onClick={() => steer("right")} className="min-h-12 rounded-2xl bg-primary px-8 font-extrabold text-primary-fg">
+                    Go!
+                  </button>
+                </div>
               </>
             )}
             {phase === "oops" && (
               <>
                 <p className="font-display text-2xl font-semibold">Oops! Try again</p>
                 <p className="mt-1 max-w-xs text-sm">{message}</p>
-                <button type="button" onClick={() => steer("right")} className="mt-3 min-h-12 rounded-2xl bg-primary px-8 font-extrabold text-primary-fg">
-                  Keep going
-                </button>
+                <div className="mt-3 flex items-center justify-center gap-2">
+                  {hearButton}
+                  <button type="button" onClick={() => steer("right")} className="min-h-12 rounded-2xl bg-primary px-8 font-extrabold text-primary-fg">
+                    Keep going
+                  </button>
+                </div>
               </>
             )}
             {phase === "word" && <p className="font-display text-3xl font-semibold text-good">{message}</p>}
@@ -554,28 +583,33 @@ export function WordSnake() {
                 <p className="mt-2 font-extrabold">
                   {wordsDone} {wordsDone === 1 ? "word" : "words"} · {coins} coins earned
                 </p>
+                <p className="text-xs font-bold text-muted">
+                  {LEVEL_NAMES[level]} best: {Math.max(levelBest, wordsDone)}
+                </p>
+                <div className="mt-3 w-full">
+                  <div className="arcade-levels" role="radiogroup" aria-label="Difficulty">
+                    {ARCADE_LEVELS.map((item) => (
+                      <button
+                        key={item}
+                        type="button"
+                        role="radio"
+                        aria-checked={item === level}
+                        onClick={() => chooseLevel(item)}
+                        className={item === level ? "is-active" : ""}
+                      >
+                        {LEVEL_NAMES[item]}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <button type="button" onClick={() => restart()} className="mt-3 min-h-12 rounded-2xl bg-primary px-8 font-extrabold text-primary-fg">
                   Play again
                 </button>
               </>
             )}
+            </div>
           </div>
         )}
-      </div>
-
-      <div className="snake-pad mx-auto shrink-0" aria-label="Steering buttons">
-        <button type="button" className="pad-up" onClick={() => steer("up")} aria-label="Up">
-          <ArrowUp aria-hidden />
-        </button>
-        <button type="button" className="pad-left" onClick={() => steer("left")} aria-label="Left">
-          <ArrowLeft aria-hidden />
-        </button>
-        <button type="button" className="pad-right" onClick={() => steer("right")} aria-label="Right">
-          <ArrowRight aria-hidden />
-        </button>
-        <button type="button" className="pad-down" onClick={() => steer("down")} aria-label="Down">
-          <ArrowDown aria-hidden />
-        </button>
       </div>
     </GameStage>
   );
