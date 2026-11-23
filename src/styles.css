@@ -1529,3 +1529,11 @@ textarea {
   .land-spotlight .land-emblem.is-big { width: 4.2rem; height: 4.2rem; }
   .spotlight-blurb { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
 }
+@media (max-width: 639px) {
+  .trail h2 { display: none; }
+  .trail .trail-ring { width: 3rem; height: 3rem; }
+  .trail .trail-ring > span { width: 2.35rem; height: 2.35rem; font-size: 1.1rem; }
+  .land-spotlight h3 { font-size: 1.3rem; }
+  .trail-tabs { padding: 0.25rem; }
+  .trail-tab { min-height: 2.5rem; }
+}
