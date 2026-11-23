@@ -47,13 +47,14 @@ import { BattleRoom } from "@/components/quiz/BattleRoom";
 import { CloudSync } from "@/components/quiz/CloudSync";
 import { CommandCenter } from "@/components/quiz/CommandCenter";
 import { HelpMap } from "@/components/quiz/HelpMap";
+import { LabelLab } from "@/components/quiz/LabelLab";
 import { MemoryMatch } from "@/components/quiz/MemoryMatch";
 import { WordSnake } from "@/components/quiz/WordSnake";
 import { Weekly } from "@/components/quiz/WeeklyChallenge";
 import { BannerCreatures, JungleIntro, JungleLife } from "@/components/quiz/JungleLife";
 
 /** Screens where a child is answering: no moving creatures there, so nothing competes with the question. */
-const QUIET_SCREENS = new Set(["play", "battle", "command", "certificate", "snake", "memory"]);
+const QUIET_SCREENS = new Set(["play", "battle", "command", "certificate", "snake", "memory", "label"]);
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -170,6 +171,7 @@ export function QuizApp() {
           {screen === "command" && <CommandCenter />}
           {screen === "snake" && <WordSnake />}
           {screen === "memory" && <MemoryMatch />}
+          {screen === "label" && <LabelLab />}
         </div>
         <PvCredit className="app-footer-credit" />
       </div>
@@ -864,6 +866,13 @@ function GameCorner() {
       art: "/art/games/snake.svg",
       note: "Eat the letters of the word in order. Four levels; on Hard the word hides and you spell it from memory.",
       best: best.snake ? `Best: ${best.snake} ${best.snake === 1 ? "word" : "words"}` : "New game!",
+    },
+    {
+      id: "label" as const,
+      name: "Label Lab",
+      art: "/art/games/label.svg",
+      note: "Drag the words onto the picture before the clock runs out: body, skeleton, plants, insects and more.",
+      best: best.label ? `Best: round ${best.label}` : "New game!",
     },
     {
       id: "memory" as const,
