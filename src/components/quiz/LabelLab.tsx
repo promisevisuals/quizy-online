@@ -294,7 +294,7 @@ export function LabelLab() {
               </div>
             </>
           ) : null}
-          <button type="button" onClick={() => startGame()} className="mt-4 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-lg font-extrabold text-primary-fg">
+          <button type="button" onClick={() => startGame()} className="lab-start mt-4 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-lg font-extrabold text-primary-fg">
             <Play className="size-5" aria-hidden /> {chosenTopic && startStage > 1 ? `Start at stage ${startStage}` : "Start labelling"}
           </button>
         </div>

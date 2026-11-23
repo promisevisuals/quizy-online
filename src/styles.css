@@ -1754,3 +1754,5 @@ textarea {
 .lab-dot.is-missed { fill: #d9822b; }
 .lab-slot.is-missed rect { fill: #fff0dc; stroke: #d9822b; stroke-dasharray: none; }
 .lab-slot.is-missed text { fill: #8a4a12; }
+/* the Start button stays in reach while the topic list scrolls on small phones */
+.lab-start { position: sticky; bottom: 0; box-shadow: 0 -10px 18px 4px #f6ead0; }
