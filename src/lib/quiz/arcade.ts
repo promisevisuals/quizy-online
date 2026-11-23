@@ -37,6 +37,8 @@ export type SnakeLevel = {
   word: "always" | "flash";
   /** Glow on the next letter to eat. */
   highlightNext: boolean;
+  /** Highest rung of the word ladder (0 = 3 letters … 8 = 13–15 letters). */
+  maxTier: number;
   /** How long the word shows before hiding (flash levels), shrinking as you go. */
   flashMs: number;
   minFlashMs: number;
@@ -51,6 +53,7 @@ export const SNAKE_LEVELS: Record<ArcadeLevel, SnakeLevel> = {
     blurb: "Word stays on screen, next letter glows",
     startTier: 0,
     wordsPerTier: 3,
+    maxTier: 4,
     baseMs: 320,
     msPerWord: 8,
     minMs: 170,
@@ -64,9 +67,10 @@ export const SNAKE_LEVELS: Record<ArcadeLevel, SnakeLevel> = {
     showPicture: true,
   },
   medium: {
-    blurb: "Word stays on screen, faster, more trick letters",
-    startTier: 1,
+    blurb: "Longer words, faster snake, more trick letters",
+    startTier: 2,
     wordsPerTier: 3,
+    maxTier: 6,
     baseMs: 250,
     msPerWord: 10,
     minMs: 140,
@@ -80,9 +84,10 @@ export const SNAKE_LEVELS: Record<ArcadeLevel, SnakeLevel> = {
     showPicture: true,
   },
   hard: {
-    blurb: "See the word, then spell it from memory",
-    startTier: 1,
-    wordsPerTier: 3,
+    blurb: "Long words to spell from memory",
+    startTier: 3,
+    wordsPerTier: 2,
+    maxTier: 7,
     baseMs: 235,
     msPerWord: 10,
     minMs: 130,
@@ -96,9 +101,10 @@ export const SNAKE_LEVELS: Record<ArcadeLevel, SnakeLevel> = {
     showPicture: true,
   },
   expert: {
-    blurb: "Quick look only, long words, fastest snake",
-    startTier: 2,
+    blurb: "8 to 15 letter words, a quick look, fastest snake",
+    startTier: 5,
     wordsPerTier: 2,
+    maxTier: 8,
     baseMs: 200,
     msPerWord: 12,
     minMs: 110,
