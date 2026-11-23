@@ -173,35 +173,29 @@ export function saveLevel(game: string, level: ArcadeLevel) {
 
 export type LabelLevel = {
   blurb: string;
+  /** Labels in stage 1; every later stage shows one more… */
   startLabels: number;
+  /** …up to this many (stages with fewer parts show them all). */
   maxLabels: number;
-  /** Seconds on the clock for each label in round 1… */
+  /** Seconds on the clock for each label in stage 1… */
   secondsPerLabel: number;
-  /** …losing this much per round, down to the minimum. */
+  /** …losing this much per stage, down to the minimum. */
   shrinkPerRound: number;
   minSecondsPerLabel: number;
-  /** Highest word tier used (1 everyday, 2 harder, 3 science). */
-  maxTier: 1 | 2 | 3;
   /** Extra wrong words mixed into the word bank. */
   decoys: number;
   /** Seconds lost for a wrong drop. */
   penalty: number;
-  /** Show the scientific names (Femur, Trachea, Evaporation…). */
-  scientific: boolean;
   /** Make the unlabelled points pulse. */
   pulse: boolean;
 };
 
 export const LABEL_LEVELS: Record<ArcadeLevel, LabelLevel> = {
-  easy: { blurb: "Few labels, lots of time, everyday words", startLabels: 3, maxLabels: 6, secondsPerLabel: 14, shrinkPerRound: 0.8, minSecondsPerLabel: 7, maxTier: 1, decoys: 0, penalty: 2, scientific: false, pulse: true },
-  medium: { blurb: "More labels, a trick word in the bank", startLabels: 4, maxLabels: 8, secondsPerLabel: 11, shrinkPerRound: 0.7, minSecondsPerLabel: 5.5, maxTier: 2, decoys: 1, penalty: 3, scientific: false, pulse: true },
-  hard: { blurb: "Science names, trick words, a faster clock", startLabels: 5, maxLabels: 10, secondsPerLabel: 8, shrinkPerRound: 0.5, minSecondsPerLabel: 4, maxTier: 3, decoys: 2, penalty: 3, scientific: true, pulse: false },
-  expert: { blurb: "Every label, three trick words, racing clock", startLabels: 6, maxLabels: 12, secondsPerLabel: 6, shrinkPerRound: 0.4, minSecondsPerLabel: 3, maxTier: 3, decoys: 3, penalty: 4, scientific: true, pulse: false },
+  easy: { blurb: "Fewer labels and lots of time", startLabels: 4, maxLabels: 7, secondsPerLabel: 14, shrinkPerRound: 0.6, minSecondsPerLabel: 8, decoys: 0, penalty: 2, pulse: true },
+  medium: { blurb: "More labels, a trick word in the bank", startLabels: 5, maxLabels: 9, secondsPerLabel: 11, shrinkPerRound: 0.6, minSecondsPerLabel: 6, decoys: 1, penalty: 3, pulse: true },
+  hard: { blurb: "Every label, two trick words, a faster clock", startLabels: 6, maxLabels: 10, secondsPerLabel: 8, shrinkPerRound: 0.5, minSecondsPerLabel: 4.5, decoys: 2, penalty: 3, pulse: false },
+  expert: { blurb: "Every label, three trick words, racing clock", startLabels: 6, maxLabels: 12, secondsPerLabel: 6.5, shrinkPerRound: 0.4, minSecondsPerLabel: 3.5, decoys: 3, penalty: 4, pulse: false },
 };
-
-export function labelsForRound(level: LabelLevel, round: number) {
-  return Math.min(level.maxLabels, level.startLabels + Math.max(0, round - 1));
-}
 
 export function labelSeconds(level: LabelLevel, round: number, labels: number) {
   const per = Math.max(level.minSecondsPerLabel, level.secondsPerLabel - level.shrinkPerRound * Math.max(0, round - 1));

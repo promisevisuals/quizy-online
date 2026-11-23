@@ -1,292 +1,553 @@
 /**
- * Label Lab diagrams. Each is a small hand-drawn SVG (viewBox 0 0 480 400) plus the parts to label:
- * `at` is the point on the drawing, `slot` is where the blank label sits. `tier` 1 = everyday words,
- * 2 = a bit harder, 3 = science words. `hard` swaps in the scientific name on Hard and Expert.
+ * Label Lab content. Each topic is a ladder of stages: stage 1 is a handful of everyday parts,
+ * and every later stage brings NEW parts to label (often on a closer drawing), ending with the
+ * names most grown-ups have never heard of. Drawings live in labelArt*.ts (480 × 480 box).
+ *
+ * `at` is the point on the drawing. `side` says where its blank goes; by default the left or
+ * right column, whichever half of the picture the point is in. Wide scenes put labels in the
+ * rows above and below instead.
  */
 
-export type LabelPart = { word: string; hard?: string; at: [number, number]; slot: [number, number]; tier: 1 | 2 | 3 };
-export type LabelDiagram = { id: string; title: string; emoji: string; art: string; parts: LabelPart[] };
+import { brainArt, earArt, faceArt, figureArt, handArt, heartArt, skeletonArt, torsoArt } from "./labelArtHuman.ts";
+import {
+  beeArt,
+  earthArt,
+  fishArt,
+  fishInsideArt,
+  flowerArt,
+  grasshopperArt,
+  leafArt,
+  leafSliceArt,
+  plantArt,
+  volcanoArt,
+  waterArt,
+} from "./labelArtNature.ts";
 
-const SKIN = "#f2c49b";
-const SKIN_LINE = "#c98d5e";
+export type LabelSide = "left" | "right" | "top" | "bottom";
+export type LabelPart = { word: string; at: [number, number]; side?: LabelSide };
+export type LabelStage = { title: string; art: string; parts: LabelPart[]; fact: string };
+/** Topics in the same group share words (Eye, Leg, Heart…), so they never trade trick words. */
+export type LabelGroup = "people" | "plants" | "animals" | "earth";
+export type LabelTopic = { id: string; title: string; emoji: string; group: LabelGroup; stages: LabelStage[] };
 
-const body = `
-  <ellipse cx="240" cy="392" rx="120" ry="8" fill="#e6d3ad"/>
-  <path d="M202 58c2-30 24-44 40-44s38 12 40 40c-10-10-26-14-40-14s-30 6-40 18z" fill="#3b2a1d"/>
-  <ellipse cx="202" cy="74" rx="8" ry="12" fill="${SKIN}" stroke="${SKIN_LINE}" stroke-width="2"/>
-  <ellipse cx="278" cy="74" rx="8" ry="12" fill="${SKIN}" stroke="${SKIN_LINE}" stroke-width="2"/>
-  <circle cx="240" cy="72" r="38" fill="${SKIN}" stroke="${SKIN_LINE}" stroke-width="2"/>
-  <path d="M202 60c6-20 22-30 38-30s32 10 38 30c-8-12-22-18-38-18s-30 6-38 18z" fill="#3b2a1d"/>
-  <circle cx="226" cy="68" r="4.5" fill="#2a2416"/><circle cx="254" cy="68" r="4.5" fill="#2a2416"/>
-  <path d="M240 72l-4 10h8" fill="none" stroke="${SKIN_LINE}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M228 92q12 9 24 0" fill="none" stroke="#b5483f" stroke-width="3" stroke-linecap="round"/>
-  <rect x="231" y="106" width="18" height="18" fill="${SKIN}" stroke="${SKIN_LINE}" stroke-width="2"/>
-  <path d="M196 132q4-12 20-12h48q16 0 20 12l-4 100h-80z" fill="#2f9a5f" stroke="#1c7a4a" stroke-width="2"/>
-  <path d="M200 130l-24 50-8 58" fill="none" stroke="${SKIN}" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M280 130l24 50 8 58" fill="none" stroke="${SKIN}" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M200 130q-6 4-10 14" fill="none" stroke="#2f9a5f" stroke-width="18" stroke-linecap="round"/>
-  <path d="M280 130q6 4 10 14" fill="none" stroke="#2f9a5f" stroke-width="18" stroke-linecap="round"/>
-  <circle cx="167" cy="244" r="12" fill="${SKIN}" stroke="${SKIN_LINE}" stroke-width="2"/>
-  <circle cx="313" cy="244" r="12" fill="${SKIN}" stroke="${SKIN_LINE}" stroke-width="2"/>
-  <rect x="200" y="228" width="80" height="48" rx="6" fill="#1c4f7a"/>
-  <path d="M220 272l-3 50-3 50" fill="none" stroke="${SKIN}" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M260 272l3 50 3 50" fill="none" stroke="${SKIN}" stroke-width="19" stroke-linecap="round" stroke-linejoin="round"/>
-  <ellipse cx="206" cy="380" rx="18" ry="9" fill="#c13d3d"/><ellipse cx="274" cy="380" rx="18" ry="9" fill="#c13d3d"/>
-  <path d="M222 160q18 10 36 0" fill="none" stroke="#1c7a4a" stroke-width="2" opacity=".6"/>
-`;
+const L = "left" as const;
+const R = "right" as const;
+const T = "top" as const;
+const B = "bottom" as const;
 
-const organs = `
-  <circle cx="240" cy="56" r="40" fill="#fbe7d6" stroke="${SKIN_LINE}" stroke-width="2"/>
-  <path d="M212 50c0-18 14-26 28-26s28 8 28 26c0 12-12 18-28 18s-28-6-28-18z" fill="#f3a6b8" stroke="#c96b84" stroke-width="2"/>
-  <path d="M222 44q6-8 12 0t12 0 10 2M220 54q8 6 16 0t16 0 10 0" fill="none" stroke="#c96b84" stroke-width="2"/>
-  <path d="M224 94h32v14q46 4 58 26l-4 236h-140l-4-236q12-22 58-26z" fill="#fbe7d6" stroke="${SKIN_LINE}" stroke-width="2"/>
-  <rect x="235" y="96" width="10" height="56" rx="4" fill="#b5d6f0" stroke="#6c9bc4" stroke-width="2"/>
-  <path d="M240 150l-22 16M240 150l22 16" stroke="#6c9bc4" stroke-width="5" stroke-linecap="round"/>
-  <ellipse cx="208" cy="182" rx="26" ry="44" fill="#f4a6a6" stroke="#c96060" stroke-width="2"/>
-  <ellipse cx="272" cy="182" rx="26" ry="44" fill="#f4a6a6" stroke="#c96060" stroke-width="2"/>
-  <path d="M252 178c-6-10-20-6-18 6 2 10 18 20 18 20s16-10 18-20c2-12-12-16-18-6z" fill="#d63a3a" stroke="#8f1f1f" stroke-width="2"/>
-  <path d="M182 238c10-14 44-16 58-6 4 12-10 20-30 20s-30-4-28-14z" fill="#9c4a3a" stroke="#6b2d22" stroke-width="2"/>
-  <path d="M250 228c16-8 38-2 38 16s-20 26-34 20c-10-4-4-14-10-20s-6-12 6-16z" fill="#f0b37e" stroke="#b5743d" stroke-width="2"/>
-  <ellipse cx="190" cy="266" rx="9" ry="15" fill="#b0413e" stroke="#7a2523" stroke-width="2"/>
-  <ellipse cx="290" cy="266" rx="9" ry="15" fill="#b0413e" stroke="#7a2523" stroke-width="2"/>
-  <path d="M204 280q36-12 72 0v44q-36 12-72 0z" fill="#f3c6a0" stroke="#c48b5c" stroke-width="2"/>
-  <path d="M212 292q10 8 20 0t20 0 20 0M212 308q10 8 20 0t20 0 20 0" fill="none" stroke="#c48b5c" stroke-width="2"/>
-  <ellipse cx="240" cy="346" rx="16" ry="12" fill="#f7d36b" stroke="#c49a25" stroke-width="2"/>
-`;
-
-const BONE = "#f8f4ea";
-const BONE_LINE = "#a89a7c";
-const bone = (x1: number, y1: number, x2: number, y2: number, w = 9) =>
-  `<path d="M${x1} ${y1}L${x2} ${y2}" stroke="${BONE_LINE}" stroke-width="${w + 4}" stroke-linecap="round"/><path d="M${x1} ${y1}L${x2} ${y2}" stroke="${BONE}" stroke-width="${w}" stroke-linecap="round"/>`;
-
-const skeleton = `
-  <circle cx="240" cy="48" r="30" fill="${BONE}" stroke="${BONE_LINE}" stroke-width="3"/>
-  <ellipse cx="229" cy="46" rx="7" ry="8" fill="#3d3627"/><ellipse cx="251" cy="46" rx="7" ry="8" fill="#3d3627"/>
-  <path d="M236 62l4-6 4 6z" fill="#3d3627"/>
-  <path d="M222 70q18 18 36 0v8q-18 14-36 0z" fill="${BONE}" stroke="${BONE_LINE}" stroke-width="3"/>
-  <path d="M230 76v6M240 78v6M250 76v6" stroke="${BONE_LINE}" stroke-width="2"/>
-  ${[100, 116, 132, 148, 164, 180, 196, 212, 228, 244].map((y) => `<rect x="233" y="${y}" width="14" height="12" rx="4" fill="${BONE}" stroke="${BONE_LINE}" stroke-width="2"/>`).join("")}
-  ${bone(238, 110, 198, 114, 7)}${bone(242, 110, 282, 114, 7)}
-  ${[130, 146, 162, 178].map((y, i) => `<path d="M236 ${y}q-${44 - i * 4} 4-${40 - i * 4} ${22 - i * 2}" fill="none" stroke="${BONE_LINE}" stroke-width="6" stroke-linecap="round"/><path d="M244 ${y}q${44 - i * 4} 4 ${40 - i * 4} ${22 - i * 2}" fill="none" stroke="${BONE_LINE}" stroke-width="6" stroke-linecap="round"/>`).join("")}
-  ${bone(198, 118, 180, 196)}${bone(282, 118, 300, 196)}
-  ${bone(180, 200, 170, 262, 7)}${bone(300, 200, 310, 262, 7)}
-  <circle cx="168" cy="272" r="9" fill="${BONE}" stroke="${BONE_LINE}" stroke-width="2"/><circle cx="312" cy="272" r="9" fill="${BONE}" stroke="${BONE_LINE}" stroke-width="2"/>
-  <path d="M206 262q34-16 68 0l-8 30q-26 12-52 0z" fill="${BONE}" stroke="${BONE_LINE}" stroke-width="3"/>
-  <circle cx="224" cy="280" r="7" fill="#e9e0cc"/><circle cx="256" cy="280" r="7" fill="#e9e0cc"/>
-  ${bone(224, 296, 220, 340, 11)}${bone(256, 296, 260, 340, 11)}
-  <circle cx="219" cy="346" r="8" fill="${BONE}" stroke="${BONE_LINE}" stroke-width="2.5"/><circle cx="261" cy="346" r="8" fill="${BONE}" stroke="${BONE_LINE}" stroke-width="2.5"/>
-  ${bone(218, 356, 216, 388, 8)}${bone(262, 356, 264, 388, 8)}
-  <ellipse cx="208" cy="394" rx="14" ry="5" fill="${BONE}" stroke="${BONE_LINE}" stroke-width="2"/><ellipse cx="272" cy="394" rx="14" ry="5" fill="${BONE}" stroke="${BONE_LINE}" stroke-width="2"/>
-`;
-
-const plant = `
-  <rect x="120" y="300" width="240" height="96" rx="10" fill="#8a5a36"/>
-  <path d="M120 304h240" stroke="#5e3b20" stroke-width="4"/>
-  <circle cx="160" cy="340" r="3" fill="#6f4628"/><circle cx="330" cy="360" r="4" fill="#6f4628"/><circle cx="300" cy="330" r="3" fill="#6f4628"/>
-  <path d="M240 302c-6 20-26 34-40 60M240 302c4 22 18 34 30 58M240 302c0 24-4 46-2 70M226 330c-12 4-20 12-24 22M256 336c10 2 18 10 22 18" fill="none" stroke="#e9d3a8" stroke-width="4" stroke-linecap="round"/>
-  <path d="M240 302V112" stroke="#3aa86b" stroke-width="9" stroke-linecap="round"/>
-  <path d="M240 160q30-10 52-22" stroke="#3aa86b" stroke-width="5" stroke-linecap="round"/>
-  <ellipse cx="296" cy="140" rx="9" ry="13" fill="#7fc97f" transform="rotate(30 296 140)"/>
-  <path d="M298 134q4-6 0-12" stroke="#e86a8f" stroke-width="4" stroke-linecap="round"/>
-  <path d="M240 232c-30-30-60-20-66 0 20 16 48 14 66 0z" fill="#4cbf7d" stroke="#1c7a4a" stroke-width="2"/>
-  <path d="M240 200c30-30 60-20 66 0-20 16-48 14-66 0z" fill="#4cbf7d" stroke="#1c7a4a" stroke-width="2"/>
-  <path d="M240 232l-56-2M240 200l56-2" stroke="#1c7a4a" stroke-width="1.5"/>
-  ${[0, 60, 120, 180, 240, 300].map((a) => `<ellipse cx="240" cy="72" rx="15" ry="26" fill="#f28fb0" stroke="#c9577c" stroke-width="2" transform="rotate(${a} 240 98)"/>`).join("")}
-  <circle cx="240" cy="98" r="15" fill="#f5c542" stroke="#c49a25" stroke-width="2"/>
-`;
-
-const flower = `
-  <path d="M240 400V300" stroke="#3aa86b" stroke-width="14" stroke-linecap="round"/>
-  <path d="M240 300c-30 0-46-16-50-30 18-4 38 6 50 22M240 300c30 0 46-16 50-30-18-4-38 6-50 22" fill="#5fbf6f" stroke="#1c7a4a" stroke-width="2"/>
-  <path d="M232 284c-60 10-110-40-96-130 40 20 72 70 88 118z" fill="#f6a9c4" stroke="#c9577c" stroke-width="2"/>
-  <path d="M248 284c60 10 110-40 96-130-40 20-72 70-88 118z" fill="#f6a9c4" stroke="#c9577c" stroke-width="2"/>
-  <ellipse cx="240" cy="270" rx="22" ry="18" fill="#9fd88f" stroke="#3a8a4a" stroke-width="2"/>
-  <circle cx="234" cy="268" r="4" fill="#fff6d8"/><circle cx="246" cy="272" r="4" fill="#fff6d8"/>
-  <path d="M240 252V200" stroke="#8cc77a" stroke-width="7" stroke-linecap="round"/>
-  <ellipse cx="240" cy="192" rx="14" ry="9" fill="#e9b949" stroke="#b5862a" stroke-width="2"/>
-  <path d="M228 262l-26-82M252 262l26-82" stroke="#d9d0a0" stroke-width="4" stroke-linecap="round"/>
-  <ellipse cx="201" cy="172" rx="9" ry="13" fill="#f0a030" stroke="#b56a10" stroke-width="2"/>
-  <ellipse cx="279" cy="172" rx="9" ry="13" fill="#f0a030" stroke="#b56a10" stroke-width="2"/>
-`;
-
-const insect = `
-  <path d="M232 78q-16-26-30-34M248 78q16-26 30-34" fill="none" stroke="#2a2416" stroke-width="3" stroke-linecap="round"/>
-  <circle cx="202" cy="44" r="4" fill="#2a2416"/><circle cx="278" cy="44" r="4" fill="#2a2416"/>
-  <ellipse cx="194" cy="146" rx="52" ry="26" fill="#d8ecf7" stroke="#8bb3cc" stroke-width="2" opacity=".9" transform="rotate(-18 194 146)"/>
-  <ellipse cx="286" cy="146" rx="52" ry="26" fill="#d8ecf7" stroke="#8bb3cc" stroke-width="2" opacity=".9" transform="rotate(18 286 146)"/>
-  <path d="M222 140l-44-14-12-18M222 156l-46 8-14 18M226 172l-36 30-6 22M258 140l44-14 12-18M258 156l46 8 14 18M254 172l36 30 6 22" fill="none" stroke="#2a2416" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <ellipse cx="240" cy="236" rx="34" ry="50" fill="#f5c542" stroke="#2a2416" stroke-width="3"/>
-  <path d="M208 220h64M206 242h68M212 264h56" stroke="#2a2416" stroke-width="9"/>
-  <path d="M234 284l6 14 6-14" fill="#2a2416"/>
-  <ellipse cx="240" cy="152" rx="24" ry="28" fill="#6b4b2a" stroke="#2a2416" stroke-width="3"/>
-  <circle cx="240" cy="98" r="22" fill="#6b4b2a" stroke="#2a2416" stroke-width="3"/>
-  <ellipse cx="228" cy="92" rx="7" ry="9" fill="#1c1c1c"/><ellipse cx="252" cy="92" rx="7" ry="9" fill="#1c1c1c"/>
-  <circle cx="230" cy="89" r="2" fill="#fff"/><circle cx="254" cy="89" r="2" fill="#fff"/>
-`;
-
-const fish = `
-  <path d="M330 200l64-60v120z" fill="#f08a3c" stroke="#b5561a" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M200 146c20-34 60-40 90-26l-18 30z" fill="#f08a3c" stroke="#b5561a" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M210 254c14 26 40 30 60 20l-16-24z" fill="#f08a3c" stroke="#b5561a" stroke-width="3" stroke-linejoin="round"/>
-  <ellipse cx="230" cy="200" rx="112" ry="62" fill="#f7a64e" stroke="#b5561a" stroke-width="3"/>
-  ${[250, 280, 310].flatMap((x) => [170, 200, 230].map((y) => `<path d="M${x - 10} ${y - 10}q12 10 0 20" fill="none" stroke="#d9772f" stroke-width="2"/>`)).join("")}
-  <path d="M188 160q-16 40 0 80" fill="none" stroke="#b5561a" stroke-width="3"/>
-  <path d="M196 206q22 4 36 20-24 4-36-20z" fill="#f08a3c" stroke="#b5561a" stroke-width="2"/>
-  <circle cx="158" cy="184" r="12" fill="#fff"/><circle cx="161" cy="184" r="6" fill="#2a2416"/>
-  <path d="M120 206q10 6 18 2" fill="none" stroke="#7a3510" stroke-width="3" stroke-linecap="round"/>
-  <circle cx="98" cy="160" r="5" fill="none" stroke="#8bb3cc" stroke-width="2"/><circle cx="88" cy="138" r="7" fill="none" stroke="#8bb3cc" stroke-width="2"/>
-`;
-
-const water = `
-  <rect x="0" y="0" width="480" height="400" fill="#e8f4fb"/>
-  <circle cx="90" cy="62" r="30" fill="#f5c542"/>
-  ${[0, 45, 90, 135, 180, 225, 270, 315].map((a) => `<path d="M90 22v-12" stroke="#f5c542" stroke-width="5" stroke-linecap="round" transform="rotate(${a} 90 62)"/>`).join("")}
-  <path d="M300 400L392 190l88 120v90z" fill="#8bb07a"/>
-  <path d="M392 190l-22 50 22-12 20 16z" fill="#fff"/>
-  <path d="M0 300q40-10 80 0t80 0 80 0 80 0 40 4V400H0z" fill="#3d8fd1"/>
-  <path d="M10 330q20-8 40 0t40 0M120 360q20-8 40 0t40 0" fill="none" stroke="#a9d4f5" stroke-width="3" stroke-linecap="round"/>
-  <path d="M410 300q-30 20-60 30t-80 0" fill="none" stroke="#3d8fd1" stroke-width="9" stroke-linecap="round"/>
-  <path d="M206 70c0-20 26-30 40-16 8-20 44-20 50 4 22-2 30 26 10 32h-92c-18 0-20-20-8-20z" fill="#fff" stroke="#b9cbd8" stroke-width="2"/>
-  ${[300, 320, 340, 360].map((x) => `<path d="M${x} 104l-8 18M${x + 6} 130l-8 18" stroke="#3d8fd1" stroke-width="3" stroke-linecap="round"/>`).join("")}
-  ${[130, 160, 190].map((x) => `<path d="M${x} 280q-8-12 0-24t0-24 0-24" fill="none" stroke="#e0a54a" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 6"/><path d="M${x - 6} 214l6-10 6 10" fill="none" stroke="#e0a54a" stroke-width="3"/>`).join("")}
-`;
-
-export const LABEL_DIAGRAMS: LabelDiagram[] = [
+export const LABEL_TOPICS: LabelTopic[] = [
   {
     id: "body",
     title: "Your body",
     emoji: "🧍",
-    art: body,
-    parts: [
-      { word: "Head", at: [240, 40], slot: [60, 26], tier: 1 },
-      { word: "Eye", at: [226, 68], slot: [60, 62], tier: 1 },
-      { word: "Ear", at: [200, 78], slot: [60, 98], tier: 1 },
-      { word: "Neck", at: [234, 116], slot: [60, 134], tier: 2 },
-      { word: "Arm", at: [184, 165], slot: [60, 172], tier: 1 },
-      { word: "Hand", at: [166, 244], slot: [60, 244], tier: 1 },
-      { word: "Knee", at: [216, 322], slot: [60, 318], tier: 2 },
-      { word: "Foot", at: [200, 380], slot: [60, 372], tier: 1 },
-      { word: "Nose", at: [242, 80], slot: [420, 62], tier: 1 },
-      { word: "Mouth", at: [250, 94], slot: [420, 100], tier: 1 },
-      { word: "Shoulder", at: [282, 132], slot: [420, 136], tier: 2 },
-      { word: "Chest", at: [255, 156], slot: [420, 172], tier: 2 },
-      { word: "Elbow", at: [304, 182], slot: [420, 208], tier: 2 },
-      { word: "Tummy", hard: "Abdomen", at: [252, 205], slot: [420, 244], tier: 1 },
-      { word: "Leg", at: [266, 345], slot: [420, 342], tier: 1 },
+    group: "people",
+    stages: [
+      {
+        title: "Body basics",
+        art: figureArt,
+        fact: "Your body has 206 bones and more than 600 muscles working together to move you.",
+        parts: [
+          { word: "Head", at: [240, 36], side: L },
+          { word: "Eye", at: [226, 67] },
+          { word: "Arm", at: [190, 168] },
+          { word: "Hand", at: [309, 276] },
+          { word: "Leg", at: [263, 330] },
+          { word: "Foot", at: [272, 450] },
+        ],
+      },
+      {
+        title: "More body parts",
+        art: figureArt,
+        fact: "Elbows and knees are hinge joints: like a door, they only bend one way.",
+        parts: [
+          { word: "Ear", at: [280, 76] },
+          { word: "Nose", at: [239, 80], side: L },
+          { word: "Mouth", at: [240, 93], side: R },
+          { word: "Neck", at: [240, 116], side: L },
+          { word: "Shoulder", at: [283, 134] },
+          { word: "Elbow", at: [181, 198] },
+          { word: "Tummy", at: [246, 206], side: L },
+          { word: "Knee", at: [263, 372] },
+        ],
+      },
+      {
+        title: "Bends and joins",
+        art: figureArt,
+        fact: "Your belly button is where the cord that fed you before you were born was attached.",
+        parts: [
+          { word: "Chest", at: [258, 162] },
+          { word: "Forearm", at: [177, 228] },
+          { word: "Wrist", at: [173, 256] },
+          { word: "Belly button", at: [240, 230], side: R },
+          { word: "Hip", at: [202, 262] },
+          { word: "Thigh", at: [220, 324] },
+          { word: "Shin", at: [265, 410] },
+          { word: "Ankle", at: [214, 436] },
+          { word: "Toes", at: [276, 462] },
+        ],
+      },
+      {
+        title: "Your face up close",
+        art: faceArt,
+        fact: "The little groove between your nose and top lip is called the philtrum. Everyone has one!",
+        parts: [
+          { word: "Forehead", at: [214, 164] },
+          { word: "Temple", at: [146, 210] },
+          { word: "Eyebrow", at: [296, 204] },
+          { word: "Eyelid", at: [196, 219] },
+          { word: "Eyelash", at: [292, 216] },
+          { word: "Cheek", at: [304, 292] },
+          { word: "Nostril", at: [230, 302] },
+          { word: "Philtrum", at: [240, 322], side: R },
+          { word: "Lips", at: [262, 346] },
+          { word: "Chin", at: [240, 388], side: L },
+        ],
+      },
+      {
+        title: "Your hand up close",
+        art: handArt,
+        fact: "Fingernails grow about 3 mm a month, faster than toenails.",
+        parts: [
+          { word: "Fingernail", at: [194, 148] },
+          { word: "Index finger", at: [194, 214] },
+          { word: "Thumb", at: [146, 268] },
+          { word: "Wrist", at: [222, 432] },
+          { word: "Middle finger", at: [230, 108], side: R },
+          { word: "Ring finger", at: [266, 174] },
+          { word: "Little finger", at: [298, 210] },
+          { word: "Knuckle", at: [266, 284] },
+        ],
+      },
+      {
+        title: "Secret parts of the ear",
+        art: earArt,
+        fact: "The tragus is the little flap in front of your ear hole. Press it and it covers the hole.",
+        parts: [
+          { word: "Helix", at: [236, 86], side: L },
+          { word: "Concha", at: [244, 250], side: L },
+          { word: "Ear canal", at: [217, 268] },
+          { word: "Tragus", at: [192, 286] },
+          { word: "Antihelix", at: [290, 214] },
+          { word: "Antitragus", at: [262, 316] },
+          { word: "Earlobe", at: [270, 392] },
+        ],
+      },
     ],
   },
   {
     id: "organs",
     title: "Inside your body",
     emoji: "🫀",
-    art: organs,
-    parts: [
-      { word: "Brain", at: [222, 48], slot: [60, 40], tier: 1 },
-      { word: "Windpipe", hard: "Trachea", at: [236, 118], slot: [60, 110], tier: 2 },
-      { word: "Lungs", at: [196, 182], slot: [60, 172], tier: 1 },
-      { word: "Liver", at: [200, 240], slot: [60, 230], tier: 2 },
-      { word: "Kidneys", at: [186, 270], slot: [60, 282], tier: 3 },
-      { word: "Bladder", at: [228, 348], slot: [60, 344], tier: 3 },
-      { word: "Heart", at: [254, 192], slot: [420, 176], tier: 1 },
-      { word: "Stomach", at: [276, 244], slot: [420, 232], tier: 1 },
-      { word: "Intestines", at: [262, 302], slot: [420, 302], tier: 2 },
+    group: "people",
+    stages: [
+      {
+        title: "The big organs",
+        art: torsoArt,
+        fact: "Your heart beats about 100,000 times a day.",
+        parts: [
+          { word: "Brain", at: [214, 46] },
+          { word: "Lungs", at: [186, 214] },
+          { word: "Heart", at: [256, 236] },
+          { word: "Liver", at: [204, 318] },
+          { word: "Stomach", at: [292, 330] },
+        ],
+      },
+      {
+        title: "Tubes and filters",
+        art: torsoArt,
+        fact: "Your small intestine is about 6 metres long, much longer than the large intestine.",
+        parts: [
+          { word: "Windpipe", at: [240, 146], side: L },
+          { word: "Food pipe", at: [255, 128], side: R },
+          { word: "Kidneys", at: [174, 366] },
+          { word: "Large intestine", at: [187, 420] },
+          { word: "Small intestine", at: [244, 424], side: R },
+          { word: "Bladder", at: [240, 463], side: R },
+        ],
+      },
+      {
+        title: "Hidden helpers",
+        art: torsoArt,
+        fact: "The diaphragm is a dome-shaped muscle. When it tightens, air rushes into your lungs.",
+        parts: [
+          { word: "Thyroid", at: [249, 113], side: R },
+          { word: "Diaphragm", at: [168, 287] },
+          { word: "Gallbladder", at: [222, 348] },
+          { word: "Spleen", at: [318, 302] },
+          { word: "Pancreas", at: [288, 365] },
+          { word: "Appendix", at: [187, 463] },
+        ],
+      },
+      {
+        title: "Inside the heart",
+        art: heartArt,
+        fact: "The left ventricle has the thickest wall: it pumps blood all the way round your body.",
+        parts: [
+          { word: "Vena cava", at: [201, 100] },
+          { word: "Pulmonary artery", at: [176, 158] },
+          { word: "Right atrium", at: [204, 232] },
+          { word: "Right ventricle", at: [222, 306] },
+          { word: "Aorta", at: [304, 84] },
+          { word: "Left atrium", at: [292, 228] },
+          { word: "Left ventricle", at: [282, 300] },
+          { word: "Septum", at: [251, 334], side: R },
+        ],
+      },
+      {
+        title: "Parts of the brain",
+        art: brainArt,
+        fact: "The cerebellum, at the back of your brain, keeps your balance and smooths your movements.",
+        parts: [
+          { word: "Frontal lobe", at: [178, 166] },
+          { word: "Temporal lobe", at: [232, 262] },
+          { word: "Spinal cord", at: [254, 448], side: L },
+          { word: "Parietal lobe", at: [296, 132] },
+          { word: "Occipital lobe", at: [334, 236] },
+          { word: "Cerebellum", at: [330, 334] },
+          { word: "Brain stem", at: [258, 372] },
+        ],
+      },
     ],
   },
   {
     id: "skeleton",
     title: "The skeleton",
     emoji: "💀",
-    art: skeleton,
-    parts: [
-      { word: "Skull", hard: "Cranium", at: [214, 40], slot: [60, 34], tier: 1 },
-      { word: "Jaw", hard: "Mandible", at: [226, 78], slot: [60, 84], tier: 2 },
-      { word: "Spine", hard: "Vertebrae", at: [236, 214], slot: [60, 214], tier: 1 },
-      { word: "Hip bone", hard: "Pelvis", at: [212, 274], slot: [60, 268], tier: 2 },
-      { word: "Thigh bone", hard: "Femur", at: [222, 318], slot: [60, 318], tier: 2 },
-      { word: "Collarbone", hard: "Clavicle", at: [270, 114], slot: [420, 96], tier: 2 },
-      { word: "Ribs", at: [270, 156], slot: [420, 150], tier: 1 },
-      { word: "Kneecap", hard: "Patella", at: [264, 346], slot: [420, 330], tier: 2 },
-      { word: "Shin bone", hard: "Tibia", at: [264, 374], slot: [420, 378], tier: 3 },
+    group: "people",
+    stages: [
+      {
+        title: "Big bones",
+        art: skeletonArt,
+        fact: "Babies are born with about 300 bones. Some join together as they grow, leaving 206.",
+        parts: [
+          { word: "Skull", at: [218, 36] },
+          { word: "Jaw", at: [258, 88] },
+          { word: "Ribs", at: [278, 176] },
+          { word: "Spine", at: [240, 256], side: L },
+          { word: "Kneecap", at: [260, 404] },
+        ],
+      },
+      {
+        title: "Bones by name",
+        art: skeletonArt,
+        fact: "The thigh bone is the longest and strongest bone in your body.",
+        parts: [
+          { word: "Breastbone", at: [240, 172], side: L },
+          { word: "Upper arm bone", at: [187, 176] },
+          { word: "Hip bone", at: [221, 308] },
+          { word: "Collarbone", at: [270, 130] },
+          { word: "Thigh bone", at: [262, 360] },
+          { word: "Shin bone", at: [257, 428] },
+          { word: "Finger bones", at: [322, 340] },
+        ],
+      },
+      {
+        title: "Science names",
+        art: skeletonArt,
+        fact: "Your forearm has two bones (radius and ulna), and so does your lower leg (tibia and fibula).",
+        parts: [
+          { word: "Clavicle", at: [208, 129] },
+          { word: "Radius", at: [163, 270] },
+          { word: "Femur", at: [218, 360] },
+          { word: "Tibia", at: [224, 428] },
+          { word: "Humerus", at: [294, 176] },
+          { word: "Sternum", at: [240, 192], side: R },
+          { word: "Ulna", at: [303, 262] },
+          { word: "Patella", at: [260, 404] },
+          { word: "Fibula", at: [268, 428] },
+        ],
+      },
+      {
+        title: "Tiny bones",
+        art: skeletonArt,
+        fact: "Your hands and feet hold more than half of all the bones in your body.",
+        parts: [
+          { word: "Cranium", at: [240, 26], side: L },
+          { word: "Vertebrae", at: [240, 248], side: L },
+          { word: "Carpals", at: [167, 304] },
+          { word: "Tarsals", at: [218, 449] },
+          { word: "Mandible", at: [262, 86] },
+          { word: "Pelvis", at: [262, 308] },
+          { word: "Phalanges", at: [324, 350] },
+          { word: "Metatarsals", at: [262, 462] },
+        ],
+      },
     ],
   },
   {
-    id: "plant",
-    title: "A plant",
+    id: "plants",
+    title: "Plants",
     emoji: "🌱",
-    art: plant,
-    parts: [
-      { word: "Petal", at: [226, 60], slot: [60, 52], tier: 2 },
-      { word: "Leaf", at: [196, 226], slot: [60, 222], tier: 1 },
-      { word: "Roots", at: [214, 350], slot: [60, 352], tier: 1 },
-      { word: "Flower", at: [256, 98], slot: [420, 82], tier: 1 },
-      { word: "Bud", at: [300, 140], slot: [420, 136], tier: 2 },
-      { word: "Stem", at: [244, 262], slot: [420, 262], tier: 1 },
-      { word: "Soil", at: [330, 330], slot: [420, 320], tier: 2 },
+    group: "plants",
+    stages: [
+      {
+        title: "A plant",
+        art: plantArt,
+        fact: "Roots hold a plant in the ground and drink up water from the soil.",
+        parts: [
+          { word: "Petal", at: [222, 76] },
+          { word: "Flower", at: [262, 98] },
+          { word: "Leaf", at: [174, 210] },
+          { word: "Stem", at: [240, 300], side: R },
+          { word: "Roots", at: [240, 400], side: L },
+        ],
+      },
+      {
+        title: "More plant parts",
+        art: plantArt,
+        fact: "Root hairs are tiny, but there are so many that they soak up most of a plant's water.",
+        parts: [
+          { word: "Vein", at: [188, 214] },
+          { word: "Node", at: [240, 232], side: L },
+          { word: "Side root", at: [202, 372] },
+          { word: "Bud", at: [294, 140] },
+          { word: "Leaf stalk", at: [252, 266] },
+          { word: "Tap root", at: [241, 418], side: R },
+          { word: "Root hairs", at: [247, 444] },
+        ],
+      },
+      {
+        title: "Inside a flower",
+        art: flowerArt,
+        fact: "Pollen from an anther has to reach a stigma before a seed can start to grow.",
+        parts: [
+          { word: "Anther", at: [191, 186] },
+          { word: "Filament", at: [199, 262] },
+          { word: "Ovary", at: [218, 304] },
+          { word: "Sepal", at: [176, 328] },
+          { word: "Stigma", at: [240, 158], side: R },
+          { word: "Petal", at: [328, 206] },
+          { word: "Style", at: [240, 222], side: R },
+          { word: "Ovule", at: [249, 312] },
+          { word: "Receptacle", at: [266, 352] },
+        ],
+      },
+      {
+        title: "A leaf up close",
+        art: leafArt,
+        fact: "The midrib carries water into the leaf and sugar out to the rest of the plant.",
+        parts: [
+          { word: "Leaf tip", at: [240, 72], side: L },
+          { word: "Vein", at: [190, 280] },
+          { word: "Petiole", at: [240, 432], side: L },
+          { word: "Midrib", at: [240, 196], side: R },
+          { word: "Margin", at: [328, 228] },
+          { word: "Blade", at: [292, 318] },
+          { word: "Stipule", at: [256, 460] },
+        ],
+      },
+      {
+        title: "Inside a leaf",
+        art: leafSliceArt,
+        fact: "Stomata are tiny holes that let air in and out of a leaf. Guard cells open and close them.",
+        parts: [
+          { word: "Cuticle", at: [166, 104] },
+          { word: "Palisade layer", at: [174, 190] },
+          { word: "Phloem", at: [236, 308], side: L },
+          { word: "Spongy layer", at: [172, 330] },
+          { word: "Guard cell", at: [229, 367] },
+          { word: "Upper epidermis", at: [306, 122] },
+          { word: "Chloroplast", at: [303, 172] },
+          { word: "Xylem", at: [247, 282], side: R },
+          { word: "Stoma", at: [240, 380], side: R },
+        ],
+      },
     ],
   },
   {
-    id: "flower",
-    title: "Inside a flower",
-    emoji: "🌸",
-    art: flower,
-    parts: [
-      { word: "Anther", at: [198, 168], slot: [60, 130], tier: 3 },
-      { word: "Petal", at: [160, 200], slot: [60, 210], tier: 1 },
-      { word: "Sepal", at: [206, 284], slot: [60, 284], tier: 3 },
-      { word: "Stem", at: [236, 352], slot: [60, 352], tier: 1 },
-      { word: "Stigma", at: [252, 190], slot: [420, 120], tier: 3 },
-      { word: "Filament", at: [270, 214], slot: [420, 180], tier: 3 },
-      { word: "Style", at: [244, 226], slot: [420, 230], tier: 3 },
-      { word: "Ovary", at: [258, 270], slot: [420, 280], tier: 3 },
-    ],
-  },
-  {
-    id: "insect",
-    title: "An insect",
+    id: "insects",
+    title: "Insects",
     emoji: "🐝",
-    art: insect,
-    parts: [
-      { word: "Antenna", at: [208, 46], slot: [60, 40], tier: 1 },
-      { word: "Head", at: [222, 104], slot: [60, 100], tier: 1 },
-      { word: "Thorax", at: [222, 156], slot: [60, 160], tier: 3 },
-      { word: "Abdomen", at: [208, 236], slot: [60, 240], tier: 3 },
-      { word: "Eye", at: [254, 92], slot: [420, 64], tier: 1 },
-      { word: "Wing", at: [306, 136], slot: [420, 120], tier: 1 },
-      { word: "Leg", at: [310, 184], slot: [420, 186], tier: 1 },
-      { word: "Stinger", at: [244, 296], slot: [420, 296], tier: 2 },
+    group: "animals",
+    stages: [
+      {
+        title: "A honeybee",
+        art: beeArt,
+        fact: "Every insect has six legs and a body in three parts.",
+        parts: [
+          { word: "Head", at: [240, 118], side: L },
+          { word: "Antenna", at: [200, 38] },
+          { word: "Leg", at: [146, 222] },
+          { word: "Eye", at: [267, 100] },
+          { word: "Wing", at: [346, 126] },
+        ],
+      },
+      {
+        title: "Body parts",
+        art: beeArt,
+        fact: "A bee beats its wings about 200 times a second. That's the buzz you hear!",
+        parts: [
+          { word: "Mouthparts", at: [232, 70], side: L },
+          { word: "Thorax", at: [226, 182] },
+          { word: "Hind wing", at: [170, 198] },
+          { word: "Stinger", at: [240, 386], side: L },
+          { word: "Front wing", at: [330, 128] },
+          { word: "Abdomen", at: [266, 300] },
+        ],
+      },
+      {
+        title: "A grasshopper up close",
+        art: grasshopperArt,
+        fact: "Grasshoppers hear with a tympanum on their side, and breathe through holes called spiracles.",
+        parts: [
+          { word: "Compound eye", at: [130, 226], side: T },
+          { word: "Tympanum", at: [243, 270], side: T },
+          { word: "Femur", at: [300, 240], side: T },
+          { word: "Spiracle", at: [350, 276], side: T },
+          { word: "Mandible", at: [122, 284], side: B },
+          { word: "Tarsus", at: [276, 353], side: B },
+          { word: "Tibia", at: [322, 280], side: B },
+          { word: "Ovipositor", at: [440, 268], side: B },
+        ],
+      },
     ],
   },
   {
     id: "fish",
-    title: "A fish",
+    title: "Fish",
     emoji: "🐟",
-    art: fish,
-    parts: [
-      { word: "Eye", at: [158, 182], slot: [110, 70], tier: 1 },
-      { word: "Fin", at: [246, 140], slot: [290, 64], tier: 1 },
-      { word: "Tail", at: [378, 196], slot: [420, 90], tier: 1 },
-      { word: "Mouth", at: [118, 206], slot: [60, 258], tier: 1 },
-      { word: "Gills", at: [186, 214], slot: [150, 330], tier: 2 },
-      { word: "Scales", at: [282, 214], slot: [330, 330], tier: 2 },
+    group: "animals",
+    stages: [
+      {
+        title: "A fish",
+        art: fishArt,
+        fact: "Scales work like armour, protecting a fish's skin.",
+        parts: [
+          { word: "Eye", at: [148, 214], side: T },
+          { word: "Fin", at: [266, 140], side: T },
+          { word: "Tail", at: [424, 200], side: T },
+          { word: "Mouth", at: [102, 242], side: B },
+          { word: "Scales", at: [300, 270], side: B },
+        ],
+      },
+      {
+        title: "Fins and features",
+        art: fishArt,
+        fact: "The lateral line lets a fish feel movement in the water, even in the dark.",
+        parts: [
+          { word: "Nostril", at: [124, 222], side: T },
+          { word: "Dorsal fin", at: [270, 138], side: T },
+          { word: "Lateral line", at: [330, 231], side: T },
+          { word: "Tail fin", at: [432, 260], side: T },
+          { word: "Gill cover", at: [198, 222], side: B },
+          { word: "Pectoral fin", at: [222, 272], side: B },
+          { word: "Pelvic fin", at: [246, 326], side: B },
+          { word: "Anal fin", at: [322, 318], side: B },
+        ],
+      },
+      {
+        title: "Inside a fish",
+        art: fishInsideArt,
+        fact: "A swim bladder fills with gas, so a fish can float at one depth without swimming hard.",
+        parts: [
+          { word: "Brain", at: [146, 206], side: T },
+          { word: "Backbone", at: [214, 190], side: T },
+          { word: "Kidney", at: [290, 203], side: T },
+          { word: "Swim bladder", at: [318, 230], side: T },
+          { word: "Gills", at: [180, 244], side: B },
+          { word: "Heart", at: [186, 300], side: B },
+          { word: "Liver", at: [228, 280], side: B },
+          { word: "Stomach", at: [270, 266], side: B },
+          { word: "Intestine", at: [298, 296], side: B },
+        ],
+      },
     ],
   },
   {
     id: "water",
     title: "The water cycle",
     emoji: "🌧️",
-    art: water,
-    parts: [
-      { word: "Sun", at: [90, 92], slot: [70, 138], tier: 1 },
-      { word: "Cloud", hard: "Condensation", at: [250, 60], slot: [250, 20], tier: 1 },
-      { word: "Rain", hard: "Precipitation", at: [334, 128], slot: [410, 40], tier: 1 },
-      { word: "Rising vapour", hard: "Evaporation", at: [160, 226], slot: [80, 200], tier: 2 },
-      { word: "Sea", hard: "Collection", at: [120, 340], slot: [110, 376], tier: 1 },
-      { word: "River", at: [330, 326], slot: [250, 376], tier: 2 },
-      { word: "Mountain", at: [392, 236], slot: [410, 170], tier: 1 },
+    group: "earth",
+    stages: [
+      {
+        title: "Where water goes",
+        art: waterArt,
+        fact: "The water you drink has been going round and round the water cycle for billions of years.",
+        parts: [
+          { word: "Sun", at: [72, 104], side: T },
+          { word: "Cloud", at: [228, 94], side: T },
+          { word: "Rain", at: [350, 176], side: T },
+          { word: "Sea", at: [60, 320], side: B },
+          { word: "River", at: [200, 348], side: B },
+          { word: "Mountain", at: [440, 300], side: B },
+        ],
+      },
+      {
+        title: "Water on the move",
+        art: waterArt,
+        fact: "Evaporation turns liquid water into an invisible gas called water vapour.",
+        parts: [
+          { word: "Evaporation", at: [104, 250], side: T },
+          { word: "Condensation", at: [212, 84], side: T },
+          { word: "Precipitation", at: [336, 160], side: T },
+          { word: "Snow", at: [404, 176], side: T },
+          { word: "Collection", at: [40, 330], side: B },
+          { word: "Surface run-off", at: [336, 316], side: B },
+        ],
+      },
+      {
+        title: "The hidden water cycle",
+        art: waterArt,
+        fact: "Plants give off water vapour through their leaves. That's called transpiration.",
+        parts: [
+          { word: "Vapour", at: [176, 164], side: T },
+          { word: "Transpiration", at: [214, 240], side: T },
+          { word: "Snowmelt", at: [392, 232], side: T },
+          { word: "Sublimation", at: [436, 150], side: T },
+          { word: "Groundwater", at: [150, 420], side: B },
+          { word: "Lake", at: [240, 344], side: B },
+          { word: "Infiltration", at: [320, 380], side: B },
+          { word: "Water table", at: [440, 404], side: B },
+        ],
+      },
+    ],
+  },
+  {
+    id: "earth",
+    title: "Volcanoes & Earth",
+    emoji: "🌋",
+    group: "earth",
+    stages: [
+      {
+        title: "A volcano",
+        art: volcanoArt,
+        fact: "Melted rock is called magma underground and lava once it pours out.",
+        parts: [
+          { word: "Ash cloud", at: [240, 80], side: T },
+          { word: "Crater", at: [240, 166], side: L },
+          { word: "Lava", at: [168, 270], side: L },
+          { word: "Rocks", at: [340, 116], side: T },
+          { word: "Magma", at: [240, 418], side: B },
+        ],
+      },
+      {
+        title: "Inside a volcano",
+        art: volcanoArt,
+        fact: "A pyroclastic flow is a racing cloud of hot gas, ash and rock. It can move faster than a car.",
+        parts: [
+          { word: "Main vent", at: [240, 250], side: L },
+          { word: "Rock layers", at: [200, 214], side: L },
+          { word: "Lava flow", at: [84, 352], side: B },
+          { word: "Side vent", at: [300, 266], side: T },
+          { word: "Pyroclastic flow", at: [368, 262], side: T },
+          { word: "Crust", at: [400, 400], side: B },
+          { word: "Magma chamber", at: [262, 420], side: B },
+        ],
+      },
+      {
+        title: "Layers of the Earth",
+        art: earthArt,
+        fact: "Earth's inner core is a solid ball of iron and nickel, about as hot as the surface of the Sun.",
+        parts: [
+          { word: "Atmosphere", at: [100, 140], side: T },
+          { word: "Ocean", at: [260, 140], side: T },
+          { word: "Crust", at: [287, 360], side: R },
+          { word: "Upper mantle", at: [277, 345], side: R },
+          { word: "Lower mantle", at: [259, 320], side: R },
+          { word: "Outer core", at: [238, 289], side: R },
+          { word: "Inner core", at: [218, 262], side: R },
+        ],
+      },
     ],
   },
 ];
-
-export function labelFor(part: LabelPart, scientific: boolean) {
-  return scientific && part.hard ? part.hard : part.word;
-}

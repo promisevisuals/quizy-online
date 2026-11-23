@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { SNAKE_LEVELS } from "./arcade.ts";
-import { GRID, decoyCount, flashMsFor, judge, layTiles, spawnSnake, step, tickMs, wordFor } from "./snake.ts";
+import { GRID, boardFor, decoyCount, flashMsFor, judge, layTiles, spawnSnake, step, tickMs, wordFor } from "./snake.ts";
 
 function mulberry(seed: number) {
   let a = seed >>> 0;
@@ -97,3 +97,25 @@ describe("Word Snake rules", () => {
     }
   });
 });
+
+describe("board shape", () => {
+  it("fills a tall phone screen with a tall board and a wide laptop screen with a wide one", () => {
+    const phone = boardFor(370, 740);
+    assert.equal(phone.cols, GRID);
+    assert.ok(phone.rows > 20, `tall board ${phone.rows}`);
+    const laptop = boardFor(1200, 680);
+    assert.equal(laptop.rows, GRID);
+    assert.ok(laptop.cols > GRID);
+    assert.deepEqual(boardFor(500, 500), { cols: GRID, rows: GRID });
+  });
+
+  it("wraps and lays letters inside a rectangular board", () => {
+    const board = { cols: 20, rows: 13 };
+    assert.deepEqual(step({ x: 19, y: 3 }, "right", board), { x: 0, y: 3 });
+    assert.deepEqual(step({ x: 2, y: 0 }, "up", board), { x: 2, y: 12 });
+    const snake = spawnSnake(board);
+    const tiles = layTiles("ELEPHANT", 8, snake, mulberry(7), board);
+    for (const t of tiles) assert.ok(t.x < 20 && t.y < 13);
+  });
+});
+

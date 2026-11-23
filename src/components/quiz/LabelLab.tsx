@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ArrowRight, Flame, Lightbulb, Play, RotateCcw, Timer } from "lucide-react";
-import { ARCADE_LEVELS, LABEL_LEVELS, LEVEL_NAMES, labelSeconds, labelsForRound, loadLevel, saveLevel, type ArcadeLevel } from "@/lib/quiz/arcade";
-import { LABEL_DIAGRAMS } from "@/lib/quiz/labelDiagrams";
-import { buildRound, nextDiagram, starsFor, type LabelRound } from "@/lib/quiz/labelLab";
+import { ArrowRight, Eye, Flame, Lightbulb, Lock, Play, RotateCcw, Timer, Trophy } from "lucide-react";
+import { ARCADE_LEVELS, LABEL_LEVELS, LEVEL_NAMES, labelSeconds, loadLevel, saveLevel, type ArcadeLevel } from "@/lib/quiz/arcade";
+import { LABEL_TOPICS } from "@/lib/quiz/labelDiagrams";
+import { BOX, buildRound, labelsFor, loadReached, nextPlan, starsFor, topicById, unlockAfter, type LabelRound } from "@/lib/quiz/labelLab";
 import { playTone } from "@/lib/quiz/logic";
 import { useQuiz } from "@/lib/quiz/store";
 import { GameStage } from "@/components/quiz/GameStage";
@@ -12,7 +12,10 @@ type Drag = { word: string; x: number; y: number; moved: boolean; startX: number
 
 const HINT_COST = 3;
 
-/** Label Lab: drag (or tap) words from the bank onto the blanks on a diagram, against the clock. */
+/**
+ * Label Lab: drag (or tap) words from the bank onto the blanks on a diagram, against the clock.
+ * Each topic is a ladder of stages, and every stage brings new parts to label.
+ */
 export function LabelLab() {
   const age = useQuiz((s) => s.age);
   const park = useQuiz((s) => s.park);
@@ -21,9 +24,11 @@ export function LabelLab() {
   const cfg = LABEL_LEVELS[level];
   const best = useQuiz((s) => s.arcadeBest[`label-${level}`] ?? 0);
 
-  const [topic, setTopic] = useState("mixed");
+  const [choice, setChoice] = useState("mixed");
+  // unlocked starting stages, read once the page is in the browser
+  const [reached, setReached] = useState<Record<string, number>>({});
+  const [startStage, setStartStage] = useState(1);
   const [phase, setPhase] = useState<Phase>("pick");
-  const [round, setRound] = useState(1);
   const [game, setGame] = useState<LabelRound | null>(null);
   const [placed, setPlaced] = useState<Set<number>>(new Set());
   const [bank, setBank] = useState<string[]>([]);
@@ -38,20 +43,26 @@ export function LabelLab() {
   const [wrongSlot, setWrongSlot] = useState<number | null>(null);
   const [hintSlot, setHintSlot] = useState<number | null>(null);
   const [penaltyFlash, setPenaltyFlash] = useState("");
+  const [reveal, setReveal] = useState(false);
   const [drag, setDrag] = useState<Drag | null>(null);
   const dragRef = useRef<Drag | null>(null);
-  const lastDiagram = useRef("");
-  const svgRef = useRef<SVGSVGElement | null>(null);
+
+  const refreshReached = useCallback(() => {
+    setReached(Object.fromEntries(LABEL_TOPICS.map((t) => [t.id, loadReached(t.id)])));
+  }, []);
+  useEffect(() => refreshReached(), [refreshReached]);
+
+  const pickTopic = (id: string) => {
+    setChoice(id);
+    setStartStage(id === "mixed" ? 1 : (reached[id] ?? 1));
+  };
 
   const startRound = useCallback(
-    (nextRound: number, nextLevel: ArcadeLevel = level, nextTopic = topic) => {
-      const c = LABEL_LEVELS[nextLevel];
-      const wanted = labelsForRound(c, nextRound);
-      const diagram = nextDiagram(c, wanted, nextTopic, lastDiagram.current);
-      lastDiagram.current = diagram.id;
-      const r = buildRound(diagram, c, wanted);
-      const seconds = labelSeconds(c, nextRound, r.targets.length);
-      setRound(nextRound);
+    (topicId: string, stageNo: number) => {
+      const topic = topicById(topicId);
+      if (!topic) return;
+      const r = buildRound(topic, stageNo, LABEL_LEVELS[level]);
+      const seconds = labelSeconds(LABEL_LEVELS[level], stageNo, r.targets.length);
       setGame(r);
       setPlaced(new Set());
       setBank(r.bank);
@@ -61,19 +72,23 @@ export function LabelLab() {
       setMistakes(0);
       setHintSlot(null);
       setWrongSlot(null);
+      setReveal(false);
       setPhase("play");
     },
-    [level, topic],
+    [level],
   );
 
-  const startGame = () => {
+  const startGame = (stageNo = startStage) => {
     setStreak(0);
     setBestStreak(0);
     setLabelled(0);
     setCoins(0);
-    lastDiagram.current = "";
-    startRound(1);
+    const plan = nextPlan(choice, choice === "mixed" ? 1 : stageNo, "");
+    if (plan) startRound(plan.topic.id, plan.stageNo);
   };
+
+  // what the next round will be (worked out once a stage is cleared, so the preview matches)
+  const [upNext, setUpNext] = useState<{ topicId: string; stageNo: number } | null>(null);
 
   // the clock
   useEffect(() => {
@@ -113,8 +128,12 @@ export function LabelLab() {
         if (nextPlaced.size === game.targets.length) {
           const earned = game.targets.length + Math.floor(timeLeft / 1000 / 5) + (mistakes === 0 ? 3 : 0);
           setCoins((c) => c + earned);
-          arcadeReward("label", round, earned);
-          arcadeReward(`label-${level}`, round, 0);
+          arcadeReward("label", game.stageNo, earned);
+          arcadeReward(`label-${level}`, game.stageNo, 0);
+          unlockAfter(game.topic.id, game.stageNo);
+          refreshReached();
+          const plan = nextPlan(choice, game.stageNo + 1, game.topic.id);
+          setUpNext(plan ? { topicId: plan.topic.id, stageNo: plan.stageNo } : null);
           setPhase("cleared");
         }
       } else {
@@ -128,7 +147,7 @@ export function LabelLab() {
         window.setTimeout(() => setPenaltyFlash(""), 700);
       }
     },
-    [game, phase, placed, timeLeft, mistakes, round, level, cfg.penalty, arcadeReward],
+    [game, phase, placed, timeLeft, mistakes, level, choice, cfg.penalty, arcadeReward, refreshReached],
   );
 
   /* ---------- drag and drop (with tap-to-place as a fallback) ---------- */
@@ -197,8 +216,10 @@ export function LabelLab() {
 
   const share = total ? timeLeft / total : 0;
   const stars = phase === "cleared" ? starsFor(timeLeft, total, mistakes) : 0;
-  const nextLabels = labelsForRound(cfg, round + 1);
-  const topics = useMemo(() => [{ id: "mixed", title: "Mix it up", emoji: "🎲" }, ...LABEL_DIAGRAMS.map((d) => ({ id: d.id, title: d.title, emoji: d.emoji }))], []);
+  const nextTopic = upNext ? topicById(upNext.topicId) : undefined;
+  const nextStage = nextTopic && upNext ? nextTopic.stages[upNext.stageNo - 1] : undefined;
+  const chosenTopic = topicById(choice);
+  const topics = useMemo(() => [{ id: "mixed", title: "Mix it up", emoji: "🎲", stages: 0 }, ...LABEL_TOPICS.map((t) => ({ id: t.id, title: t.title, emoji: t.emoji, stages: t.stages.length }))], []);
 
   return (
     <GameStage
@@ -206,13 +227,11 @@ export function LabelLab() {
       onBack={() => park("map")}
       stats={
         phase === "pick" ? (
-          <span>Best {best ? `round ${best}` : "—"}</span>
+          <span>Best: stage {best || "—"}</span>
         ) : (
           <span>
-            {LEVEL_NAMES[level]} · Round {round}
-            <span className="block font-bold">
-              {labelled} labelled · {coins} coins
-            </span>
+            {LEVEL_NAMES[level]} · {labelled} labelled
+            <span className="block font-bold">{coins} coins</span>
           </span>
         )
       }
@@ -225,7 +244,7 @@ export function LabelLab() {
             </span>
             <div>
               <p className="font-display text-2xl font-semibold leading-tight">Label the picture before time runs out!</p>
-              <p className="text-sm text-muted">Drag each word to its blank (or tap a word, then tap the blank). Each round adds a label and the clock gets quicker.</p>
+              <p className="text-sm text-muted">Drag each word to its blank, or tap a word and then its blank. Every stage brings new parts to learn, and the clock gets faster.</p>
             </div>
           </div>
           <p className="mt-3 text-xs font-extrabold uppercase tracking-widest text-gold">Level</p>
@@ -240,16 +259,43 @@ export function LabelLab() {
           <p className="mt-3 text-xs font-extrabold uppercase tracking-widest text-gold">Topic</p>
           <div className="lab-topics mt-1">
             {topics.map((t) => (
-              <button key={t.id} type="button" onClick={() => setTopic(t.id)} className={topic === t.id ? "is-active" : ""} aria-pressed={topic === t.id}>
+              <button key={t.id} type="button" onClick={() => pickTopic(t.id)} className={choice === t.id ? "is-active" : ""} aria-pressed={choice === t.id}>
                 <span className="text-2xl" aria-hidden>
                   {t.emoji}
                 </span>
                 {t.title}
+                <small>{t.stages ? `${reached[t.id] ?? 1}/${t.stages} open` : "stage by stage"}</small>
               </button>
             ))}
           </div>
-          <button type="button" onClick={startGame} className="mt-4 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-lg font-extrabold text-primary-fg">
-            <Play className="size-5" aria-hidden /> Start labelling
+          {chosenTopic ? (
+            <>
+              <p className="mt-3 text-xs font-extrabold uppercase tracking-widest text-gold">Start at</p>
+              <div className="lab-stages mt-1" role="radiogroup" aria-label="Starting stage">
+                {chosenTopic.stages.map((stage, i) => {
+                  const n = i + 1;
+                  const open = n <= (reached[chosenTopic.id] ?? 1);
+                  return (
+                    <button
+                      key={stage.title}
+                      type="button"
+                      role="radio"
+                      aria-checked={startStage === n}
+                      disabled={!open}
+                      onClick={() => setStartStage(n)}
+                      className={startStage === n ? "is-active" : ""}
+                      title={open ? stage.title : "Clear the stage before to open this one"}
+                    >
+                      <b>{open ? n : <Lock className="size-3.5" aria-label="Locked" />}</b>
+                      <span>{stage.title}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          ) : null}
+          <button type="button" onClick={() => startGame()} className="mt-4 inline-flex min-h-13 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-6 py-3 text-lg font-extrabold text-primary-fg">
+            <Play className="size-5" aria-hidden /> {chosenTopic && startStage > 1 ? `Start at stage ${startStage}` : "Start labelling"}
           </button>
         </div>
       ) : game ? (
@@ -262,47 +308,49 @@ export function LabelLab() {
             </b>
           </div>
           <div className="flex shrink-0 items-center justify-between gap-2">
-            <p className="truncate font-display text-lg font-semibold">
-              {game.diagram.emoji} {game.diagram.title}
-            </p>
-            <div className="flex items-center gap-2">
+            <div className="min-w-0">
+              <p className="truncate font-display text-lg font-semibold leading-tight">
+                {game.topic.emoji} {game.stage.title}
+              </p>
+              <p className="text-xs font-extrabold text-muted">
+                {game.topic.title} · stage {game.stageNo} of {game.topic.stages.length}
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
               {streak >= 3 ? (
                 <span className="lab-streak">
-                  <Flame className="size-4" aria-hidden /> {streak} in a row!
+                  <Flame className="size-4" aria-hidden /> {streak}
                 </span>
               ) : null}
               <button type="button" onClick={hint} disabled={phase !== "play"} className="lab-hint" aria-label={`Hint, costs ${HINT_COST} seconds`}>
-                <Lightbulb className="size-4" aria-hidden /> Hint −{HINT_COST}s
+                <Lightbulb className="size-4" aria-hidden /> −{HINT_COST}s
               </button>
             </div>
           </div>
 
           <div className="lab-board">
-            <svg ref={svgRef} viewBox="0 0 480 400" className="lab-svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label={`Diagram: ${game.diagram.title}`}>
-              <g dangerouslySetInnerHTML={{ __html: game.diagram.art }} />
+            <svg viewBox={`0 0 ${BOX} ${BOX}`} className="lab-svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label={`Diagram: ${game.stage.title}`}>
+              <g dangerouslySetInnerHTML={{ __html: game.stage.art }} />
               {game.targets.map((t, i) => {
                 const [ax, ay] = t.part.at;
-                const [sx, sy] = t.part.slot;
-                const w = Math.min(150, Math.max(92, t.word.length * 10 + 26));
-                const side = Math.abs(ax - sx) > w / 2;
-                const lx = side ? (ax > sx ? sx + w / 2 : sx - w / 2) : sx;
-                const ly = side ? sy : ay > sy ? sy + 16 : sy - 16;
+                const s = t.slot;
                 const done = placed.has(i);
-                const ready = !done && (selected !== null || hoverSlot === i);
+                const missed = !done && reveal;
+                const ready = !done && phase === "play" && (selected !== null || hoverSlot === i);
                 return (
                   <g key={t.part.word}>
-                    <line x1={lx} y1={ly} x2={ax} y2={ay} className={done ? "lab-line is-done" : "lab-line"} />
-                    <circle cx={ax} cy={ay} r={5} className={`lab-dot ${done ? "is-done" : cfg.pulse ? "is-pulse" : ""}`} />
+                    <line x1={s.lx} y1={s.ly} x2={ax} y2={ay} className={done ? "lab-line is-done" : missed ? "lab-line is-missed" : "lab-line"} />
+                    <circle cx={ax} cy={ay} r={5} className={`lab-dot ${done ? "is-done" : missed ? "is-missed" : cfg.pulse ? "is-pulse" : ""}`} />
                     <g
                       data-slot={i}
-                      className={`lab-slot ${done ? "is-done" : ""} ${ready ? "is-ready" : ""} ${hoverSlot === i ? "is-hover" : ""} ${wrongSlot === i ? "is-wrong" : ""} ${hintSlot === i ? "is-hint" : ""}`}
+                      className={`lab-slot ${done ? "is-done" : ""} ${missed ? "is-missed" : ""} ${ready ? "is-ready" : ""} ${hoverSlot === i ? "is-hover" : ""} ${wrongSlot === i ? "is-wrong" : ""} ${hintSlot === i ? "is-hint" : ""}`}
                       onClick={() => selected && tryPlace(selected, i)}
                       role="button"
-                      aria-label={done ? t.word : "Empty label"}
+                      aria-label={done || missed ? t.word : "Empty label"}
                     >
-                      <rect x={sx - w / 2} y={sy - 16} width={w} height={32} rx={10} />
-                      <text x={sx} y={sy + 1} textAnchor="middle" dominantBaseline="central">
-                        {done ? t.word : "?"}
+                      <rect x={s.x - s.w / 2} y={s.y - s.h / 2} width={s.w} height={s.h} rx={10} />
+                      <text x={s.x} y={s.y + 1} textAnchor="middle" dominantBaseline="central" style={{ fontSize: s.font }}>
+                        {done || missed ? t.word : "?"}
                       </text>
                     </g>
                   </g>
@@ -316,55 +364,85 @@ export function LabelLab() {
                   {"★".repeat(stars)}
                   {"☆".repeat(3 - stars)}
                 </p>
-                <p className="font-display text-2xl font-semibold">Round {round} labelled!</p>
+                <p className="font-display text-2xl font-semibold">{nextStage ? `Stage ${game.stageNo} done!` : `${game.topic.title}: all done!`}</p>
                 <p className="text-sm text-muted">
                   {Math.ceil(timeLeft / 1000)}s to spare{mistakes === 0 ? " · perfect, +3 bonus coins" : ""}
                   {bestStreak >= 3 ? ` · best streak ${bestStreak}` : ""}
                 </p>
-                <p className="mt-1 text-sm font-bold">Next: {nextLabels} labels, quicker clock</p>
-                <button type="button" onClick={() => startRound(round + 1)} className="mt-3 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-primary px-6 font-extrabold text-primary-fg">
-                  Next round <ArrowRight className="size-4" aria-hidden />
-                </button>
+                <p className="lab-fact">
+                  <b>Did you know?</b> {game.stage.fact}
+                </p>
+                {nextStage && nextTopic && upNext ? (
+                  <>
+                    <p className="mt-2 text-sm font-bold">
+                      Next: {nextTopic.emoji} {nextStage.title} · {labelsFor(cfg, upNext.stageNo, nextStage.parts.length)} new labels, quicker clock
+                    </p>
+                    <button type="button" onClick={() => startRound(upNext.topicId, upNext.stageNo)} className="mt-3 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-primary px-6 font-extrabold text-primary-fg">
+                      Stage {upNext.stageNo} <ArrowRight className="size-4" aria-hidden />
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <p className="mt-2 inline-flex items-center gap-1 text-sm font-bold">
+                      <Trophy className="size-4 text-gold" aria-hidden /> You labelled every stage{choice === "mixed" ? " in the mix" : ""}!
+                    </p>
+                    <button type="button" onClick={() => setPhase("pick")} className="mt-3 inline-flex min-h-12 items-center gap-2 rounded-2xl bg-primary px-6 font-extrabold text-primary-fg">
+                      Pick another topic <ArrowRight className="size-4" aria-hidden />
+                    </button>
+                  </>
+                )}
               </div>
             ) : null}
-            {phase === "over" ? (
+            {phase === "over" && !reveal ? (
               <div className="lab-overlay" role="status">
                 <p className="font-display text-3xl font-semibold">Time's up!</p>
                 <p className="text-sm text-muted">
-                  You reached round {round} and labelled {labelled} {labelled === 1 ? "part" : "parts"}. {coins} coins earned.
+                  You got to stage {game.stageNo} and labelled {labelled} {labelled === 1 ? "part" : "parts"}. {coins} coins earned.
                 </p>
                 <div className="mt-3 flex flex-wrap justify-center gap-2">
-                  <button type="button" onClick={startGame} className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-primary px-6 font-extrabold text-primary-fg">
-                    <RotateCcw className="size-4" aria-hidden /> Play again
+                  <button type="button" onClick={() => setReveal(true)} className="inline-flex min-h-12 items-center gap-2 rounded-2xl border border-line bg-surface px-4 font-extrabold">
+                    <Eye className="size-4" aria-hidden /> See the answers
                   </button>
-                  <button type="button" onClick={() => setPhase("pick")} className="inline-flex min-h-12 items-center rounded-2xl border border-line bg-surface px-4 font-extrabold">
-                    Change level
+                  <button type="button" onClick={() => startRound(game.topic.id, game.stageNo)} className="inline-flex min-h-12 items-center gap-2 rounded-2xl bg-primary px-5 font-extrabold text-primary-fg">
+                    <RotateCcw className="size-4" aria-hidden /> Try stage {game.stageNo} again
                   </button>
                 </div>
               </div>
             ) : null}
           </div>
 
-          <div className="lab-bank" aria-label="Word bank">
-            {bank.map((word) => (
-              <button
-                key={word}
-                type="button"
-                className={`lab-chip ${selected === word ? "is-selected" : ""} ${drag?.word === word && drag.moved ? "is-lifted" : ""}`}
-                onPointerDown={(e) => onChipDown(word, e)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setSelected((s) => (s === word ? null : word));
-                  }
-                }}
-                aria-pressed={selected === word}
-              >
-                {word}
+          {phase === "over" && reveal ? (
+            <div className="lab-bank">
+              <p className="w-full text-center text-xs font-bold text-muted">The ones in orange are the answers you missed.</p>
+              <button type="button" onClick={() => startRound(game.topic.id, game.stageNo)} className="inline-flex min-h-11 items-center gap-2 rounded-2xl bg-primary px-5 font-extrabold text-primary-fg">
+                <RotateCcw className="size-4" aria-hidden /> Try stage {game.stageNo} again
               </button>
-            ))}
-            {phase === "play" && bank.length && selected ? <p className="w-full text-center text-xs font-bold text-muted">Now tap the blank where “{selected}” goes</p> : null}
-          </div>
+              <button type="button" onClick={() => setPhase("pick")} className="inline-flex min-h-11 items-center rounded-2xl border border-line bg-surface px-4 font-extrabold">
+                Change topic
+              </button>
+            </div>
+          ) : (
+            <div className="lab-bank" aria-label="Word bank">
+              {bank.map((word) => (
+                <button
+                  key={word}
+                  type="button"
+                  className={`lab-chip ${selected === word ? "is-selected" : ""} ${drag?.word === word && drag.moved ? "is-lifted" : ""}`}
+                  onPointerDown={(e) => onChipDown(word, e)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setSelected((s) => (s === word ? null : word));
+                    }
+                  }}
+                  aria-pressed={selected === word}
+                >
+                  {word}
+                </button>
+              ))}
+              {phase === "play" && bank.length && selected ? <p className="w-full text-center text-xs font-bold text-muted">Now tap the blank where “{selected}” goes</p> : null}
+            </div>
+          )}
 
           {drag?.moved ? (
             <div className="lab-ghost" style={{ left: drag.x, top: drag.y }} aria-hidden>

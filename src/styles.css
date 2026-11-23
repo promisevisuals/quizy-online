@@ -1708,3 +1708,49 @@ textarea {
   .game-corner .game-card .text-xs { font-size: 0.6rem; letter-spacing: 0.04em; }
   .game-corner .game-card .mt-2.inline-flex { min-height: 2rem; padding: 0 0.7rem; font-size: 0.85rem; }
 }
+
+/* ───────────────── Word Snake: edge-to-edge board, no arrow pad ───────────────── */
+.game-stage-bar.is-full, .game-stage-body.is-full { max-width: none; }
+.game-stage-body.is-full { margin-top: 0.35rem; }
+.snake-heading { display: flex; flex: 1; align-items: center; justify-content: center; gap: 0.4rem; }
+.snake-heading .snake-word { font-size: 1.55rem; letter-spacing: 0.12em; line-height: 1; white-space: nowrap; }
+.snake-heading .snake-word[data-len="long"] { font-size: 1.2rem; letter-spacing: 0.08em; }
+@media (min-width: 640px) {
+  .snake-heading .snake-word { font-size: 2rem; }
+  .snake-heading .snake-word[data-len="long"] { font-size: 1.7rem; }
+}
+.snake-heading .snake-word .is-next { text-underline-offset: 4px; }
+.game-stage-bar.is-full .ml-auto { margin-left: 0; }
+.snake-score { display: flex; flex-direction: column; align-items: center; line-height: 1; color: var(--color-fg); }
+.snake-score b { font-family: var(--font-display, inherit); font-size: 1.25rem; }
+.snake-score small { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-muted); }
+.snake-hear { display: inline-flex; width: 3rem; height: 3rem; align-items: center; justify-content: center; border: 1px solid var(--color-line); border-radius: 1rem; background: var(--color-surface); }
+.game-stage .snake-board { border-width: 3px; border-radius: 1rem; }
+.snake-overlay::before { content: none; }
+.snake-card {
+  width: min(22rem, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  border-radius: 1.4rem;
+  background: rgba(255, 250, 241, 0.95);
+  box-shadow: 0 10px 30px rgba(40, 28, 8, 0.2);
+  padding: 1rem;
+  pointer-events: auto;
+}
+.snake-overlay .snake-card > * { margin-left: auto; margin-right: auto; }
+
+/* ───────── Label Lab: stages ───────── */
+.lab-topics button small { font-size: 0.62rem; font-weight: 800; color: var(--color-muted); }
+.lab-stages { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.35rem; }
+@media (min-width: 640px) { .lab-stages { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.lab-stages button { display: flex; min-height: 2.6rem; align-items: center; gap: 0.45rem; border: 1px solid var(--color-line); border-radius: 0.9rem; background: #fffdf8; padding: 0.3rem 0.55rem; text-align: left; font-size: 0.78rem; font-weight: 800; line-height: 1.15; }
+.lab-stages button b { display: inline-flex; flex: none; width: 1.6rem; height: 1.6rem; align-items: center; justify-content: center; border-radius: 999px; background: #efdcb2; font-size: 0.85rem; }
+.lab-stages button.is-active { border: 2px solid var(--color-gold); background: #fff1d4; }
+.lab-stages button.is-active b { background: var(--color-gold); color: #fff; }
+.lab-stages button:disabled { opacity: 0.45; cursor: not-allowed; }
+.lab-fact { max-width: 24rem; margin-top: 0.6rem; border-radius: 1rem; background: #eef8f6; padding: 0.5rem 0.75rem; font-size: 0.85rem; line-height: 1.35; }
+.lab-fact b { color: #1c7a6a; }
+.lab-line.is-missed { stroke: #d9822b; stroke-dasharray: none; }
+.lab-dot.is-missed { fill: #d9822b; }
+.lab-slot.is-missed rect { fill: #fff0dc; stroke: #d9822b; stroke-dasharray: none; }
+.lab-slot.is-missed text { fill: #8a4a12; }

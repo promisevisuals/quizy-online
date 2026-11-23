@@ -17,6 +17,25 @@ export type SnakeWord = { word: string; emoji: string; hint: string };
 
 export const GRID = 13;
 
+/** Board size in cells. A plain number means a square board. */
+export type Board = number | { cols: number; rows: number };
+export function dims(board: Board = GRID) {
+  return typeof board === "number" ? { cols: board, rows: board } : board;
+}
+
+/**
+ * Fit a board to a screen area: the short side gets about 13 cells and the
+ * long side as many cells of that size as fit, so the board fills the space.
+ */
+export function boardFor(width: number, height: number, short = GRID, maxLong = 24): { cols: number; rows: number } {
+  const w = Math.max(1, width);
+  const h = Math.max(1, height);
+  const cell = Math.min(w, h) / short;
+  const cols = Math.max(short, Math.min(maxLong, Math.floor(w / cell)));
+  const rows = Math.max(short, Math.min(maxLong, Math.floor(h / cell)));
+  return w >= h ? { cols, rows: short } : { cols: short, rows };
+}
+
 /** Word ladder, easiest first. Each tier is a little longer. */
 export const SNAKE_WORDS: SnakeWord[][] = [
   [
@@ -85,10 +104,11 @@ const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export const OPPOSITE: Record<Dir, Dir> = { up: "down", down: "up", left: "right", right: "left" };
 
-export function step(cell: Cell, dir: Dir, size = GRID): Cell {
+export function step(cell: Cell, dir: Dir, size: Board = GRID): Cell {
+  const { cols, rows } = dims(size);
   const dx = dir === "left" ? -1 : dir === "right" ? 1 : 0;
   const dy = dir === "up" ? -1 : dir === "down" ? 1 : 0;
-  return { x: (cell.x + dx + size) % size, y: (cell.y + dy + size) % size };
+  return { x: (cell.x + dx + cols) % cols, y: (cell.y + dy + rows) % rows };
 }
 
 export function same(a: Cell, b: Cell) {
@@ -96,8 +116,8 @@ export function same(a: Cell, b: Cell) {
 }
 
 /** A short snake in the middle-left of the board, heading right. */
-export function spawnSnake(size = GRID): Cell[] {
-  const y = Math.floor(size / 2);
+export function spawnSnake(size: Board = GRID): Cell[] {
+  const y = Math.floor(dims(size).rows / 2);
   return [
     { x: 3, y },
     { x: 2, y },
@@ -106,8 +126,8 @@ export function spawnSnake(size = GRID): Cell[] {
 }
 
 /** Keep the lane in front of a fresh snake clear so it never spawns into a letter. */
-function inSpawnLane(cell: Cell, size = GRID) {
-  return cell.y === Math.floor(size / 2) && cell.x <= 6;
+function inSpawnLane(cell: Cell, size: Board = GRID) {
+  return cell.y === Math.floor(dims(size).rows / 2) && cell.x <= 6;
 }
 
 export function decoyCount(wordIndex: number, level: SnakeLevel = SNAKE_LEVELS.easy) {
@@ -115,13 +135,14 @@ export function decoyCount(wordIndex: number, level: SnakeLevel = SNAKE_LEVELS.e
 }
 
 /** Scatter the word's letters and some decoys on free cells. */
-export function layTiles(word: string, decoys: number, avoid: Cell[], rnd: () => number = Math.random, size = GRID): Tile[] {
+export function layTiles(word: string, decoys: number, avoid: Cell[], rnd: () => number = Math.random, size: Board = GRID): Tile[] {
+  const { cols, rows } = dims(size);
   const used = new Set(avoid.map((c) => `${c.x},${c.y}`));
   const tiles: Tile[] = [];
   let id = 1;
   const freeCell = (): Cell => {
     for (let tries = 0; tries < 500; tries++) {
-      const cell = { x: Math.floor(rnd() * size), y: Math.floor(rnd() * size) };
+      const cell = { x: Math.floor(rnd() * cols), y: Math.floor(rnd() * rows) };
       const key = `${cell.x},${cell.y}`;
       if (used.has(key) || inSpawnLane(cell, size)) continue;
       // keep letters from touching each other so a child can steer between them

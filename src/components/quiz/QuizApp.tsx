@@ -871,8 +871,8 @@ function GameCorner() {
       id: "label" as const,
       name: "Label Lab",
       art: "/art/games/label.svg",
-      note: "Drag the words onto the picture before the clock runs out: body, skeleton, plants, insects and more.",
-      best: best.label ? `Best: round ${best.label}` : "New game!",
+      note: "Label the picture before the clock runs out. Every stage brings new parts to learn, from your face to the heart, the brain and volcanoes.",
+      best: best.label ? `Best: stage ${best.label}` : "New game!",
     },
     {
       id: "memory" as const,
