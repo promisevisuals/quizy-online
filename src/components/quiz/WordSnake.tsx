@@ -57,7 +57,7 @@ function layoutFor(word: SnakeWord, cfg: SnakeLevel, wordsDone: number, board: B
     board,
     progress: 0,
     snake,
-    dir: "right",
+    dir: "right" as Dir,
     queue: [],
     tiles: layTiles(word.word, decoyCount(wordsDone, cfg), snake, Math.random, board),
     grow: 0,
