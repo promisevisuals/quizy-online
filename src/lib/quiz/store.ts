@@ -33,7 +33,9 @@ export type Screen =
   | "summary"
   | "certificate"
   | "battle"
-  | "command";
+  | "command"
+  | "snake"
+  | "memory";
 
 export type RoundMode = "land" | "daily" | "academy" | "battle";
 
@@ -88,6 +90,10 @@ type State = {
   bonusPick: number | null;
   bonusRevealed: boolean;
   summaryNote: string;
+  /** Best scores in the side games (Word Snake, Memory Match). */
+  arcadeBest: Record<string, number>;
+  /** Pay coins for a finished side game and remember the best score. */
+  arcadeReward: (game: string, score: number, coins: number) => void;
   setName: (name: string) => void;
   setAge: (age: Age) => void;
   setDifficulty: (difficulty: Difficulty) => void;
@@ -169,7 +175,13 @@ export const useQuiz = create<State>()(
       board: [],
       voiceOn: true,
       role: "",
+      arcadeBest: {},
       ...freshLive,
+      arcadeReward: (game, score, coins) => {
+        const s = get();
+        const best = Math.max(s.arcadeBest[game] ?? 0, score);
+        set({ coins: s.coins + Math.max(0, Math.round(coins)), arcadeBest: { ...s.arcadeBest, [game]: best } });
+      },
       setName: (name) => set({ name }),
       setAge: (age) => set({ age }),
       setDifficulty: (difficulty) => set({ difficulty, challenge: difficulty === "advanced" ? get().challenge || "Beast Mode" : "" }),
@@ -609,6 +621,7 @@ export const useQuiz = create<State>()(
         breakCard: s.breakCard,
         breakShown: s.breakShown,
         breakAfter: s.breakAfter,
+        arcadeBest: s.arcadeBest,
         savedAt: Date.now(),
       }),
     },
