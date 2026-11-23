@@ -7,10 +7,15 @@ import {
   CalendarDays,
   CircleHelp,
   Coins,
+  Dices,
   Flame,
+  Gamepad2,
   Heart,
   Lightbulb,
+  Map as MapIcon,
+  Play as PlayIcon,
   Shield,
+  Sparkles,
   Swords,
   Tent,
   Trophy,
@@ -40,10 +45,12 @@ import { BattleRoom } from "@/components/quiz/BattleRoom";
 import { CloudSync } from "@/components/quiz/CloudSync";
 import { CommandCenter } from "@/components/quiz/CommandCenter";
 import { HelpMap } from "@/components/quiz/HelpMap";
+import { MemoryMatch } from "@/components/quiz/MemoryMatch";
+import { WordSnake } from "@/components/quiz/WordSnake";
 import { BannerCreatures, JungleIntro, JungleLife } from "@/components/quiz/JungleLife";
 
 /** Screens where a child is answering: no moving creatures there, so nothing competes with the question. */
-const QUIET_SCREENS = new Set(["play", "battle", "command", "certificate"]);
+const QUIET_SCREENS = new Set(["play", "battle", "command", "certificate", "snake", "memory"]);
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -148,6 +155,8 @@ export function QuizApp() {
           {screen === "certificate" && <Certificate />}
           {screen === "battle" && <BattleRoom />}
           {screen === "command" && <CommandCenter />}
+          {screen === "snake" && <WordSnake />}
+          {screen === "memory" && <MemoryMatch />}
         </div>
         <PvCredit className="app-footer-credit" />
       </div>
@@ -513,7 +522,7 @@ function Camp({ flags }: { flags: PublicFlags }) {
           A brighter trail.
         </h1>
         <p className="mt-4 max-w-xl text-lg leading-relaxed text-muted">
-          Twelve lands, spelling, brain breaks, a daily challenge, and a Year 1 academy. Sign in and the same stars —
+          Thirteen lands, spelling, Word Snake and Memory Match, a daily challenge, and a Year 1 academy. Sign in and the same stars —
           and an unfinished question — follow you to another device.
         </p>
         <Inbox />
@@ -620,84 +629,260 @@ function Camp({ flags }: { flags: PublicFlags }) {
   );
 }
 
+const LAND_BLURBS: Record<string, string> = {
+  animal: "Lions, bees, whales and how they survive.",
+  space: "Planets, stars, rockets and the Moon.",
+  ocean: "Reefs, tides and creatures of the deep.",
+  number: "Sums, shapes, patterns and puzzles.",
+  world: "Countries, capitals, rivers and maps.",
+  news: "What is happening in 2026.",
+  science: "Forces, light, sound and materials.",
+  body: "Your heart, bones, brain and senses.",
+  logic: "Riddles and brain teasers.",
+  africa: "Stories, kingdoms and cultures.",
+  tech: "Computers, coding and inventions.",
+  sports: "Football, athletics, tennis and more.",
+  spelling: "Hear the word, then spell it.",
+};
+
+export function landArt(id: string) {
+  return id === "body" ? "/art/lands/body.svg" : `/art/lands/${id}.jpg`;
+}
+
+type TrailTab = "lands" | "games" | "more";
+
 function Trail({ flags }: { flags: PublicFlags }) {
   const name = useQuiz((s) => s.name);
   const landDone = useQuiz((s) => s.landDone);
   const landCorrect = useQuiz((s) => s.landCorrect);
   const totalStars = useQuiz((s) => s.totalStars);
-  const startLand = useQuiz((s) => s.startLand);
+  const round = useQuiz((s) => s.round);
   const go = useQuiz((s) => s.go);
-  const cleared = lands.filter((land) => landDone[land.id]).length;
+  const [tab, setTab] = useState<TrailTab>("lands");
+  const visible = lands.filter((land) =>
+    land.id === "news" ? flags.featureNews : land.id === "sports" ? flags.featureSports : true,
+  );
+  const cleared = visible.filter((land) => landDone[land.id]).length;
+  const pct = visible.length ? Math.round((cleared / visible.length) * 100) : 0;
 
-  const shortcuts: { label: string; icon: LucideIcon; screen: "daily" | "academy" | "badges" | "board" | "battle" }[] = [
-    ...(flags.featureDaily ? [{ label: "Daily", icon: CalendarDays, screen: "daily" as const }] : []),
-    ...(flags.featureAcademy ? [{ label: "Academy", icon: BookOpen, screen: "academy" as const }] : []),
-    { label: "Badges", icon: Award, screen: "badges" },
-    { label: "Board", icon: Trophy, screen: "board" },
-    ...(flags.featureBattle ? [{ label: "Online", icon: Wifi, screen: "battle" as const }] : []),
+  const tabs: { id: TrailTab; label: string; icon: LucideIcon }[] = [
+    { id: "lands", label: "Lands", icon: MapIcon },
+    { id: "games", label: "Games", icon: Gamepad2 },
+    { id: "more", label: "More", icon: Sparkles },
   ];
 
   return (
-    <section>
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <p className="text-sm font-extrabold uppercase tracking-widest text-gold">{name}</p>
-          <h2 className="font-display text-3xl font-semibold">The trail</h2>
-          <p className="text-muted">
-            {cleared} of {lands.length} lands cleared · {totalStars} {totalStars === 1 ? "star" : "stars"}
-          </p>
+    <section className="trail">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="trail-ring" style={{ "--pct": `${pct}%` } as React.CSSProperties} aria-hidden>
+            <span>{cleared}</span>
+          </span>
+          <div>
+            <p className="text-xs font-extrabold uppercase tracking-widest text-gold">{name || "Explorer"}</p>
+            <h2 className="font-display text-2xl font-semibold leading-tight sm:text-3xl">The trail</h2>
+            <p className="text-sm text-muted">
+              {cleared} of {visible.length} lands · {totalStars} {totalStars === 1 ? "star" : "stars"}
+            </p>
+          </div>
         </div>
         <Stats />
       </div>
-      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">
-        {shortcuts.map((item, index) => (
+      {round && <ResumeCard />}
+      <div className="trail-tabs mt-3" role="tablist" aria-label="Trail sections">
+        {tabs.map((item) => (
           <button
-            key={item.label}
+            key={item.id}
             type="button"
-            onClick={() => go(item.screen)}
-            className="stagger-item inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-line bg-surface font-extrabold"
-            style={{ animationDelay: `${index * 50}ms` }}
+            role="tab"
+            aria-selected={tab === item.id}
+            onClick={() => setTab(item.id)}
+            className={cn("trail-tab", tab === item.id && "is-active")}
           >
-            <item.icon className="size-4 text-gold" aria-hidden />
+            <item.icon className="size-4" aria-hidden />
             {item.label}
+            {item.id === "games" && <span className="trail-new">New</span>}
           </button>
         ))}
       </div>
-      <ResumeCard />
-      <Duel />
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {lands
-          .filter((land) => (land.id === "news" ? flags.featureNews : land.id === "sports" ? flags.featureSports : true))
-          .map((land) => {
-          const best = landCorrect[land.id] ?? 0;
-          const done = !!landDone[land.id];
-          return (
+      <div key={tab} className="tab-in mt-3">
+        {tab === "lands" && <LandPicker lands={visible} landDone={landDone} landCorrect={landCorrect} />}
+        {tab === "games" && <GameCorner />}
+        {tab === "more" && (
+          <div>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              {[
+                ...(flags.featureDaily ? [{ label: "Daily challenge", icon: CalendarDays, screen: "daily" as const }] : []),
+                ...(flags.featureAcademy ? [{ label: "Academy", icon: BookOpen, screen: "academy" as const }] : []),
+                { label: "Badges", icon: Award, screen: "badges" as const },
+                { label: "Leaderboard", icon: Trophy, screen: "board" as const },
+                ...(flags.featureBattle ? [{ label: "Play online", icon: Wifi, screen: "battle" as const }] : []),
+                { label: "Shop", icon: Coins, screen: "shop" as const },
+              ].map((item, index) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() => go(item.screen)}
+                  className="more-tile stagger-item"
+                  style={{ animationDelay: `${index * 45}ms` }}
+                >
+                  <item.icon className="size-6 text-gold" aria-hidden />
+                  {item.label}
+                </button>
+              ))}
+            </div>
+            <Duel />
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function LandPicker({
+  lands: list,
+  landDone,
+  landCorrect,
+}: {
+  lands: typeof lands;
+  landDone: Record<string, boolean>;
+  landCorrect: Record<string, number>;
+}) {
+  const startLand = useQuiz((s) => s.startLand);
+  const firstOpen = list.find((land) => !landDone[land.id]) ?? list[0];
+  const [picked, setPicked] = useState(firstOpen?.id ?? "");
+  const [spinning, setSpinning] = useState(false);
+  const land = list.find((item) => item.id === picked) ?? list[0];
+
+  const surprise = () => {
+    if (spinning || list.length === 0) return;
+    const pool = list.filter((item) => !landDone[item.id]);
+    const from = pool.length ? pool : list;
+    const target = from[Math.floor(Math.random() * from.length)];
+    if (!target) return;
+    setSpinning(true);
+    let hops = 0;
+    const id = window.setInterval(() => {
+      hops += 1;
+      const hop = list[Math.floor(Math.random() * list.length)];
+      if (hop) setPicked(hop.id);
+      if (hops >= 9) {
+        window.clearInterval(id);
+        setPicked(target.id);
+        setSpinning(false);
+      }
+    }, 90);
+  };
+
+  if (!land) return null;
+  const best = landCorrect[land.id] ?? 0;
+  const done = !!landDone[land.id];
+
+  return (
+    <div className="land-picker">
+      <div className={cn("land-spotlight", done && "is-cleared")} aria-live="polite">
+        <span className={cn("land-emblem is-big", `land-${land.id}`, done && "is-cleared")}>
+          <img src={landArt(land.id)} alt="" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-extrabold uppercase tracking-widest text-gold">
+            {done ? "Cleared" : "Ready"} · best {best}/{land.count}
+          </p>
+          <h3 className="truncate font-display text-2xl font-semibold leading-tight">{land.name}</h3>
+          <p className="text-sm text-muted">{LAND_BLURBS[land.id] ?? "Ten questions. Lives on the line."}</p>
+          <div className="mt-2 flex gap-2">
             <button
-              key={land.id}
               type="button"
               onClick={() => startLand(land.id)}
-              className={cn(
-                "land-card rounded-card border bg-surface p-4 text-left",
-                done ? "border-gold" : "border-line",
-              )}
+              disabled={spinning}
+              className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-2xl bg-primary px-4 font-extrabold text-primary-fg"
             >
-              <span className="flex items-center justify-between gap-3">
-                <span className={cn("land-emblem", `land-${land.id}`, done && "is-cleared")}>
-                  <img src={`/art/lands/${land.id}.jpg`} alt="" />
-                </span>
-                <span className="text-sm font-extrabold text-muted">
-                  {done ? "Cleared" : "Open"} · {best}/{land.count}
-                </span>
+              <PlayIcon className="size-4" aria-hidden /> {done ? "Play again" : "Start"}
+            </button>
+            <button
+              type="button"
+              onClick={surprise}
+              className={cn("inline-flex min-h-11 items-center gap-2 rounded-2xl border border-line bg-surface-2 px-3 font-extrabold", spinning && "is-rolling")}
+              aria-label="Surprise me: pick a land for me"
+            >
+              <Dices className="size-5 text-gold" aria-hidden />
+              <span className="hidden sm:inline">Surprise me</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="land-bubbles" role="listbox" aria-label="Choose a land">
+        {list.map((item, index) => {
+          const score = landCorrect[item.id] ?? 0;
+          const isDone = !!landDone[item.id];
+          return (
+            <button
+              key={item.id}
+              type="button"
+              role="option"
+              aria-selected={item.id === land.id}
+              onClick={() => setPicked(item.id)}
+              onDoubleClick={() => startLand(item.id)}
+              className={cn("land-bubble stagger-item", item.id === land.id && "is-picked", isDone && "is-cleared")}
+              style={{ animationDelay: `${index * 30}ms`, "--pct": `${Math.min(100, (score / item.count) * 100)}%` } as React.CSSProperties}
+            >
+              <span className={cn("land-emblem is-small", `land-${item.id}`)}>
+                <img src={landArt(item.id)} alt="" />
               </span>
-              <span className="mt-3 block font-display text-xl font-semibold">{land.name}</span>
-              <span className="mt-1 block text-sm text-muted">
-                {land.mode === "spelling" ? "Spell the word you hear." : "Ten questions. Lives on the line."}
-              </span>
+              {isDone && <span className="bubble-check" aria-hidden>✓</span>}
+              <span className="bubble-name">{item.name.replace(" (2026)", "")}</span>
             </button>
           );
         })}
       </div>
-    </section>
+    </div>
+  );
+}
+
+function GameCorner() {
+  const go = useQuiz((s) => s.go);
+  const best = useQuiz((s) => s.arcadeBest);
+  const games = [
+    {
+      id: "snake" as const,
+      name: "Word Snake",
+      art: "/art/games/snake.svg",
+      note: "Steer the snake to eat the letters of the word in the right order.",
+      best: best.snake ? `Best: ${best.snake} ${best.snake === 1 ? "word" : "words"}` : "New game!",
+    },
+    {
+      id: "memory" as const,
+      name: "Memory Match",
+      art: "/art/games/memory.svg",
+      note: "Flip the cards and find every matching pair.",
+      best: best.memory ? `Best: ${"★".repeat(best.memory)}` : "New game!",
+    },
+  ];
+  return (
+    <div className="grid gap-3 sm:grid-cols-2">
+      {games.map((game, index) => (
+        <button
+          key={game.id}
+          type="button"
+          onClick={() => go(game.id)}
+          className="game-card stagger-item"
+          style={{ animationDelay: `${index * 70}ms` }}
+        >
+          <span className="land-emblem is-big game-emblem">
+            <img src={game.art} alt="" />
+          </span>
+          <span className="min-w-0 flex-1 text-left">
+            <span className="block text-xs font-extrabold uppercase tracking-widest text-gold">{game.best}</span>
+            <span className="block font-display text-2xl font-semibold leading-tight">{game.name}</span>
+            <span className="block text-sm text-muted">{game.note}</span>
+            <span className="mt-2 inline-flex min-h-10 items-center gap-2 rounded-2xl bg-primary px-4 font-extrabold text-primary-fg">
+              <PlayIcon className="size-4" aria-hidden /> Play
+            </span>
+          </span>
+        </button>
+      ))}
+      <p className="text-sm text-muted sm:col-span-2">Every finished game earns coins for lives and hints.</p>
+    </div>
   );
 }
 
@@ -1265,6 +1450,7 @@ function Academy() {
 function Summary() {
   const note = useQuiz((s) => s.summaryNote);
   const park = useQuiz((s) => s.park);
+  const go = useQuiz((s) => s.go);
   return (
     <section className="mx-auto max-w-xl rounded-card border border-gold bg-surface p-6 text-center">
       <Trophy className="mx-auto size-8 text-gold" aria-hidden />
@@ -1276,6 +1462,13 @@ function Summary() {
         className="mt-6 min-h-12 w-full rounded-2xl bg-primary font-extrabold text-primary-fg"
       >
         Back to the trail
+      </button>
+      <button
+        type="button"
+        onClick={() => go("snake")}
+        className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border-2 border-gold bg-surface-2 font-extrabold"
+      >
+        <Gamepad2 className="size-5 text-gold" aria-hidden /> Bonus game: Word Snake
       </button>
       <ShareQuizyButton
         variant="card"

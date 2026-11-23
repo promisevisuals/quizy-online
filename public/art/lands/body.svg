@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#fffaf0"/><stop offset="1" stop-color="#f8e9cc"/></radialGradient>
+    <radialGradient id="h" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#ff9a8a"/><stop offset=".55" stop-color="#e2574c"/><stop offset="1" stop-color="#b8322e"/></radialGradient>
+    <filter id="soft"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="6"/></filter>
+  </defs>
+  <rect width="512" height="512" fill="#fdf5e6"/>
+  <circle cx="256" cy="256" r="218" fill="url(#bg)" stroke="#e6cfa4" stroke-width="10"/>
+  <circle cx="190" cy="180" r="70" fill="#f6c9b8" opacity=".35"/>
+  <circle cx="330" cy="330" r="90" fill="#f9dcc0" opacity=".45"/>
+  <g filter="url(#soft)">
+    <path d="M256 392C150 318 112 262 112 206c0-46 36-82 80-82 28 0 50 14 64 36 14-22 36-36 64-36 44 0 80 36 80 82 0 56-38 112-144 186z" fill="url(#h)"/>
+  </g>
+  <path d="M172 196c6-26 26-42 48-44" fill="none" stroke="#ffe3da" stroke-width="14" stroke-linecap="round" opacity=".85"/>
+  <polyline points="128,262 196,262 218,228 244,300 270,236 290,262 384,262" fill="none" stroke="#fffaf1" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="#7cb97a" opacity=".9">
+    <path d="M356 126c22-6 40 2 48 20-22 6-40-2-48-20z"/>
+    <path d="M340 110c4-20 18-30 36-30-4 20-18 30-36 30z"/>
+  </g>
+</svg>
