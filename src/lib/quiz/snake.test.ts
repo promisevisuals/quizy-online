@@ -1,6 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { GRID, judge, layTiles, spawnSnake, step, wordFor } from "./snake.ts";
+import { SNAKE_LEVELS } from "./arcade.ts";
+import { GRID, decoyCount, flashMsFor, judge, layTiles, spawnSnake, step, tickMs, wordFor } from "./snake.ts";
 
 function mulberry(seed: number) {
   let a = seed >>> 0;
@@ -68,9 +69,31 @@ describe("Word Snake rules", () => {
     assert.equal(judge({ x: 4, y: 3 }, body, [], "CAT", 0).kind, "none");
   });
 
-  it("starts young players on short words and climbs", () => {
-    assert.equal(wordFor("young", 0, () => 0).word.length, 3);
-    assert.equal(wordFor("old", 0, () => 0).word.length, 4);
-    assert.ok(wordFor("young", 9, () => 0).word.length >= 6);
+  it("starts each level small and climbs as words are finished", () => {
+    assert.equal(wordFor(SNAKE_LEVELS.easy, 0, () => 0).word.length, 3);
+    assert.equal(wordFor(SNAKE_LEVELS.medium, 0, () => 0).word.length, 4);
+    assert.equal(wordFor(SNAKE_LEVELS.expert, 0, () => 0).word.length, 5);
+    assert.ok(wordFor(SNAKE_LEVELS.easy, 9, () => 0).word.length >= 6);
+    assert.ok(wordFor(SNAKE_LEVELS.expert, 4, () => 0).word.length >= 8);
+  });
+
+  it("gets faster, busier and quicker to hide as the game goes on", () => {
+    for (const level of Object.values(SNAKE_LEVELS)) {
+      assert.ok(tickMs(level, 6) < tickMs(level, 0));
+      assert.ok(tickMs(level, 100) >= level.minMs);
+      assert.ok(decoyCount(5, level) > decoyCount(0, level));
+      assert.ok(decoyCount(100, level) <= level.maxDecoys);
+    }
+    assert.equal(flashMsFor(SNAKE_LEVELS.easy, 0), 0);
+    assert.ok(flashMsFor(SNAKE_LEVELS.hard, 5) < flashMsFor(SNAKE_LEVELS.hard, 0));
+    assert.ok(flashMsFor(SNAKE_LEVELS.expert, 100) >= SNAKE_LEVELS.expert.minFlashMs);
+  });
+
+  it("fits the longest words and the most trick letters on the board", () => {
+    const snake = spawnSnake();
+    for (let seed = 1; seed < 30; seed++) {
+      const tiles = layTiles("CROCODILE", SNAKE_LEVELS.expert.maxDecoys, snake, mulberry(seed));
+      assert.equal(tiles.length, 9 + SNAKE_LEVELS.expert.maxDecoys);
+    }
   });
 });

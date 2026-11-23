@@ -862,14 +862,14 @@ function GameCorner() {
       id: "snake" as const,
       name: "Word Snake",
       art: "/art/games/snake.svg",
-      note: "Steer the snake to eat the letters of the word in the right order.",
+      note: "Eat the letters of the word in order. Four levels; on Hard the word hides and you spell it from memory.",
       best: best.snake ? `Best: ${best.snake} ${best.snake === 1 ? "word" : "words"}` : "New game!",
     },
     {
       id: "memory" as const,
       name: "Memory Match",
       art: "/art/games/memory.svg",
-      note: "Flip the cards and find every matching pair.",
+      note: "Find the matching pairs. Four levels, and more cards every round.",
       best: best.memory ? `Best: ${"★".repeat(best.memory)}` : "New game!",
     },
   ];
