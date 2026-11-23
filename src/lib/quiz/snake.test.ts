@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { SNAKE_LEVELS } from "./arcade.ts";
-import { GRID, boardFor, decoyCount, flashMsFor, judge, layTiles, spawnSnake, step, tickMs, wordFor } from "./snake.ts";
+import { GRID, SNAKE_WORDS, boardFor, decoyCount, flashMsFor, judge, layTiles, spawnSnake, step, tickMs, wordFor } from "./snake.ts";
 
 function mulberry(seed: number) {
   let a = seed >>> 0;
@@ -71,8 +71,8 @@ describe("Word Snake rules", () => {
 
   it("starts each level small and climbs as words are finished", () => {
     assert.equal(wordFor(SNAKE_LEVELS.easy, 0, () => 0).word.length, 3);
-    assert.equal(wordFor(SNAKE_LEVELS.medium, 0, () => 0).word.length, 4);
-    assert.equal(wordFor(SNAKE_LEVELS.expert, 0, () => 0).word.length, 5);
+    assert.equal(wordFor(SNAKE_LEVELS.medium, 0, () => 0).word.length, 5);
+    assert.equal(wordFor(SNAKE_LEVELS.expert, 0, () => 0).word.length, 8);
     assert.ok(wordFor(SNAKE_LEVELS.easy, 9, () => 0).word.length >= 6);
     assert.ok(wordFor(SNAKE_LEVELS.expert, 4, () => 0).word.length >= 8);
   });
@@ -116,6 +116,32 @@ describe("board shape", () => {
     const snake = spawnSnake(board);
     const tiles = layTiles("ELEPHANT", 8, snake, mulberry(7), board);
     for (const t of tiles) assert.ok(t.x < 20 && t.y < 13);
+  });
+});
+
+describe("word ladder", () => {
+  it("each rung is longer, up to 15 letters, and every word is real capitals only", () => {
+    const ranges = [[3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 10], [11, 12], [13, 15]];
+    SNAKE_WORDS.forEach((tier, i) => {
+      assert.ok(tier.length >= 10, `tier ${i} has plenty of words`);
+      for (const w of tier) {
+        assert.match(w.word, /^[A-Z]+$/);
+        assert.ok(w.word.length >= ranges[i]![0]! && w.word.length <= ranges[i]![1]!, `${w.word} in tier ${i}`);
+      }
+    });
+  });
+
+  it("harder levels start on longer words and climb further", () => {
+    const longest = (level: keyof typeof SNAKE_LEVELS) => Math.max(...Array.from({ length: 40 }, (_, n) => wordFor(SNAKE_LEVELS[level], n, () => 0.99).word.length));
+    assert.ok(longest("easy") <= 7);
+    assert.ok(longest("medium") >= 9);
+    assert.ok(longest("hard") >= 11);
+    assert.ok(longest("expert") >= 13);
+    assert.ok(wordFor(SNAKE_LEVELS.hard, 0, () => 0).word.length >= 6);
+  });
+
+  it("long words stay on screen a little longer in memory levels", () => {
+    assert.ok(flashMsFor(SNAKE_LEVELS.expert, 0, 15) > flashMsFor(SNAKE_LEVELS.expert, 0, 5));
   });
 });
 

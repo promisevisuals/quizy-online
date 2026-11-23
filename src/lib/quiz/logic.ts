@@ -392,7 +392,7 @@ export function playTone(ok: boolean) {
     osc.type = "sine";
     osc.frequency.value = ok ? 587 : 196;
     if (!ok) osc.frequency.exponentialRampToValueAtTime(140, audio.currentTime + 0.16);
-    gain.gain.value = 0.045;
+    gain.gain.value = 0.14;
     osc.connect(gain);
     gain.connect(audio.destination);
     osc.start();

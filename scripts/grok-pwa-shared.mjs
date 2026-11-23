@@ -167,15 +167,19 @@ export function renderWebManifest(hostHeader, site = {}) {
       start_url: "/",
       scope: "/",
       display: "standalone",
-      background_color: "#000000",
-      theme_color: "#000000",
-      icons: [
-        {
-          src: "/__grok/icon-180.png",
-          sizes: "180x180",
-          type: "image/png",
-        },
-      ],
+      // An app can bring its own icon and colours through src/lib/og/site.json.
+      background_color: site.background || "#000000",
+      theme_color: site.theme || "#000000",
+      icons:
+        Array.isArray(site.icons) && site.icons.length
+          ? site.icons
+          : [
+              {
+                src: "/__grok/icon-180.png",
+                sizes: "180x180",
+                type: "image/png",
+              },
+            ],
     },
     null,
     2,
@@ -451,7 +455,7 @@ export function injectGrokPwaHead(html, ctx = {}) {
   const missing = grokPwaHeadTags(appName)
     .filter(([key]) => {
       if (key === "manifest") return !next.includes('href="/__grok/manifest.webmanifest"');
-      if (key === "apple-touch-icon") return !next.includes('href="/__grok/icon-180.png"');
+      if (key === "apple-touch-icon") return !next.includes('rel="apple-touch-icon"');
       return !next.includes(`name="${key}"`);
     })
     .map(([, tag]) => tag);

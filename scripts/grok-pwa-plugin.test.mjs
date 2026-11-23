@@ -566,3 +566,11 @@ test("vite plugin bakes og identity as a virtual module", () => {
   assert.match(plugin, /snapshotOgIdentity/);
 });
 
+
+test("an app's own icons and colours from site.json go into the manifest", () => {
+  const icons = [{ src: "/icons/quizy-512.png", sizes: "512x512", type: "image/png" }];
+  const manifest = JSON.parse(renderWebManifest("quizy.promisevisuals.com", { title: "Quizy", icons, background: "#fffaf1", theme: "#1c7a4a" }));
+  assert.equal(manifest.icons[0].src, "/icons/quizy-512.png");
+  assert.equal(manifest.background_color, "#fffaf1");
+  assert.equal(manifest.theme_color, "#1c7a4a");
+});

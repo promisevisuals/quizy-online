@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Heart, Volume2 } from "lucide-react";
 import { ARCADE_LEVELS, LEVEL_NAMES, SNAKE_LEVELS, loadLevel, saveLevel, type ArcadeLevel, type SnakeLevel } from "@/lib/quiz/arcade";
-import { playTone, speak } from "@/lib/quiz/logic";
+import { speak } from "@/lib/quiz/logic";
+import { sfx } from "@/lib/quiz/sfx";
 import {
   GRID,
   OPPOSITE,
@@ -200,9 +201,10 @@ export function WordSnake() {
     (text: string) => {
       const g = game.current;
       g.lives -= 1;
-      playTone(false);
+      sfx.wrong();
       syncHud();
       if (g.lives <= 0) {
+        window.setTimeout(() => sfx.gameOver(), 350);
         setMessage(text);
         setPhase("over");
         return;
@@ -234,7 +236,8 @@ export function WordSnake() {
       g.progress += 1;
       g.grow += 1;
       g.flash = { cell: next, good: true, at: performance.now() };
-      playTone(true);
+      if (bite.done) sfx.word();
+      else sfx.chomp(g.progress);
       if (bite.done) {
         g.wordsDone += 1;
         g.coins += g.word.word.length;
@@ -279,7 +282,7 @@ export function WordSnake() {
   const beginWord = useCallback(() => {
     const g = game.current;
     if (cfg.canHear) say(g.word.word.toLowerCase());
-    const ms = flashMsFor(cfg, g.wordsDone);
+    const ms = flashMsFor(cfg, g.wordsDone, g.word.word.length);
     if (ms) {
       const until = Date.now() + ms;
       setNow(Date.now());
@@ -365,6 +368,7 @@ export function WordSnake() {
         }
         g.queue = [];
         if (dir !== "left") g.dir = dir;
+        sfx.start();
         setPhase("playing");
         return;
       }
@@ -453,7 +457,7 @@ export function WordSnake() {
   // On memory levels the word is hidden after the peek: only eaten letters show.
   const hidden = cfg.word === "flash" && !revealing;
   const peekLeft = revealing ? Math.max(0, revealUntil - now) : 0;
-  const peekTotal = flashMsFor(cfg, wordsDone) || 1;
+  const peekTotal = flashMsFor(cfg, wordsDone, word.word.length) || 1;
 
   const hearButton = cfg.canHear ? (
     <button

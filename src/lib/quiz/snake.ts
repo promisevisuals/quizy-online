@@ -36,7 +36,10 @@ export function boardFor(width: number, height: number, short = GRID, maxLong = 
   return w >= h ? { cols, rows: short } : { cols: short, rows };
 }
 
-/** Word ladder, easiest first. Each tier is a little longer. */
+/**
+ * Word ladder, easiest first: 3, 4, 5, 6, 7, 8 letters, then 9–10, 11–12 and 13–15 letters.
+ * Each level starts on its own rung and climbs as words are spelled.
+ */
 export const SNAKE_WORDS: SnakeWord[][] = [
   [
     { word: "CAT", emoji: "🐱", hint: "It says meow." },
@@ -81,22 +84,82 @@ export const SNAKE_WORDS: SnakeWord[][] = [
     { word: "BANANA", emoji: "🍌", hint: "A long yellow fruit." },
     { word: "RABBIT", emoji: "🐰", hint: "It has long ears." },
     { word: "TURTLE", emoji: "🐢", hint: "It carries its shell." },
-    { word: "GIRAFFE", emoji: "🦒", hint: "The tallest animal." },
-    { word: "DOLPHIN", emoji: "🐬", hint: "A clever sea mammal." },
+    { word: "GARDEN", emoji: "🌻", hint: "Flowers grow here." },
+    { word: "SCHOOL", emoji: "🏫", hint: "You learn here." },
+    { word: "PENCIL", emoji: "✏️", hint: "You write with it." },
+    { word: "MONKEY", emoji: "🐒", hint: "It swings in trees." },
+    { word: "CASTLE", emoji: "🏰", hint: "A king lives here." },
+    { word: "WINDOW", emoji: "🪟", hint: "You look out of it." },
+  ],
+  [
+    { word: "DOLPHIN", emoji: "🐬", hint: "A clever sea animal." },
     { word: "PENGUIN", emoji: "🐧", hint: "A bird that cannot fly." },
-    { word: "RAINBOW", emoji: "🌈", hint: "Seven colours in the sky." },
+    { word: "RAINBOW", emoji: "🌈", hint: "Colours after the rain." },
+    { word: "GIRAFFE", emoji: "🦒", hint: "The tallest animal." },
+    { word: "TEACHER", emoji: "👩‍🏫", hint: "Helps you learn." },
+    { word: "CHICKEN", emoji: "🐔", hint: "It lays eggs." },
+    { word: "KITCHEN", emoji: "🍳", hint: "Food is cooked here." },
+    { word: "BLANKET", emoji: "🛏️", hint: "Keeps you warm in bed." },
+    { word: "PYRAMID", emoji: "🔺", hint: "Built in ancient Egypt." },
+    { word: "VOLCANO", emoji: "🌋", hint: "A mountain that erupts." },
+    { word: "LANTERN", emoji: "🏮", hint: "A light you carry." },
+    { word: "PUMPKIN", emoji: "🎃", hint: "A big orange vegetable." },
   ],
   [
     { word: "ELEPHANT", emoji: "🐘", hint: "It has a long trunk." },
     { word: "KANGAROO", emoji: "🦘", hint: "It hops and has a pouch." },
     { word: "DINOSAUR", emoji: "🦕", hint: "It lived long, long ago." },
     { word: "UMBRELLA", emoji: "☂️", hint: "It keeps the rain off you." },
-    { word: "BUTTERFLY", emoji: "🦋", hint: "It has colourful wings." },
-    { word: "CROCODILE", emoji: "🐊", hint: "It has a long snout and sharp teeth." },
-    { word: "PINEAPPLE", emoji: "🍍", hint: "A spiky, sweet fruit." },
-    { word: "SANDWICH", emoji: "🥪", hint: "Bread with something inside." },
-    { word: "CHAMELEON", emoji: "🦎", hint: "It changes colour." },
+    { word: "MOUNTAIN", emoji: "⛰️", hint: "Much bigger than a hill." },
+    { word: "SANDWICH", emoji: "🥪", hint: "Bread with a filling." },
+    { word: "SQUIRREL", emoji: "🐿️", hint: "It hides nuts." },
+    { word: "HOSPITAL", emoji: "🏥", hint: "Doctors work here." },
+    { word: "NOTEBOOK", emoji: "📓", hint: "You write in it." },
+    { word: "AIRPLANE", emoji: "✈️", hint: "It flies people far away." },
+    { word: "BIRTHDAY", emoji: "🎂", hint: "Your special day each year." },
+    { word: "TOMORROW", emoji: "📅", hint: "The day after today." },
+  ],
+  [
+    { word: "BUTTERFLY", emoji: "🦋", hint: "It was once a caterpillar." },
+    { word: "CROCODILE", emoji: "🐊", hint: "Big teeth, lives in rivers." },
     { word: "SNOWFLAKE", emoji: "❄️", hint: "Frozen and falls from the sky." },
+    { word: "CHOCOLATE", emoji: "🍫", hint: "A sweet brown treat." },
+    { word: "ASTRONAUT", emoji: "👩‍🚀", hint: "Travels into space." },
+    { word: "TELESCOPE", emoji: "🔭", hint: "Helps you see the stars." },
+    { word: "PINEAPPLE", emoji: "🍍", hint: "A spiky tropical fruit." },
+    { word: "WATERMELON", emoji: "🍉", hint: "Green outside, red inside." },
+    { word: "STRAWBERRY", emoji: "🍓", hint: "A small red fruit with seeds." },
+    { word: "HELICOPTER", emoji: "🚁", hint: "It flies with spinning blades." },
+    { word: "BASKETBALL", emoji: "🏀", hint: "You bounce it and shoot it." },
+    { word: "MICROSCOPE", emoji: "🔬", hint: "Makes tiny things look big." },
+  ],
+  [
+    { word: "GRASSHOPPER", emoji: "🦗", hint: "A green insect that jumps." },
+    { word: "CATERPILLAR", emoji: "🐛", hint: "It turns into a butterfly." },
+    { word: "THUNDERSTORM", emoji: "⛈️", hint: "Lightning, thunder and rain." },
+    { word: "PHOTOGRAPHER", emoji: "📸", hint: "Takes pictures for a job." },
+    { word: "REFRIGERATOR", emoji: "🧊", hint: "Keeps food cold." },
+    { word: "WHEELBARROW", emoji: "🛒", hint: "Push it to carry soil." },
+    { word: "MATHEMATICS", emoji: "➗", hint: "Numbers, shapes and sums." },
+    { word: "ENCYCLOPEDIA", emoji: "📚", hint: "A book of facts about everything." },
+    { word: "HIPPOPOTAMUS", emoji: "🦛", hint: "A huge animal that loves water." },
+    { word: "KALEIDOSCOPE", emoji: "🔮", hint: "A tube of changing colourful patterns." },
+    { word: "ELECTRICITY", emoji: "⚡", hint: "It powers lights and machines." },
+    { word: "CHAMPIONSHIP", emoji: "🏆", hint: "A contest to find the best." },
+  ],
+  [
+    { word: "CONSTELLATION", emoji: "✨", hint: "A group of stars making a shape." },
+    { word: "EXTRAORDINARY", emoji: "🤩", hint: "Very, very unusual." },
+    { word: "PHOTOSYNTHESIS", emoji: "🌿", hint: "How plants make food from sunlight." },
+    { word: "ARCHAEOLOGIST", emoji: "🏺", hint: "Digs up things from long ago." },
+    { word: "RESPONSIBILITY", emoji: "🤝", hint: "A job you must take care of." },
+    { word: "METAMORPHOSIS", emoji: "🦋", hint: "A big change, like caterpillar to butterfly." },
+    { word: "TRANSPORTATION", emoji: "🚆", hint: "Ways of moving people and things." },
+    { word: "CONGRATULATIONS", emoji: "🎉", hint: "What you say when someone wins." },
+    { word: "UNDERSTANDING", emoji: "💡", hint: "Knowing what something means." },
+    { word: "INVESTIGATION", emoji: "🔍", hint: "Looking carefully for the truth." },
+    { word: "ENTERTAINMENT", emoji: "🎭", hint: "Shows and fun to enjoy." },
+    { word: "EXPERIMENTING", emoji: "🧪", hint: "Trying things out to learn." },
   ],
 ];
 
@@ -197,14 +260,16 @@ export function tickMs(level: SnakeLevel, wordsDone: number) {
 }
 
 /** How long the word shows before hiding on memory levels; shorter as the game goes on. */
-export function flashMsFor(level: SnakeLevel, wordsDone: number) {
+export function flashMsFor(level: SnakeLevel, wordsDone: number, length = 0) {
   if (level.word !== "flash") return 0;
-  return Math.max(level.minFlashMs, level.flashMs - wordsDone * 250);
+  // long words get a little longer to read: 0.3 s for each letter past five
+  return Math.max(level.minFlashMs, level.flashMs - wordsDone * 250) + Math.max(0, length - 5) * 300;
 }
 
 /** Starts on the level's tier and climbs to longer words as words are finished. */
 export function wordFor(level: SnakeLevel, wordsDone: number, rnd: () => number = Math.random, avoid = ""): SnakeWord {
-  const tier = Math.min(SNAKE_WORDS.length - 1, level.startTier + Math.floor(wordsDone / level.wordsPerTier));
+  const top = Math.min(SNAKE_WORDS.length - 1, level.maxTier);
+  const tier = Math.min(top, level.startTier + Math.floor(wordsDone / level.wordsPerTier));
   const list = (SNAKE_WORDS[tier] ?? SNAKE_WORDS[0]!).filter((w) => w.word !== avoid);
   return list[Math.floor(rnd() * list.length)] ?? list[0]!;
 }
