@@ -38,7 +38,8 @@ export type Screen =
   | "battle"
   | "command"
   | "snake"
-  | "memory";
+  | "memory"
+  | "label";
 
 export type RoundMode = "land" | "daily" | "weekly" | "academy" | "battle";
 

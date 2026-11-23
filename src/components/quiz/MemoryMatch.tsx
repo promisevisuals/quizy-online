@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ArrowRight, RotateCcw, Timer } from "lucide-react";
+import { ArrowRight, RotateCcw, Timer } from "lucide-react";
 import { ARCADE_LEVELS, LEVEL_NAMES, MEMORY_LEVELS, loadLevel, pairsForRound, saveLevel, secondsForRound, type ArcadeLevel } from "@/lib/quiz/arcade";
 import { playTone, shuffle } from "@/lib/quiz/logic";
 import { useQuiz } from "@/lib/quiz/store";
+import { GameStage } from "@/components/quiz/GameStage";
 
 /** 15 faces per deck so the biggest rounds (15 pairs) never repeat a picture. */
 const DECKS: { name: string; cards: { face: string; label: string }[] }[] = [
@@ -197,21 +198,21 @@ export function MemoryMatch() {
   const lowTime = totalSeconds > 0 && secondsLeft <= Math.max(5, Math.round(totalSeconds * 0.2));
 
   return (
-    <section className="mx-auto max-w-xl">
-      <div className="flex items-center justify-between gap-3">
-        <button type="button" onClick={() => park("map")} className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-line bg-surface px-4 font-extrabold">
-          <ArrowLeft className="size-4" aria-hidden /> Trail
-        </button>
-        <p className="text-right text-sm font-extrabold text-muted">
+    <GameStage
+      title="Memory Match"
+      onBack={() => park("map")}
+      stats={
+        <span>
           {LEVEL_NAMES[level]} · Round {round}
-          <span className="block text-xs">
-            {pairs} pairs · Moves {moves} · Best round {Math.max(best, done ? round : round - 1) || "—"}
+          <span className="block font-bold">
+            {pairs} pairs · {moves} moves · Best {Math.max(best, done ? round : round - 1) || "—"}
           </span>
-        </p>
-      </div>
-
+        </span>
+      }
+    >
+      <div className="min-h-0 flex-1 overflow-y-auto">
       {canChooseLevel ? (
-        <div className="mt-3">
+        <div>
           <div className="arcade-levels" role="radiogroup" aria-label="Difficulty">
             {ARCADE_LEVELS.map((item) => (
               <button key={item} type="button" role="radio" aria-checked={item === level} onClick={() => chooseLevel(item)} className={item === level ? "is-active" : ""}>
@@ -223,17 +224,16 @@ export function MemoryMatch() {
         </div>
       ) : null}
 
-      <div className="mt-3 flex items-center justify-between gap-3">
-        <h2 className="font-display text-2xl font-semibold sm:text-3xl">Memory Match</h2>
+      <div className="mt-2 flex items-center justify-between gap-3">
+        <p className="text-sm text-muted">
+          {peeking ? "Look closely! The cards turn over in a moment…" : `Flip two cards at a time. Find all ${pairs} pairs.`}
+        </p>
         {totalSeconds ? (
           <p className={`memory-timer inline-flex items-center gap-1 text-lg font-extrabold ${lowTime ? "is-low" : ""}`} aria-live="polite">
             <Timer className="size-5" aria-hidden /> {secondsLeft}s
           </p>
         ) : null}
       </div>
-      <p className="text-sm text-muted">
-        {peeking ? "Look closely! The cards turn over in a moment…" : `Flip two cards at a time. Find all ${pairs} pairs.`}
-      </p>
 
       <div className={`memory-grid mt-3 ${columnsFor(cards.length)}`}>
         {cards.map((card, index) => {
@@ -298,6 +298,7 @@ export function MemoryMatch() {
           </button>
         </div>
       ) : null}
-    </section>
+      </div>
+    </GameStage>
   );
 }

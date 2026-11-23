@@ -21,6 +21,7 @@ import {
   type Tile,
 } from "@/lib/quiz/snake";
 import { useQuiz } from "@/lib/quiz/store";
+import { GameStage } from "@/components/quiz/GameStage";
 
 type Phase = "ready" | "playing" | "oops" | "word" | "over";
 
@@ -66,8 +67,8 @@ export function WordSnake() {
   const park = useQuiz((s) => s.park);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const wrapRef = useRef<HTMLDivElement | null>(null);
-  const playAreaRef = useRef<HTMLDivElement | null>(null);
+  // a state ref, so sizing starts as soon as the full-screen stage has mounted the board
+  const [wrapEl, setWrapEl] = useState<HTMLDivElement | null>(null);
   const [level, setLevel] = useState<ArcadeLevel>(() => loadLevel("snake", age));
   const cfg = SNAKE_LEVELS[level];
   const game = useRef<Game>(freshGame(SNAKE_LEVELS[level]));
@@ -299,19 +300,14 @@ export function WordSnake() {
     return () => window.clearInterval(id);
   }, [revealUntil]);
 
-  // On small screens, bring the word, board and steering buttons into view together.
-  useEffect(() => {
-    const id = window.setTimeout(() => playAreaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
-    return () => window.clearTimeout(id);
-  }, []);
-
   /* ---------- canvas sizing ---------- */
   useEffect(() => {
-    const wrap = wrapRef.current;
+    const wrap = wrapEl;
     const canvas = canvasRef.current;
     if (!wrap || !canvas) return;
     const fit = () => {
-      const css = Math.floor(Math.min(wrap.clientWidth, 520));
+      // the board is the biggest square that fits the space left between the word and the buttons
+      const css = Math.max(200, Math.floor(Math.min(wrap.clientWidth, wrap.clientHeight, 640)));
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.style.width = `${css}px`;
       canvas.style.height = `${css}px`;
@@ -323,7 +319,7 @@ export function WordSnake() {
     const ro = new ResizeObserver(fit);
     ro.observe(wrap);
     return () => ro.disconnect();
-  }, [draw]);
+  }, [draw, wrapEl]);
 
   /* ---------- input ---------- */
   const steer = useCallback(
@@ -434,24 +430,26 @@ export function WordSnake() {
   const peekTotal = flashMsFor(cfg, wordsDone) || 1;
 
   return (
-    <section className="mx-auto max-w-xl">
-      <div className="flex items-center justify-between gap-3">
-        <button type="button" onClick={() => park("map")} className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-line bg-surface px-4 font-extrabold">
-          <ArrowLeft className="size-4" aria-hidden /> Trail
-        </button>
-        <div className="flex items-center gap-1" aria-label={`${lives} lives left`}>
-          {Array.from({ length: START_LIVES }, (_, i) => (
-            <Heart key={i} className={i < lives ? "size-6 fill-bad text-bad" : "size-6 text-line"} aria-hidden />
-          ))}
-        </div>
-        <p className="text-right text-sm font-extrabold text-muted">
-          {LEVEL_NAMES[level]} · Words {wordsDone}
-          <span className="block text-xs">Best {Math.max(levelBest, wordsDone)} · All levels {Math.max(best, wordsDone)}</span>
-        </p>
-      </div>
+    <GameStage
+      title="Word Snake"
+      onBack={() => park("map")}
+      stats={
+        <>
+          <span className="flex items-center gap-0.5" aria-label={`${lives} lives left`}>
+            {Array.from({ length: START_LIVES }, (_, i) => (
+              <Heart key={i} className={i < lives ? "size-5 fill-bad text-bad" : "size-5 text-line"} aria-hidden />
+            ))}
+          </span>
+          <span>
+            {LEVEL_NAMES[level]} · {wordsDone} {wordsDone === 1 ? "word" : "words"}
+            <span className="block font-bold">Best {Math.max(levelBest, wordsDone)}{best > levelBest ? ` · all ${best}` : ""}</span>
+          </span>
+        </>
+      }
+    >
 
       {canChooseLevel ? (
-        <div className="mt-3">
+        <div className="shrink-0">
           <div className="arcade-levels" role="radiogroup" aria-label="Difficulty">
             {ARCADE_LEVELS.map((item) => (
               <button
@@ -466,13 +464,13 @@ export function WordSnake() {
               </button>
             ))}
           </div>
-          <p className="mt-1 text-center text-xs font-bold text-muted">{cfg.blurb}. It speeds up and the words get longer as you go.</p>
+          <p className="mt-1 truncate text-center text-xs font-bold text-muted">{cfg.blurb}. Gets harder as you go.</p>
         </div>
       ) : null}
 
-      <div ref={playAreaRef} className="mt-3 flex scroll-mt-2 items-center justify-between gap-3 rounded-card border border-line bg-surface px-4 py-3">
+      <div className="flex shrink-0 items-center justify-between gap-3 rounded-2xl border border-line bg-surface px-3 py-2">
         <div className="flex items-center gap-3">
-          <span className="text-4xl" aria-hidden>
+          <span className="text-3xl" aria-hidden>
             {cfg.showPicture ? word.emoji : "🧠"}
           </span>
           <div className="min-w-0">
@@ -480,7 +478,7 @@ export function WordSnake() {
               {revealing ? "Remember this word!" : hidden ? "Spell it from memory" : "Eat the letters in order"}
             </p>
             <p
-              className="snake-word font-display text-3xl font-semibold tracking-[0.18em]"
+              className="snake-word font-display text-2xl font-semibold tracking-[0.16em] sm:text-3xl"
               aria-label={hidden ? `Word hidden. ${progress} of ${word.word.length} letters eaten` : `Word: ${word.word}. Next letter ${needed}`}
             >
               {word.word.split("").map((letter, i) => (
@@ -508,7 +506,7 @@ export function WordSnake() {
         ) : null}
       </div>
 
-      <div ref={wrapRef} className="relative mt-3 w-full">
+      <div ref={setWrapEl} className="snake-wrap">
         <canvas
           ref={canvasRef}
           className="snake-board mx-auto block rounded-card"
@@ -565,7 +563,7 @@ export function WordSnake() {
         )}
       </div>
 
-      <div className="snake-pad mx-auto mt-3" aria-label="Steering buttons">
+      <div className="snake-pad mx-auto shrink-0" aria-label="Steering buttons">
         <button type="button" className="pad-up" onClick={() => steer("up")} aria-label="Up">
           <ArrowUp aria-hidden />
         </button>
@@ -579,10 +577,7 @@ export function WordSnake() {
           <ArrowDown aria-hidden />
         </button>
       </div>
-      <p className="mt-3 text-center text-sm text-muted">
-        A wrong letter, a letter out of order, or bumping your own tail costs a heart. Every finished word earns coins.
-      </p>
-    </section>
+    </GameStage>
   );
 }
 
