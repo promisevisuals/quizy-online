@@ -65,6 +65,7 @@ export function WordSnake() {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
+  const playAreaRef = useRef<HTMLDivElement | null>(null);
   const game = useRef<Game>(freshGame(age));
   const phaseRef = useRef<Phase>("ready");
   const [phase, setPhaseState] = useState<Phase>("ready");
@@ -265,6 +266,12 @@ export function WordSnake() {
     return () => window.clearTimeout(id);
   }, [age, phase, say, setPhase, syncHud]);
 
+  // On small screens, bring the word, board and steering buttons into view together.
+  useEffect(() => {
+    const id = window.setTimeout(() => playAreaRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 150);
+    return () => window.clearTimeout(id);
+  }, []);
+
   /* ---------- canvas sizing ---------- */
   useEffect(() => {
     const wrap = wrapRef.current;
@@ -386,7 +393,7 @@ export function WordSnake() {
         </p>
       </div>
 
-      <div className="mt-3 flex items-center justify-between gap-3 rounded-card border border-line bg-surface px-4 py-3">
+      <div ref={playAreaRef} className="mt-3 flex scroll-mt-2 items-center justify-between gap-3 rounded-card border border-line bg-surface px-4 py-3">
         <div className="flex items-center gap-3">
           <span className="text-4xl" aria-hidden>
             {word.emoji}
