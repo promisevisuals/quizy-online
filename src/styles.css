@@ -1698,3 +1698,13 @@ textarea {
   .game-card .text-sm.text-muted { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 0.8rem; }
   .game-card .mt-2.inline-flex { margin-top: 0.3rem; min-height: 2.2rem; }
 }
+@media (max-width: 639px) {
+  /* three side games side by side on phones so the Games tab never scrolls */
+  .game-corner { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; }
+  .game-corner .game-card { flex-direction: column; gap: 0.35rem; padding: 0.6rem 0.35rem; text-align: center; }
+  .game-corner .game-card > span:last-child { text-align: center; }
+  .game-corner .game-card .text-sm.text-muted { display: none; }
+  .game-corner .game-card .font-display.text-2xl { font-size: 1.05rem; }
+  .game-corner .game-card .text-xs { font-size: 0.6rem; letter-spacing: 0.04em; }
+  .game-corner .game-card .mt-2.inline-flex { min-height: 2rem; padding: 0 0.7rem; font-size: 0.85rem; }
+}

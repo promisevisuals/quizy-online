@@ -883,7 +883,7 @@ function GameCorner() {
     },
   ];
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
+    <div className="game-corner grid gap-3 sm:grid-cols-3">
       {games.map((game, index) => (
         <button
           key={game.id}
@@ -905,7 +905,7 @@ function GameCorner() {
           </span>
         </button>
       ))}
-      <p className="text-sm text-muted sm:col-span-2">Every finished game earns coins for lives and hints.</p>
+      <p className="col-span-full text-sm text-muted">Every finished game earns coins for lives and hints. Pick Easy to Expert inside each game.</p>
     </div>
   );
 }
