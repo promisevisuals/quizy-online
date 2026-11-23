@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { commandCall, listFeedback, useQuizSession, type CommandSettings, type CommandSummary, type CommandUser } from "@/lib/quiz/cloud";
+import { commandCall, listFeedback, loadTraffic, useQuizSession, type CommandSettings, type CommandSummary, type CommandUser, type Traffic } from "@/lib/quiz/cloud";
 
 const TEMPLATES: Record<string, [string, string]> = {
   praise: [
@@ -103,6 +103,7 @@ export function CommandCenter() {
           </div>
         ))}
       </div>
+      <TrafficPanel />
       <div className="rounded-card border border-line bg-surface p-4">
         <h3 className="font-extrabold">Switches</h3>
         {SWITCHES.map(([key, label]) => (
@@ -263,5 +264,61 @@ export function CommandCenter() {
       {note && <p className="text-sm">{note}</p>}
       {error && <p className="text-bad">{error}</p>}
     </section>
+  );
+}
+
+function TrafficPanel() {
+  const [t, setT] = useState<Traffic | null>(null);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    loadTraffic()
+      .then(setT)
+      .catch((caught: unknown) => setError(caught instanceof Error ? caught.message : "Visitor counts are unavailable"));
+  }, []);
+  const series = t?.series ?? [];
+  const max = Math.max(1, ...series.map((d) => d.visitors));
+  return (
+    <div className="rounded-card border border-line bg-surface p-4">
+      <h3 className="font-extrabold">Visitors and sign-ups</h3>
+      {error ? (
+        <p className="mt-2 text-sm text-muted">{error}</p>
+      ) : !t ? (
+        <p className="mt-2 text-sm text-muted">Counting…</p>
+      ) : (
+        <>
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {(
+              [
+                ["Visitors today", t.visitors_today],
+                ["Visitors, 7 days", t.visitors_7d],
+                ["Visitors, 30 days", t.visitors_30d],
+                ["Page views, 7 days", t.views_7d],
+                ["Sign-ups today", t.signups_today],
+                ["Sign-ups, 7 days", t.signups_7d],
+                ["Sign-ups, 30 days", t.signups_30d],
+                ["Weekly players, 7 days", t.weekly_players_7d],
+              ] as const
+            ).map(([label, value]) => (
+              <div key={label} className="rounded-2xl border border-line bg-surface-2 p-3">
+                <p className="text-xs font-extrabold uppercase tracking-wide text-muted">{label}</p>
+                <p className="font-display text-2xl font-semibold">{value ?? 0}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 flex h-32 items-end gap-1" role="img" aria-label="Visitors per day for the last 14 days">
+            {series.map((d) => (
+              <div key={d.day} className="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1" title={`${d.day}: ${d.visitors} visitors, ${d.signups} sign-ups`}>
+                <span className="text-[10px] font-bold text-muted">{d.visitors || ""}</span>
+                <span className="w-full max-w-7 rounded-t-md bg-primary" style={{ height: `${Math.max(3, (d.visitors / max) * 100)}%` }} />
+                <span className="text-[10px] font-bold text-good">{d.signups ? `+${d.signups}` : "\u00a0"}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-2 text-xs text-muted">
+            Visitors count once per browser per day (Lagos time). Bars cover the last 14 days; “+N” is new explorer accounts. {t.signups_total} explorer accounts in all.
+          </p>
+        </>
+      )}
+    </div>
   );
 }

@@ -1255,7 +1255,7 @@ textarea {
 
 .trail-tabs {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 0.3rem;
   padding: 0.3rem;
   border: 1px solid var(--color-line);
@@ -1536,4 +1536,9 @@ textarea {
   .land-spotlight h3 { font-size: 1.3rem; }
   .trail-tabs { padding: 0.25rem; }
   .trail-tab { min-height: 2.5rem; }
+}
+@media (max-width: 639px) {
+  .trail-tab { gap: 0.25rem; font-size: 0.82rem; }
+  .trail-tab svg { display: none; }
+  .trail-new { position: absolute; top: -0.35rem; right: -0.1rem; font-size: 0.55rem; }
 }

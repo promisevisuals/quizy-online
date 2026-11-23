@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createClient, type Session, type User } from "@supabase/supabase-js";
 import type { Age, BankQ, Difficulty } from "@/lib/quiz/logic";
-import { useQuiz, type Round, type Screen } from "@/lib/quiz/store";
+import { useQuiz, type Round, type Screen, type WeeklyResult } from "@/lib/quiz/store";
 
 /** Publishable key already shipped in the existing Quizy client. Never put a service-role key here. */
 const PUBLIC_URL = "https://snxehcpichoskvdtuveh.supabase.co";
@@ -271,7 +271,7 @@ export function applyCloudProfile(row: Record<string, unknown>) {
   const meta = (history[META] as Record<string, unknown>) ?? {};
   const resume = (history[RESUME] as Record<string, unknown>) ?? (row.resume as Record<string, unknown>) ?? null;
   const difficulty = asDifficulty(String(meta.difficulty || row.difficulty || "easy"));
-  const screens: Screen[] = ["camp", "map", "play", "shop", "bonus", "break", "badges", "daily", "board", "academy", "summary", "certificate", "battle"];
+  const screens: Screen[] = ["camp", "map", "play", "shop", "bonus", "break", "badges", "daily", "board", "academy", "summary", "certificate", "battle", "weekly"];
   const screen = screens.includes(resume?.screen as Screen) ? (resume?.screen as Screen) : undefined;
   useQuiz.setState({
     name: typeof row.display_name === "string" && row.display_name ? row.display_name : useQuiz.getState().name,
@@ -289,6 +289,7 @@ export function applyCloudProfile(row: Record<string, unknown>) {
     dailyDate: typeof meta.dailyDate === "string" ? meta.dailyDate : "",
     dailyDone: meta.dailyDone === true,
     dailyScore: Number(meta.dailyScore ?? 0),
+    weekly: newerWeekly(meta.weekly, useQuiz.getState().weekly),
     voiceOn: meta.voiceOn !== false,
     lives: Number(resume?.lives ?? 3),
     hints: Number(resume?.hints ?? 3),
@@ -302,6 +303,15 @@ export function applyCloudProfile(row: Record<string, unknown>) {
     breakAfter: resume?.breakAfter === "certificate" ? "certificate" : "map",
     ...(screen ? { screen, round: (resume?.round as Round | null) ?? null } : {}),
   });
+}
+
+/** Keeps whichever finished weekly challenge is newer: the one saved in the cloud or the one on this device. */
+function newerWeekly(cloud: unknown, local: WeeklyResult | null): WeeklyResult | null {
+  const c = cloud as WeeklyResult | null | undefined;
+  const valid = !!c && typeof c.week === "string" && typeof c.correct === "number" && typeof c.total === "number";
+  if (!valid) return local;
+  if (!local) return c;
+  return c.week > local.week || (c.week === local.week && c.at < local.at) ? c : local;
 }
 
 let resumeColumn: boolean | null = null;
@@ -325,6 +335,7 @@ export async function saveProfile(userId: string) {
       dailyDate: state.dailyDate,
       dailyDone: state.dailyDone,
       dailyScore: state.dailyScore,
+      weekly: state.weekly,
       savedAt: Date.now(),
     },
     [RESUME]: {
@@ -497,3 +508,46 @@ export async function signOut() {
 }
 
 export type { Age };
+
+export type Traffic = {
+  visitors_today: number;
+  visitors_7d: number;
+  visitors_30d: number;
+  views_today: number;
+  views_7d: number;
+  views_30d: number;
+  signups_today: number;
+  signups_7d: number;
+  signups_30d: number;
+  signups_total: number;
+  weekly_players_7d: number;
+  series: { day: string; visitors: number; views: number; signups: number }[] | null;
+};
+
+const VISITOR_KEY = "quizy-visitor";
+
+/** Counts one visit for the Command Center. The id is random and made on this device; nothing personal is sent. */
+export function trackVisit() {
+  if (typeof window === "undefined" || navigator.webdriver) return;
+  let id: string | null = null;
+  try {
+    id = localStorage.getItem(VISITOR_KEY);
+    if (!id || !/^[A-Za-z0-9_-]{8,64}$/.test(id)) {
+      const raw = crypto.randomUUID ? crypto.randomUUID() : `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`;
+      id = raw.replace(/[^A-Za-z0-9]/g, "").slice(0, 32);
+      localStorage.setItem(VISITOR_KEY, id);
+    }
+  } catch {
+    return;
+  }
+  void supabase.rpc("quizy_track_visit", { p_visitor: id }).then(
+    () => undefined,
+    () => undefined,
+  );
+}
+
+export async function loadTraffic() {
+  const { data, error } = await supabase.rpc("quizy_admin_traffic");
+  if (error) throw new Error(/quizy_admin_traffic|schema cache/i.test(error.message) ? "Visitor counts start once the latest database update is applied." : error.message);
+  return data as Traffic;
+}
