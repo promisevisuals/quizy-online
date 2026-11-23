@@ -111,7 +111,7 @@ export function QuizApp() {
   }, []);
 
   return (
-    <main className={cn("expedition-app min-h-screen text-fg", screen === "camp" && "is-camp", !QUIET_SCREENS.has(screen) && "has-jungle")}>
+    <main className={cn("expedition-app min-h-screen text-fg", screen === "camp" && "is-camp", screen === "map" && "is-map", !QUIET_SCREENS.has(screen) && "has-jungle")}>
       <div className="world-bg" aria-hidden="true">
         <img src="/art/compass.jpg" alt="" className="world-compass" />
       </div>
@@ -645,7 +645,7 @@ const LAND_BLURBS: Record<string, string> = {
   spelling: "Hear the word, then spell it.",
 };
 
-export function landArt(id: string) {
+function landArt(id: string) {
   return id === "body" ? "/art/lands/body.svg" : `/art/lands/${id}.jpg`;
 }
 
@@ -789,7 +789,7 @@ function LandPicker({
             {done ? "Cleared" : "Ready"} · best {best}/{land.count}
           </p>
           <h3 className="truncate font-display text-2xl font-semibold leading-tight">{land.name}</h3>
-          <p className="text-sm text-muted">{LAND_BLURBS[land.id] ?? "Ten questions. Lives on the line."}</p>
+          <p className="spotlight-blurb text-sm text-muted">{LAND_BLURBS[land.id] ?? "Ten questions. Lives on the line."}</p>
           <div className="mt-2 flex gap-2">
             <button
               type="button"

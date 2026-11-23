@@ -1513,3 +1513,19 @@ textarea {
   font-size: clamp(1.8rem, 9vw, 2.8rem);
 }
 .memory-card.is-matched .memory-face { border-color: var(--color-good); background: #eef8e6; }
+
+/* Keep the whole trail on one screen: the picture banner only shows on tall screens. */
+@media (max-height: 1000px) {
+  .scenic-banner.is-trail { display: none; }
+}
+.expedition-app.is-map.has-jungle .app-shell { padding-bottom: 2.2rem; }
+@media (max-width: 639px) {
+  .land-bubbles { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.35rem 0.15rem; }
+  .land-emblem.is-small { width: 2.75rem; height: 2.75rem; }
+  .land-bubble::before { width: 3.05rem; height: 3.05rem; }
+  .bubble-name { font-size: 0.64rem; }
+  .land-bubble { padding: 0.35rem 0.05rem 0.3rem; }
+  .land-spotlight { padding: 0.7rem; gap: 0.7rem; }
+  .land-spotlight .land-emblem.is-big { width: 4.2rem; height: 4.2rem; }
+  .spotlight-blurb { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+}
