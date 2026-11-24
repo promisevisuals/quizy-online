@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { commandCall, listFeedback, loadFeedbackReport, loadTraffic, type FeedbackReport, useQuizSession, type CommandSettings, type CommandSummary, type CommandUser, type Traffic } from "@/lib/quiz/cloud";
+import { commandCall, grantAdmin, listAdmins, listFeedback, revokeAdmin, type AdminList, loadFeedbackReport, loadTraffic, type FeedbackReport, useQuizSession, type CommandSettings, type CommandSummary, type CommandUser, type Traffic } from "@/lib/quiz/cloud";
 
 const TEMPLATES: Record<string, [string, string]> = {
   praise: [
@@ -105,6 +105,7 @@ export function CommandCenter() {
       </div>
       <TrafficPanel />
       <FeedbackPanel />
+      <AdminsPanel />
       <div className="rounded-card border border-line bg-surface p-4">
         <h3 className="font-extrabold">Switches</h3>
         {SWITCHES.map(([key, label]) => (
@@ -403,6 +404,108 @@ function FeedbackPanel() {
           </ul>
         </>
       )}
+    </div>
+  );
+}
+
+function AdminsPanel() {
+  const [list, setList] = useState<AdminList | null>(null);
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState<"admin" | "owner">("admin");
+  const [busy, setBusy] = useState(false);
+  const [note, setNote] = useState<{ text: string; good: boolean } | null>(null);
+
+  const load = () =>
+    listAdmins()
+      .then(setList)
+      .catch((caught: unknown) => setNote({ text: caught instanceof Error ? caught.message : "Could not load admins", good: false }));
+  useEffect(() => {
+    void load();
+  }, []);
+
+  const add = () => {
+    if (!email.trim() || busy) return;
+    setBusy(true);
+    setNote(null);
+    grantAdmin(email.trim(), role)
+      .then((result) => {
+        setNote({ text: `${result.name} is now ${result.role === "owner" ? "an owner" : "an admin"}. They'll see the Command Center next time they open Quizy signed in.`, good: true });
+        setEmail("");
+        return load();
+      })
+      .catch((caught: unknown) => setNote({ text: caught instanceof Error ? caught.message : "Could not add that email", good: false }))
+      .finally(() => setBusy(false));
+  };
+
+  const remove = (userId: string, name: string) => {
+    if (!window.confirm(`Remove Command Center access for ${name}?`)) return;
+    setBusy(true);
+    revokeAdmin(userId)
+      .then(() => {
+        setNote({ text: `${name} no longer has Command Center access.`, good: true });
+        return load();
+      })
+      .catch((caught: unknown) => setNote({ text: caught instanceof Error ? caught.message : "Could not remove access", good: false }))
+      .finally(() => setBusy(false));
+  };
+
+  return (
+    <div className="rounded-card border border-line bg-surface p-4">
+      <h3 className="font-extrabold">Who can use the Command Center</h3>
+      {list?.can_manage ? (
+        <>
+          <p className="mt-1 text-sm text-muted">
+            Type the email of someone who already has a Quizy account. <b>Admins</b> can use the Command Center; <b>owners</b> can also add and remove people.
+          </p>
+          <form
+            className="mt-3 grid gap-2 sm:grid-cols-[1fr_auto_auto]"
+            onSubmit={(event) => {
+              event.preventDefault();
+              add();
+            }}
+          >
+            <input
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="name@example.com"
+              autoComplete="off"
+              className="min-h-11 rounded-xl border border-line bg-surface-2 px-3 text-fg"
+              aria-label="Email to give access"
+            />
+            <select value={role} onChange={(event) => setRole(event.target.value as "admin" | "owner")} className="min-h-11 rounded-xl border border-line bg-surface-2 px-3 font-bold" aria-label="Access level">
+              <option value="admin">Admin</option>
+              <option value="owner">Owner</option>
+            </select>
+            <button type="submit" disabled={busy || !email.trim()} className="min-h-11 rounded-xl bg-primary px-4 font-extrabold text-primary-fg disabled:opacity-50">
+              Give access
+            </button>
+          </form>
+        </>
+      ) : list ? (
+        <p className="mt-1 text-sm text-muted">Only owners can add or remove people.</p>
+      ) : null}
+      {note ? <p className={`mt-2 text-sm font-bold ${note.good ? "text-good" : "text-bad"}`}>{note.text}</p> : null}
+      <ul className="mt-3 grid gap-2">
+        {(list?.admins ?? []).map((admin) => (
+          <li key={admin.user_id} className="flex items-center justify-between gap-2 rounded-xl border border-line bg-surface-2 px-3 py-2 text-sm">
+            <span className="min-w-0">
+              <b className="block truncate">
+                {admin.name}
+                {admin.user_id === list?.me ? " (you)" : ""}
+              </b>
+              <span className="text-xs text-muted">
+                {admin.email} · {admin.role === "owner" ? "Owner" : "Admin"}
+              </span>
+            </span>
+            {list?.can_manage && admin.user_id !== list.me ? (
+              <button type="button" onClick={() => remove(admin.user_id, admin.name)} disabled={busy} className="min-h-9 shrink-0 rounded-xl border border-line px-3 text-xs font-extrabold">
+                Remove
+              </button>
+            ) : null}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

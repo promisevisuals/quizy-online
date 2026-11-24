@@ -504,6 +504,31 @@ export async function commandCall<T>(action: string, extra: Record<string, unkno
   return (await invoke("quizy-command-center", { action, ...extra })) as T;
 }
 
+export type AdminList = {
+  can_manage: boolean;
+  me: string | null;
+  admins: { user_id: string; role: "owner" | "admin"; name: string; email: string; since: string }[];
+};
+
+const friendly = (message: string) => (/schema cache|quizy_admin_/i.test(message) ? "Admin tools are still being switched on. Try again in a minute." : message);
+
+export async function listAdmins() {
+  const { data, error } = await supabase.rpc("quizy_admin_list");
+  if (error) throw new Error(friendly(error.message));
+  return data as AdminList;
+}
+
+export async function grantAdmin(email: string, role: "owner" | "admin") {
+  const { data, error } = await supabase.rpc("quizy_admin_grant", { p_email: email, p_role: role });
+  if (error) throw new Error(friendly(error.message));
+  return data as { ok: boolean; name: string; role: string };
+}
+
+export async function revokeAdmin(userId: string) {
+  const { error } = await supabase.rpc("quizy_admin_revoke", { p_user: userId });
+  if (error) throw new Error(friendly(error.message));
+}
+
 export async function signOut() {
   await supabase.auth.signOut();
 }
