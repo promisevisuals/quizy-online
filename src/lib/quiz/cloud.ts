@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createClient, type Session, type User } from "@supabase/supabase-js";
 import type { Age, BankQ, Difficulty } from "@/lib/quiz/logic";
+import { sourceFrom } from "@/lib/quiz/visitSource";
 import { useQuiz, type Round, type Screen, type WeeklyResult } from "@/lib/quiz/store";
 
 /** Publishable key already shipped in the existing Quizy client. Never put a service-role key here. */
@@ -459,21 +460,21 @@ export async function ownControl(userId: string) {
   return data as { suspended: boolean; reason: string | null } | null;
 }
 
-export async function sendFeedback(kind: "problem" | "idea", body: string, name: string, userId: string) {
-  const comment = `${kind === "problem" ? "Problem" : "Idea"} from ${name}: ${body}`;
-  const activity = await supabase.from("quizy_activity").insert({
-    user_id: userId,
-    event_type: "feedback",
-    metadata: { kind, body, name },
-  });
-  const note = await supabase.from("parent_feedback").insert({ comment });
-  if (activity.error && note.error) throw activity.error;
+export async function sendFeedback(kind: "problem" | "idea", body: string, name: string) {
+  await sendQuizyFeedback({ kind, comment: body, name, context: "help menu" });
 }
 
 export async function listFeedback() {
-  const { data, error } = await supabase.from("parent_feedback").select("id,comment").order("id", { ascending: false }).limit(30);
-  if (error) return [];
-  return (data ?? []) as { id: string; comment: string | null }[];
+  // Written problems and ideas from the Quizy feedback box (the thumbs are counted in the report).
+  try {
+    const report = await loadFeedbackReport();
+    return (report.items ?? [])
+      .filter((item) => item.comment)
+      .slice(0, 30)
+      .map((item) => ({ id: item.at, comment: `${item.kind === "problem" ? "Problem" : "Idea"}${item.name ? ` from ${item.name}` : ""}${item.rating === -1 ? " 👎" : item.rating === 1 ? " 👍" : ""}: ${item.comment}` }));
+  } catch {
+    return [];
+  }
 }
 
 export function battlePlayerId() {
@@ -527,6 +528,58 @@ export type Traffic = {
 const VISITOR_KEY = "quizy-visitor";
 
 /** Counts one visit for the Command Center. The id is random and made on this device; nothing personal is sent. */
+const SOURCE_KEY = "quizy-source";
+
+/** Where this browser first came from; kept so later visits count to the same source. */
+function visitSource() {
+  try {
+    const saved = localStorage.getItem(SOURCE_KEY);
+    if (saved) return saved;
+    const installed = window.matchMedia?.("(display-mode: standalone)").matches;
+    const found = installed ? "installed-app" : sourceFrom(window.location.search, document.referrer, window.location.hostname);
+    localStorage.setItem(SOURCE_KEY, found);
+    return found;
+  } catch {
+    return null;
+  }
+}
+
+function visitorId() {
+  try {
+    const id = localStorage.getItem(VISITOR_KEY);
+    return id && /^[A-Za-z0-9_-]{8,64}$/.test(id) ? id : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Feedback from anyone, signed in or not: a thumbs up/down, or a problem or idea. */
+export async function sendQuizyFeedback(input: { kind: "rating" | "problem" | "idea"; rating?: 1 | -1; context?: string; comment?: string; name?: string }) {
+  const { error } = await supabase.rpc("quizy_send_feedback", {
+    p_visitor: visitorId(),
+    p_kind: input.kind,
+    p_rating: input.rating ?? null,
+    p_context: input.context ?? null,
+    p_comment: input.comment ?? null,
+    p_name: input.name ?? null,
+  });
+  if (error) throw new Error(/quizy_send_feedback|schema cache/i.test(error.message) ? "Feedback isn't switched on yet." : error.message);
+}
+
+export type FeedbackReport = {
+  up_30d: number;
+  down_30d: number;
+  returning_7d: number;
+  sources_30d: { source: string; visitors: number }[] | null;
+  items: { at: string; kind: string; rating: number | null; context: string | null; comment: string | null; name: string | null }[] | null;
+};
+
+export async function loadFeedbackReport() {
+  const { data, error } = await supabase.rpc("quizy_admin_feedback");
+  if (error) throw new Error(error.message);
+  return data as FeedbackReport;
+}
+
 export function trackVisit() {
   if (typeof window === "undefined" || navigator.webdriver) return;
   let id: string | null = null;
@@ -540,7 +593,7 @@ export function trackVisit() {
   } catch {
     return;
   }
-  void supabase.rpc("quizy_track_visit", { p_visitor: id }).then(
+  void supabase.rpc("quizy_track_visit", { p_visitor: id, p_source: visitSource() }).then(
     () => undefined,
     () => undefined,
   );

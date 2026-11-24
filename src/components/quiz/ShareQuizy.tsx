@@ -3,6 +3,8 @@ import { createPortal } from "react-dom";
 import { Check, Copy, Heart, MessageCircle, Send, Share2, ThumbsUp, X } from "lucide-react";
 
 export const QUIZY_URL = "https://quizy.promisevisuals.com";
+/** Shared links carry ?ref=share so the Command Center can count visitors who came from a share. */
+const SHARE_URL = `${QUIZY_URL}/?ref=share`;
 
 /** A few warm invitations; one is picked each time so repeat shares don't feel copy-pasted. */
 const MESSAGES = [
@@ -17,7 +19,7 @@ function pickMessage() {
 }
 
 export function shareText(message: string) {
-  return `${message}\n\n👉 ${QUIZY_URL}`;
+  return `${message}\n\n👉 ${SHARE_URL}`;
 }
 
 type Variant = "icon" | "card";
@@ -38,7 +40,7 @@ export function ShareQuizyButton({ variant = "icon", title, note }: { variant?: 
     setStatus("");
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
-        await navigator.share({ title: "Quizy — the jungle quiz adventure", text: next, url: QUIZY_URL });
+        await navigator.share({ title: "Quizy — the jungle quiz adventure", text: next, url: SHARE_URL });
         setStatus("Thank you for sharing Quizy! 💛");
         return;
       } catch (error) {
@@ -115,8 +117,8 @@ function ShareSheet({ message, onClose }: { message: string; onClose: () => void
 
   const links = [
     { label: "WhatsApp", icon: MessageCircle, href: `https://wa.me/?text=${encoded}` },
-    { label: "Facebook", icon: ThumbsUp, href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(QUIZY_URL)}&quote=${encodeURIComponent(message)}` },
-    { label: "X", icon: Send, href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(QUIZY_URL)}` },
+    { label: "Facebook", icon: ThumbsUp, href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(SHARE_URL)}&quote=${encodeURIComponent(message)}` },
+    { label: "X", icon: Send, href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}&url=${encodeURIComponent(SHARE_URL)}` },
   ];
 
   return (
