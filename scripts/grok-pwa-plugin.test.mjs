@@ -5,6 +5,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
 import {
+  grokOgHeadTags,
   appNameFromHost,
   createHeadInjector,
   grokXCreatorHeadTags,
@@ -573,4 +574,17 @@ test("an app's own icons and colours from site.json go into the manifest", () =>
   assert.equal(manifest.icons[0].src, "/icons/quizy-512.png");
   assert.equal(manifest.background_color, "#fffaf1");
   assert.equal(manifest.theme_color, "#1c7a4a");
+});
+
+test("a website link preview gets a headline, description, address and image for Facebook, WhatsApp and X", () => {
+  const tags = grokOgHeadTags({
+    host: "quizy.promisevisuals.com",
+    site: { title: "Quizy", shareTitle: "Quizy – learn and play", description: "Quizzes for kids.", type: "website", card: "custom", image: "/og.jpg" },
+  }).join("");
+  assert.match(tags, /og:title" content="Quizy – learn and play"/);
+  assert.match(tags, /og:description" content="Quizzes for kids."/);
+  assert.match(tags, /og:type" content="website"/);
+  assert.match(tags, /og:url" content="https:\/\/quizy.promisevisuals.com\/"/);
+  assert.match(tags, /og:site_name" content="Quizy"/);
+  assert.match(tags, /twitter:image" content="https:\/\/quizy.promisevisuals.com\/og.jpg"/);
 });

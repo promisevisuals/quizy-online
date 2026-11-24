@@ -19,6 +19,8 @@ const SHARE_META_KEYS = new Set([
   "og:type",
   "og:url",
   "og:site_name",
+  "og:image:alt",
+  "description",
   "twitter:card",
   "twitter:title",
   "twitter:image",
@@ -350,18 +352,27 @@ export function grokOgHeadTags({
   documentTitle = "",
   cwd = process.cwd(),
 } = {}) {
-  const title = resolveOgTitle(site, appName, host, documentTitle);
+  const appTitle = resolveOgTitle(site, appName, host, documentTitle);
+  // site.json `shareTitle` is the headline on link previews; `title` stays the short app name.
+  const title = String(site.shareTitle ?? "").trim() || appTitle;
   const publicHost = resolvePublicHost(host);
   const tags = [
     `<meta name="twitter:card" content="summary_large_image">`,
     `<meta property="og:title" content="${escapeHtml(title)}">`,
+    `<meta name="twitter:title" content="${escapeHtml(title)}">`,
   ];
   const description = String(site.description ?? "").trim();
   if (description) {
     tags.push(`<meta property="og:description" content="${escapeHtml(description)}">`);
+    tags.push(`<meta name="twitter:description" content="${escapeHtml(description)}">`);
+    tags.push(`<meta name="description" content="${escapeHtml(description)}">`);
   }
   if (String(site.type ?? "").toLowerCase() === "x:game") {
     tags.push(`<meta property="og:type" content="x:game">`);
+  } else if (String(site.type ?? "").toLowerCase() === "website") {
+    tags.push(`<meta property="og:type" content="website">`);
+    tags.push(`<meta property="og:site_name" content="${escapeHtml(appTitle)}">`);
+    if (publicHost) tags.push(`<meta property="og:url" content="https://${escapeHtml(publicHost)}/">`);
   }
   if (publicHost) {
     const asset = resolveOgCardAsset(site, cwd);
@@ -374,6 +385,9 @@ export function grokOgHeadTags({
     tags.push(`<meta property="og:image" content="${escapeHtml(image)}">`);
     tags.push(`<meta property="og:image:width" content="1200">`);
     tags.push(`<meta property="og:image:height" content="630">`);
+    tags.push(`<meta name="twitter:image" content="${escapeHtml(image)}">`);
+    const alt = String(site.imageAlt ?? "").trim();
+    if (alt) tags.push(`<meta property="og:image:alt" content="${escapeHtml(alt)}">`);
     const banner = String(site.banner ?? "").trim();
     if (banner) {
       const bannerUrl = `https://${publicHost}${banner.startsWith("/") ? banner : `/${banner}`}`;

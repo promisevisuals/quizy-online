@@ -1,6 +1,6 @@
 {
   "title": "Quizy",
-  "type": "x:game",
+  "type": "website",
   "card": "custom",
   "color": "0c1220",
   "background": "#fffaf1",
@@ -24,5 +24,8 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "shareTitle": "Quizy – a free learning adventure for kids 🇳🇬",
+  "description": "Quizzes, spelling games and fun facts for children aged 5–10. Science, animals, space, the human body and more. Free, no download. Made in Nigeria.",
+  "imageAlt": "Quizy: a smiling child with the Quizy logo and the words Explore, Learn, Play"
 }
