@@ -11,6 +11,7 @@ import {
   X,
 } from "lucide-react";
 import { sendFeedback, useQuizSession } from "@/lib/quiz/cloud";
+import { WHATSAPP_LINK } from "@/lib/quiz/contact";
 
 const PINS = [
   { id: "play", title: "How to play", detail: "Explorer's camp", icon: Tent },
@@ -118,28 +119,20 @@ function Destination({ id, onBack }: { id: Exclude<Pin, "home">; onBack: () => v
 }
 
 function NoteForm({ kind, title, prompt }: { kind: "problem" | "idea"; title: string; prompt: string }) {
-  const { user, pending } = useQuizSession();
+  const { user } = useQuizSession();
   const [body, setBody] = useState("");
   const [note, setNote] = useState("");
-  if (pending) return <p>Checking your account…</p>;
-  if (!user) {
-    return (
-      <>
-        <h3 className="font-display text-2xl font-semibold text-fg">{title}</h3>
-        <p>Sign in to send this to the Quizy owner. Do not include passwords or private contact details.</p>
-      </>
-    );
-  }
+  // anyone can write: signed-in explorers are named for you, everyone else stays anonymous
   const name =
-    (typeof user.user_metadata?.display_name === "string" && user.user_metadata.display_name) ||
-    user.email?.split("@")[0] ||
-    "Explorer";
+    (typeof user?.user_metadata?.display_name === "string" && user.user_metadata.display_name) ||
+    user?.email?.split("@")[0] ||
+    "A visitor";
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
         setNote("");
-        sendFeedback(kind, body, name, user.id)
+        sendFeedback(kind, body, name)
           .then(() => {
             setBody("");
             setNote("Sent. Thank you.");
@@ -149,6 +142,9 @@ function NoteForm({ kind, title, prompt }: { kind: "problem" | "idea"; title: st
     >
       <h3 className="font-display text-2xl font-semibold text-fg">{title}</h3>
       <p>{prompt} Leave out passwords and private details.</p>
+      <p className="mt-1 text-sm">
+        Prefer to talk? <a className="font-extrabold text-primary underline" href={WHATSAPP_LINK} target="_blank" rel="noreferrer">Message Quizy on WhatsApp</a>.
+      </p>
       <textarea
         value={body}
         onChange={(event) => setBody(event.target.value)}

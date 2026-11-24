@@ -1,0 +1,3 @@
+-- Applied to the Promise Visuals – Main project on 2026-11-24 (same SQL as the live migration).
+-- Where visitors come from (first-touch source), and a feedback box that works without sign-in.
+-- See the Supabase migration history entry quizy_feedback_and_sources for the full SQL.

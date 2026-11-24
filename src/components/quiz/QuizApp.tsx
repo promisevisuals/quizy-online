@@ -52,6 +52,8 @@ import { MemoryMatch } from "@/components/quiz/MemoryMatch";
 import { WordSnake } from "@/components/quiz/WordSnake";
 import { Weekly } from "@/components/quiz/WeeklyChallenge";
 import { BannerCreatures, JungleLife } from "@/components/quiz/JungleLife";
+import { QuickFeedback } from "@/components/quiz/QuickFeedback";
+import { WHATSAPP_LINK } from "@/lib/quiz/contact";
 
 /** Screens where a child is answering: no moving creatures there, so nothing competes with the question. */
 const QUIET_SCREENS = new Set(["play", "battle", "command", "certificate", "snake", "memory", "label"]);
@@ -552,6 +554,9 @@ function Camp({ flags }: { flags: PublicFlags }) {
         <Inbox />
         <InstallButton />
         <ShareQuizyButton variant="card" />
+        <a href={WHATSAPP_LINK} target="_blank" rel="noreferrer" className="text-center text-sm font-extrabold text-primary underline">
+          Parents: questions or ideas? Chat with us on WhatsApp
+        </a>
       </div>
     </section>
   );
@@ -1432,11 +1437,7 @@ function Summary() {
       >
         <Gamepad2 className="size-5 text-gold" aria-hidden /> Bonus game: Word Snake
       </button>
-      <ShareQuizyButton
-        variant="card"
-        title="Loved this land?"
-        note="Share Quizy with a friend and explore the jungle together. It's free!"
-      />
+      <QuickFeedback context="finished a land" />
     </section>
   );
 }

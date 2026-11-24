@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { commandCall, listFeedback, loadTraffic, useQuizSession, type CommandSettings, type CommandSummary, type CommandUser, type Traffic } from "@/lib/quiz/cloud";
+import { commandCall, listFeedback, loadFeedbackReport, loadTraffic, type FeedbackReport, useQuizSession, type CommandSettings, type CommandSummary, type CommandUser, type Traffic } from "@/lib/quiz/cloud";
 
 const TEMPLATES: Record<string, [string, string]> = {
   praise: [
@@ -104,6 +104,7 @@ export function CommandCenter() {
         ))}
       </div>
       <TrafficPanel />
+      <FeedbackPanel />
       <div className="rounded-card border border-line bg-surface p-4">
         <h3 className="font-extrabold">Switches</h3>
         {SWITCHES.map(([key, label]) => (
@@ -322,3 +323,87 @@ function TrafficPanel() {
     </div>
   );
 }
+
+const SOURCE_NAMES: Record<string, string> = {
+  direct: "Typed the link / bookmark",
+  share: "A shared Quizy link",
+  whatsapp: "WhatsApp",
+  facebook: "Facebook",
+  instagram: "Instagram",
+  tiktok: "TikTok",
+  x: "X (Twitter)",
+  google: "Google",
+  search: "Other search",
+  promisevisuals: "promisevisuals.com",
+  "installed-app": "Installed app",
+  unknown: "Before tracking started",
+};
+
+function FeedbackPanel() {
+  const [r, setR] = useState<FeedbackReport | null>(null);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    loadFeedbackReport()
+      .then(setR)
+      .catch((caught: unknown) => setError(caught instanceof Error ? caught.message : "Feedback is unavailable"));
+  }, []);
+  const sources = r?.sources_30d ?? [];
+  const total = Math.max(1, sources.reduce((n, s) => n + s.visitors, 0));
+  return (
+    <div className="rounded-card border border-line bg-surface p-4">
+      <h3 className="font-extrabold">Where visitors come from, and what they say</h3>
+      {error ? (
+        <p className="mt-2 text-sm text-muted">{error}</p>
+      ) : !r ? (
+        <p className="mt-2 text-sm text-muted">Loading…</p>
+      ) : (
+        <>
+          <div className="mt-3 grid grid-cols-3 gap-2">
+            {(
+              [
+                ["👍 30 days", r.up_30d],
+                ["👎 30 days", r.down_30d],
+                ["Came back, 7 days", r.returning_7d],
+              ] as const
+            ).map(([label, value]) => (
+              <div key={label} className="rounded-2xl border border-line bg-surface-2 p-3">
+                <p className="text-xs font-extrabold uppercase tracking-wide text-muted">{label}</p>
+                <p className="font-display text-2xl font-semibold">{value ?? 0}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 text-xs font-extrabold uppercase tracking-wide text-muted">Visitors by source, 30 days</p>
+          <ul className="mt-2 grid gap-1.5">
+            {sources.length === 0 ? <li className="text-sm text-muted">No visitors yet.</li> : null}
+            {sources.map((s) => (
+              <li key={s.source} className="grid grid-cols-[9rem_1fr_2rem] items-center gap-2 text-sm">
+                <span className="truncate font-bold">{SOURCE_NAMES[s.source] ?? s.source}</span>
+                <span className="h-2.5 rounded-full bg-surface-2">
+                  <span className="block h-full rounded-full bg-primary" style={{ width: `${(s.visitors / total) * 100}%` }} />
+                </span>
+                <span className="text-right font-extrabold">{s.visitors}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 text-xs font-extrabold uppercase tracking-wide text-muted">Latest feedback</p>
+          <ul className="mt-2 grid gap-2">
+            {(r.items ?? []).length === 0 ? <li className="text-sm text-muted">No feedback yet. It appears here as soon as a child or parent taps 👍 or 👎.</li> : null}
+            {(r.items ?? []).slice(0, 25).map((f, i) => (
+              <li key={`${f.at}-${i}`} className="rounded-xl border border-line bg-surface-2 px-3 py-2 text-sm">
+                <span className="font-extrabold">
+                  {f.rating === 1 ? "👍" : f.rating === -1 ? "👎" : f.kind === "problem" ? "⚠️ Problem" : "💡 Idea"}
+                </span>{" "}
+                {f.comment ? <span>{f.comment}</span> : <span className="text-muted">(no comment)</span>}
+                <span className="block text-xs text-muted">
+                  {new Date(f.at).toLocaleString()} · {f.context ?? "app"}
+                  {f.name ? ` · ${f.name}` : ""}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+    </div>
+  );
+}
+
