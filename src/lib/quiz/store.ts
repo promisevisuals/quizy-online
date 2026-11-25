@@ -21,6 +21,7 @@ import {
   shuffle,
   todayKey,
 } from "@/lib/quiz/logic";
+import { passMark, ticketsForRound } from "@/lib/quiz/unlocks";
 
 export type Screen =
   | "camp"
@@ -40,7 +41,11 @@ export type Screen =
   | "command"
   | "snake"
   | "memory"
-  | "label";
+  | "label"
+  | "bricks"
+  | "whot"
+  | "match"
+  | "bounce";
 
 export type RoundMode = "land" | "daily" | "weekly" | "academy" | "battle";
 
@@ -103,6 +108,13 @@ type State = {
   summaryNote: string;
   /** Best scores in the side games (Word Snake, Memory Match). */
   arcadeBest: Record<string, number>;
+  /** Game tickets for the fun games, earned by passing land rounds (see unlocks.ts). */
+  tickets: number;
+  /** A note about tickets just earned, shown once on the next screen. */
+  ticketNote: string;
+  /** Spend one ticket to start a fun game. Owners play free. Returns false when there is none. */
+  spendTicket: () => boolean;
+  clearTicketNote: () => void;
   /** Pay coins for a finished side game and remember the best score. */
   arcadeReward: (game: string, score: number, coins: number) => void;
   setName: (name: string) => void;
@@ -189,7 +201,17 @@ export const useQuiz = create<State>()(
       voiceOn: true,
       role: "",
       arcadeBest: {},
+      tickets: 0,
+      ticketNote: "",
       ...freshLive,
+      spendTicket: () => {
+        const s = get();
+        if (s.role === "owner") return true;
+        if (s.tickets <= 0) return false;
+        set({ tickets: s.tickets - 1 });
+        return true;
+      },
+      clearTicketNote: () => set({ ticketNote: "" }),
       arcadeReward: (game, score, coins) => {
         const s = get();
         const best = Math.max(s.arcadeBest[game] ?? 0, score);
@@ -384,6 +406,11 @@ export const useQuiz = create<State>()(
           if (finishedAll) badges = unlock(badges, "trail");
           let coins = s.coins + 25;
           if (sessionCorrect >= count) coins += 20;
+          const earned = ticketsForRound(sessionCorrect, count);
+          const tickets = s.tickets + earned;
+          const ticketNote = earned
+            ? `You passed with ${sessionCorrect}/${count}! +${earned} game tickets. You have ${tickets}.`
+            : `${sessionCorrect}/${count}. Score ${passMark(count)} or more on a land to earn game tickets.`;
           const board = finishedAll
             ? pushBoard(s.board, { name: s.name, stars: s.totalStars, coins, at: Date.now() })
             : s.board;
@@ -393,6 +420,8 @@ export const useQuiz = create<State>()(
             landDone,
             landCorrect,
             coins,
+            tickets,
+            ticketNote,
             board,
             history: { ...s.history, "break|facts": picked.seen },
             round: null,
@@ -675,6 +704,8 @@ export const useQuiz = create<State>()(
         breakShown: s.breakShown,
         breakAfter: s.breakAfter,
         arcadeBest: s.arcadeBest,
+        tickets: s.tickets,
+        ticketNote: s.ticketNote,
         savedAt: Date.now(),
       }),
     },

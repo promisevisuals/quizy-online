@@ -107,4 +107,70 @@ export const sfx = {
   tick() {
     play([{ f: 1200, len: 0.03, type: "square", vol: 0.04 }]);
   },
+  /** A brick slides one step. */
+  move() {
+    play([{ f: 660, len: 0.025, type: "square", vol: 0.035 }]);
+  },
+  /** A brick turns. */
+  turn() {
+    play([{ f: 880, to: 1175, len: 0.05, type: "triangle", vol: 0.08 }]);
+  },
+  /** A brick lands. */
+  thud() {
+    play([{ f: 150, to: 80, len: 0.09, type: "triangle", vol: 0.2 }]);
+    crunch(0, 0.04, 0.1);
+  },
+  /** Rows cleared: bigger and brighter for more rows. */
+  clear(rows = 1) {
+    const notes = [523, 659, 784, 1047, 1319].slice(0, Math.min(5, rows + 1));
+    notes.forEach((f, i) => play([{ f, at: i * 0.06, len: 0.14, type: "triangle", vol: 0.2 }]));
+    if (rows >= 4) play([{ f: 1568, at: 0.32, len: 0.4, type: "sine", vol: 0.18 }]);
+  },
+  /** Level up / goal reached. */
+  levelUp() {
+    [659, 784, 988, 1319].forEach((f, i) => play([{ f, at: i * 0.08, len: 0.18, type: "square", vol: 0.08 }]));
+  },
+  /** A card slides onto the table. */
+  card() {
+    crunch(0, 0.05, 0.12);
+    play([{ f: 300, to: 520, len: 0.06, type: "triangle", vol: 0.06 }]);
+  },
+  /** Going to market: a soft shuffle. */
+  draw() {
+    crunch(0, 0.08, 0.1);
+    crunch(0.07, 0.06, 0.08);
+  },
+  /** Sweets popping: rises with each cascade. */
+  pop(step = 0) {
+    const f = 520 * Math.pow(2, Math.min(step, 10) / 6);
+    play([
+      { f, to: f * 1.6, len: 0.1, type: "sine", vol: 0.2 },
+      { f: f * 1.5, at: 0.05, len: 0.08, type: "triangle", vol: 0.1 },
+    ]);
+  },
+  /** A special sweet or a big blast. */
+  blast() {
+    play([{ f: 220, to: 55, len: 0.35, type: "sawtooth", vol: 0.12 }]);
+    crunch(0, 0.25, 0.25);
+    play([{ f: 880, to: 1760, at: 0.05, len: 0.25, type: "sine", vol: 0.12 }]);
+  },
+  /** The ball jumps. */
+  jump() {
+    play([{ f: 300, to: 620, len: 0.12, type: "triangle", vol: 0.14 }]);
+  },
+  /** The ball lands with a little boing. */
+  boing(strength = 1) {
+    play([{ f: 180 + 60 * strength, to: 120, len: 0.08, type: "sine", vol: Math.min(0.2, 0.06 * strength) }]);
+  },
+  /** A ring or a crystal collected. */
+  ring() {
+    play([
+      { f: 988, len: 0.08, type: "sine", vol: 0.16 },
+      { f: 1319, at: 0.07, len: 0.16, type: "sine", vol: 0.16 },
+    ]);
+  },
+  /** You won the game or the level. */
+  win() {
+    [523, 659, 784, 1047, 784, 1047].forEach((f, i) => play([{ f, at: i * 0.11, len: 0.2, type: "triangle", vol: 0.2 }]));
+  },
 };

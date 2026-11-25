@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe8f5"/><stop offset="1" stop-color="#f4f0d6"/></linearGradient>
+    <radialGradient id="ball" cx="38%" cy="35%" r="70%"><stop offset="0" stop-color="#ff8f7a"/><stop offset="1" stop-color="#c62a22"/></radialGradient>
+    <clipPath id="c"><circle cx="256" cy="256" r="218"/></clipPath>
+  </defs>
+  <rect width="512" height="512" fill="#fdf5e6"/>
+  <g clip-path="url(#c)">
+    <rect width="512" height="512" fill="url(#sky)"/>
+    <path d="M0 330 Q90 260 180 320 T360 300 T512 310 V512 H0Z" fill="#a9d8a0"/>
+    <g fill="#b5462e" stroke="#7d2a18" stroke-width="5"><rect x="20" y="380" width="480" height="140"/></g>
+    <rect x="20" y="380" width="480" height="22" fill="#4cae4c"/>
+    <g fill="#b5462e" stroke="#7d2a18" stroke-width="5"><rect x="300" y="300" width="80" height="80"/></g>
+    <rect x="300" y="300" width="80" height="18" fill="#4cae4c"/>
+    <g fill="#6b7280" stroke="#374151" stroke-width="3"><polygon points="160,380 180,346 200,380"/><polygon points="200,380 220,346 240,380"/></g>
+    <ellipse cx="340" cy="210" rx="22" ry="48" fill="none" stroke="#f2b31b" stroke-width="14"/>
+    <path d="M90 300 Q170 120 250 250" fill="none" stroke="#e2483f" stroke-width="6" stroke-dasharray="6 14" stroke-linecap="round" opacity=".6"/>
+  </g>
+  <circle cx="256" cy="256" r="218" fill="none" stroke="#e6cfa4" stroke-width="10"/>
+  <circle cx="250" cy="250" r="56" fill="url(#ball)"/>
+  <ellipse cx="230" cy="226" rx="16" ry="9" fill="#fff" opacity=".7" transform="rotate(-35 230 226)"/>
+</svg>
