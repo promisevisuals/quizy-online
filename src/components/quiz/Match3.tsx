@@ -56,7 +56,7 @@ export function Match3() {
   const [toast, setToast] = useState("");
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const [wrapEl, setWrapEl] = useState<HTMLDivElement | null>(null);
   const sizeRef = useRef({ cell: 40, w: 320 });
   const drawn = useRef(new Map<number, Drawn>());
   const dying = useRef<Dying[]>([]);
@@ -118,7 +118,7 @@ export function Match3() {
 
   /* ---------- sizing ---------- */
   useEffect(() => {
-    const wrap = wrapRef.current;
+    const wrap = wrapEl;
     const canvas = canvasRef.current;
     if (!wrap || !canvas) return;
     const fit = () => {
@@ -137,7 +137,7 @@ export function Match3() {
     const ro = new ResizeObserver(fit);
     ro.observe(wrap);
     return () => ro.disconnect();
-  }, []);
+  }, [wrapEl]);
 
   /* ---------- resolving a move: pop, fall, repeat ---------- */
   const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
@@ -413,7 +413,7 @@ export function Match3() {
           </small>
         </span>
       </div>
-      <div ref={wrapRef} className="match-wrap">
+      <div ref={setWrapEl} className="match-wrap">
         <canvas
           ref={canvasRef}
           className="match-board"

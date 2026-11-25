@@ -36,7 +36,7 @@ export function Bounce() {
   const [runCoins, setRunCoins] = useState(0);
   const input = useRef({ left: false, right: false, held: false, jump: false });
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const [wrapEl, setWrapEl] = useState<HTMLDivElement | null>(null);
   const size = useRef({ w: 360, h: 600, tile: 40 });
   const pops = useRef<Pop[]>([]);
   const cam = useRef({ x: 0, y: 0 });
@@ -158,7 +158,7 @@ export function Bounce() {
 
   /* ---------- sizing ---------- */
   useEffect(() => {
-    const wrap = wrapRef.current;
+    const wrap = wrapEl;
     const canvas = canvasRef.current;
     if (!wrap || !canvas) return;
     const fit = () => {
@@ -176,7 +176,7 @@ export function Bounce() {
     const ro = new ResizeObserver(fit);
     ro.observe(wrap);
     return () => ro.disconnect();
-  }, []);
+  }, [wrapEl]);
 
   /* ---------- game loop ---------- */
   useEffect(() => {
@@ -425,7 +425,7 @@ export function Bounce() {
         </>
       }
     >
-      <div ref={wrapRef} className="bounce-wrap">
+      <div ref={setWrapEl} className="bounce-wrap">
         <canvas ref={canvasRef} className="bounce-view" aria-label="Bouncy Ball. Use the arrow buttons to roll and the big button to jump, or arrow keys and space on a computer." />
         {banner && phase === "playing" ? <p className="bounce-banner">{banner}</p> : null}
         <div className="bounce-pad" aria-label="Controls">

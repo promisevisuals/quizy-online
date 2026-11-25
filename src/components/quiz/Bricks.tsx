@@ -45,7 +45,7 @@ export function Bricks() {
   const ticket = useTicket();
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const [wrapEl, setWrapEl] = useState<HTMLDivElement | null>(null);
   const gameRef = useRef<Game>(newGame(START[level].level));
   const phaseRef = useRef<Phase>("ready");
   const [phase, setPhaseState] = useState<Phase>("ready");
@@ -131,7 +131,7 @@ export function Bricks() {
 
   /* ---------- sizing ---------- */
   useEffect(() => {
-    const wrap = wrapRef.current;
+    const wrap = wrapEl;
     const canvas = canvasRef.current;
     if (!wrap || !canvas) return;
     const fit = () => {
@@ -152,7 +152,7 @@ export function Bricks() {
     const ro = new ResizeObserver(fit);
     ro.observe(wrap);
     return () => ro.disconnect();
-  }, []);
+  }, [wrapEl]);
 
   /* ---------- loop ---------- */
   useEffect(() => {
@@ -399,7 +399,7 @@ export function Bricks() {
         </>
       }
     >
-      <div ref={wrapRef} className="bricks-wrap">
+      <div ref={setWrapEl} className="bricks-wrap">
         <canvas
           ref={canvasRef}
           className="bricks-board"
