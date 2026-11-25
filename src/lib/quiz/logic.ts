@@ -30,6 +30,9 @@ export type SpellQ = {
   difficulty: Difficulty;
   age8: boolean;
   replace: boolean;
+  topic?: string;
+  also?: string[];
+  tags?: string[];
 };
 
 export type BankQ = ChoiceQ | SpellQ;
