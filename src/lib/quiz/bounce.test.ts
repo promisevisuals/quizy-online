@@ -15,7 +15,7 @@ function run(w: World, input: Input, seconds: number) {
 }
 
 function flat(extra: (rows: string[][]) => void, width = 30): LevelDef {
-  const rows = Array.from({ length: H }, (_, y) => Array.from({ length: width }, () => (y >= GY ? "#" : " ")));
+  const rows: string[][] = Array.from({ length: H }, (_, y) => Array.from({ length: width }, (): string => (y >= GY ? "#" : " ")));
   rows[GY - 1]![2] = "S";
   extra(rows);
   return { name: "test", hint: "", rows: rows.map((r) => r.join("")) };

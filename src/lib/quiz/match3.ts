@@ -252,10 +252,10 @@ export function trySwap(m: Match, a: Pos, b: Pos): Step | null {
     for (let y = 0; y < SIZE; y++)
       for (let x = 0; x < SIZE; x++) {
         const p = at(g, x, y);
-        if (!isSweet(p) && !(p?.special === "rainbow")) continue;
-        if (other.special === "rainbow" || p!.color === other.color) {
+        if (!p || p.color === -1) continue;
+        if (other.special === "rainbow" || p.color === other.color) {
           // a striped or bomb partner turns all of that colour into its kind before it goes off
-          if (other.special && other.special !== "rainbow" && p!.special === null) p!.special = other.special === "bomb" ? "bomb" : (x + y) % 2 ? "row" : "col";
+          if (other.special && other.special !== "rainbow" && p.special === null) p.special = other.special === "bomb" ? "bomb" : (x + y) % 2 ? "row" : "col";
           cells.push([x, y]);
         }
       }
