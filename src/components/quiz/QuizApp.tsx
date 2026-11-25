@@ -12,6 +12,7 @@ import {
   Gamepad2,
   Heart,
   Lightbulb,
+  Lock,
   Map as MapIcon,
   Play as PlayIcon,
   Medal,
@@ -19,6 +20,7 @@ import {
   Sparkles,
   Swords,
   Tent,
+  Ticket,
   Trophy,
   Volume2,
   VolumeX,
@@ -50,6 +52,11 @@ import { HelpMap } from "@/components/quiz/HelpMap";
 import { LabelLab } from "@/components/quiz/LabelLab";
 import { MemoryMatch } from "@/components/quiz/MemoryMatch";
 import { WordSnake } from "@/components/quiz/WordSnake";
+import { Bricks } from "@/components/quiz/Bricks";
+import { Whot } from "@/components/quiz/Whot";
+import { Match3 } from "@/components/quiz/Match3";
+import { Bounce } from "@/components/quiz/Bounce";
+import { FUN_GAMES, gameAccess, passMark, passedLands } from "@/lib/quiz/unlocks";
 import { Weekly } from "@/components/quiz/WeeklyChallenge";
 import { BannerCreatures, JungleLife } from "@/components/quiz/JungleLife";
 import { QuickFeedback } from "@/components/quiz/QuickFeedback";
@@ -58,7 +65,7 @@ import { topicsFor } from "@/lib/quiz/topics";
 import { WHATSAPP_LINK } from "@/lib/quiz/contact";
 
 /** Screens where a child is answering: no moving creatures there, so nothing competes with the question. */
-const QUIET_SCREENS = new Set(["play", "battle", "command", "certificate", "snake", "memory", "label"]);
+const QUIET_SCREENS = new Set(["play", "battle", "command", "certificate", "snake", "memory", "label", "bricks", "whot", "match", "bounce"]);
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -170,6 +177,10 @@ export function QuizApp() {
           {screen === "snake" && <WordSnake />}
           {screen === "memory" && <MemoryMatch />}
           {screen === "label" && <LabelLab />}
+          {screen === "bricks" && <Bricks />}
+          {screen === "whot" && <Whot />}
+          {screen === "match" && <Match3 />}
+          {screen === "bounce" && <Bounce />}
         </div>
         <PvCredit className="app-footer-credit" />
       </div>
@@ -817,8 +828,11 @@ function GameCorner() {
     },
   ];
   return (
-    <div className="game-corner grid gap-3 sm:grid-cols-3">
-      {games.map((game, index) => (
+    <div className="grid gap-4">
+      <FunGames />
+      <div>
+        <p className="mb-2 text-xs font-extrabold uppercase tracking-widest text-gold">Learning games · always open</p>
+        <div className="game-corner grid gap-3 sm:grid-cols-3">      {games.map((game, index) => (
         <button
           key={game.id}
           type="button"
@@ -840,9 +854,88 @@ function GameCorner() {
         </button>
       ))}
       <p className="col-span-full text-sm text-muted">Every finished game earns coins for lives and hints. Pick Easy to Expert inside each game.</p>
+        </div>
+      </div>
     </div>
   );
 }
+
+/** Brick Drop, WHOT, Sweet Swap and Bouncy Ball: unlocked by passing lands, played with tickets. */
+function FunGames() {
+  const go = useQuiz((s) => s.go);
+  const landCorrect = useQuiz((s) => s.landCorrect);
+  const tickets = useQuiz((s) => s.tickets);
+  const owner = useQuiz((s) => s.role === "owner");
+  const best = useQuiz((s) => s.arcadeBest);
+  const passed = passedLands(landCorrect, lands);
+  const [note, setNote] = useState("");
+  const bestText: Record<string, string> = {
+    bricks: best.bricks ? `Best: ${best.bricks} lines` : "New!",
+    whot: best["whot-wins"] ? `Won ${best["whot-wins"]} ${best["whot-wins"] === 1 ? "game" : "games"}` : "New!",
+    match: best.match ? `Best: level ${best.match}` : "New!",
+    bounce: best.bounce ? `Reached level ${Math.min(best.bounce, 8)}` : "New!",
+  };
+  return (
+    <section className="fun-games" aria-label="Fun games">
+      <div className="fun-head">
+        <div className="min-w-0">
+          <p className="text-xs font-extrabold uppercase tracking-widest text-gold">Fun games · earned by learning</p>
+          <p className="text-sm text-muted">
+            Score {passMark(10)}/10 or more on a land to earn 3 game tickets. Each pass of a new land unlocks another game.
+          </p>
+        </div>
+        <span className="fun-tickets" aria-label={owner ? "Owner: free play" : `${tickets} game tickets`}>
+          <Ticket className="size-5" aria-hidden />
+          <b>{owner ? "Free" : tickets}</b>
+          <small>{owner ? "owner" : tickets === 1 ? "ticket" : "tickets"}</small>
+        </span>
+      </div>
+      <div className="fun-grid">
+        {FUN_GAMES.map((game, index) => {
+          const access = gameAccess(game, passed, tickets, owner);
+          const locked = !access.open && access.reason === "locked";
+          return (
+            <button
+              key={game.id}
+              type="button"
+              className={cn("fun-card stagger-item", locked && "is-locked")}
+              style={{ animationDelay: `${index * 60}ms` }}
+              onClick={() => {
+                if (access.open) go(game.id);
+                else if (access.reason === "locked")
+                  setNote(`${game.name} opens when you pass ${game.needLands} different ${game.needLands === 1 ? "land" : "lands"} with ${passMark(10)}/10 or more. You've passed ${passed}.`);
+                else setNote("No game tickets left. Play a land and score 7/10 or more to earn 3 more.");
+              }}
+              aria-label={`${game.name}${locked ? ", locked" : ""}`}
+            >
+              <span className="fun-art">
+                <img src={game.art} alt="" />
+                {locked ? (
+                  <span className="fun-lock">
+                    <Lock className="size-5" aria-hidden />
+                    {passed}/{game.needLands}
+                  </span>
+                ) : null}
+              </span>
+              <span className="block font-display text-lg font-semibold leading-tight">{game.name}</span>
+              <span className="block text-xs font-bold text-muted">
+                {locked ? `Pass ${game.needLands} ${game.needLands === 1 ? "land" : "lands"} to open` : bestText[game.id]}
+              </span>
+              <span className="fun-note text-xs text-muted">{game.note}</span>
+            </button>
+          );
+        })}
+      </div>
+      {note ? (
+        <p className="fun-msg" role="status">
+          {note}
+        </p>
+      ) : null}
+    </section>
+  );
+}
+
+
 
 function WeeklyBanner() {
   const weekly = useQuiz((s) => s.weekly);
@@ -1289,9 +1382,17 @@ function Break() {
   const shown = useQuiz((s) => s.breakShown);
   const revealBreak = useQuiz((s) => s.revealBreak);
   const continueBreak = useQuiz((s) => s.continueBreak);
+  const ticketNote = useQuiz((s) => s.ticketNote);
+  const clearTicketNote = useQuiz((s) => s.clearTicketNote);
   if (!card) return null;
   return (
     <section className="mx-auto max-w-xl rounded-card border border-line bg-surface p-6">
+      {ticketNote ? (
+        <p className={cn("ticket-note", ticketNote.includes("+") && "is-earned")}>
+          <Ticket className="size-5 shrink-0" aria-hidden />
+          <span>{ticketNote}</span>
+        </p>
+      ) : null}
       <p className="inline-flex items-center gap-2 text-sm font-extrabold uppercase tracking-widest text-gold">
         <Tent className="size-4" aria-hidden />
         Brain break
@@ -1310,7 +1411,10 @@ function Break() {
       )}
       <button
         type="button"
-        onClick={continueBreak}
+        onClick={() => {
+          clearTicketNote();
+          continueBreak();
+        }}
         className="mt-3 min-h-12 w-full rounded-2xl border border-line font-extrabold"
       >
         Onward

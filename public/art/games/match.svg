@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#fdf5e6"/>
+  <rect x="56" y="56" width="400" height="400" rx="48" fill="#f6cf95" stroke="#e6cfa4" stroke-width="10"/>
+  <g stroke-width="6">
+    <circle cx="146" cy="146" r="46" fill="#e8413f" stroke="#a51f22"/>
+    <rect x="212" y="102" width="88" height="88" rx="28" fill="#f08a24" stroke="#b45a0b"/>
+    <polygon points="366,98 380,132 416,134 388,156 398,192 366,172 334,192 344,156 316,134 352,132" fill="#f5c518" stroke="#b98d00"/>
+    <polygon points="146,212 190,256 146,300 102,256" fill="#3a86e8" stroke="#1d58a8"/>
+    <circle cx="256" cy="256" r="46" fill="#e8413f" stroke="#a51f22"/>
+    <polygon points="366,214 404,236 404,278 366,300 328,278 328,236" fill="#9a52d9" stroke="#6a2ba3"/>
+    <path d="M146 322 Q196 400 146 410 Q96 400 146 322Z" fill="#3dbb5c" stroke="#1f7c39"/>
+    <circle cx="256" cy="366" r="46" fill="#e8413f" stroke="#a51f22"/>
+    <rect x="322" y="322" width="88" height="88" rx="28" fill="#f08a24" stroke="#b45a0b"/>
+  </g>
+  <g fill="#fff" opacity=".8"><rect x="216" y="240" width="80" height="9" rx="4"/><rect x="216" y="262" width="80" height="9" rx="4"/></g>
+  <g fill="#fff" opacity=".5"><ellipse cx="132" cy="128" rx="14" ry="8" transform="rotate(-35 132 128)"/><ellipse cx="242" cy="348" rx="14" ry="8" transform="rotate(-35 242 348)"/></g>
+</svg>
