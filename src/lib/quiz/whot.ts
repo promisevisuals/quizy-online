@@ -197,8 +197,8 @@ export function play(g: Whot, cardId: number, ask?: Exclude<Shape, "whot">): Pla
       g.turn = next(g);
       if (!g.defend) {
         const victim = g.turn;
-        const n = pick(g, victim, g.pending);
-        g.log.push(`${g.players[victim]!.name} picks ${n} from market.`);
+        g.log.push(`${g.players[victim]!.name} picks ${Math.min(g.pending, g.market.length)} from market.`);
+        pick(g, victim, g.pending);
         g.pending = 0;
         g.pendingBy = 0;
         if (g.winner === null) g.turn = next(g, victim);
@@ -212,8 +212,8 @@ export function play(g: Whot, cardId: number, ask?: Exclude<Shape, "whot">): Pla
       g.turn = next(g, me, 2);
       return { ok: true, again: false, needsShape: false };
     case 14: // General Market
-      for (let i = 1; i < g.players.length && g.winner === null; i++) pick(g, next(g, me, i), 1);
       g.log.push("General market! Everyone else picks one.");
+      for (let i = 1; i < g.players.length && g.winner === null; i++) pick(g, next(g, me, i), 1);
       return { ok: true, again: g.winner === null, needsShape: false };
     default:
       g.turn = next(g);
@@ -226,8 +226,8 @@ export function goMarket(g: Whot) {
   if (g.winner !== null) return 0;
   const me = g.turn;
   const count = g.pending || 1;
+  g.log.push(`${g.players[me]!.name} goes to market${count > 1 ? ` and picks ${Math.min(count, g.market.length)}` : ""}.`);
   const got = pick(g, me, count);
-  g.log.push(`${g.players[me]!.name} goes to market${count > 1 ? ` and picks ${got}` : ""}.`);
   g.pending = 0;
   g.pendingBy = 0;
   if (g.winner === null) g.turn = next(g, me);

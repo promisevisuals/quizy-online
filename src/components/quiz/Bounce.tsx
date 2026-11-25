@@ -221,7 +221,8 @@ export function Bounce() {
     const viewW = cw / tile;
     const viewH = ch / tile;
     const tx = Math.max(0, Math.min(world.w - viewW, b.x - viewW * 0.4 + b.vx * 0.25));
-    const ty = Math.max(0, Math.min(H - viewH, b.y - viewH * 0.55));
+    // a tall screen shows extra sky above the level, with the ground at the bottom
+    const ty = viewH >= H ? H - viewH : Math.max(0, Math.min(H - viewH, b.y - viewH * 0.55));
     cam.current.x += (tx - cam.current.x) * Math.min(1, dt * 6);
     cam.current.y += (ty - cam.current.y) * Math.min(1, dt * 6);
     if (Math.abs(tx - cam.current.x) > viewW) cam.current.x = tx;
