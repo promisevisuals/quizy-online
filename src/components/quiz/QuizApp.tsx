@@ -53,6 +53,8 @@ import { WordSnake } from "@/components/quiz/WordSnake";
 import { Weekly } from "@/components/quiz/WeeklyChallenge";
 import { BannerCreatures, JungleLife } from "@/components/quiz/JungleLife";
 import { QuickFeedback } from "@/components/quiz/QuickFeedback";
+import { TopicPicker } from "@/components/quiz/TopicPicker";
+import { topicsFor } from "@/lib/quiz/topics";
 import { WHATSAPP_LINK } from "@/lib/quiz/contact";
 
 /** Screens where a child is answering: no moving creatures there, so nothing competes with the question. */
@@ -683,7 +685,10 @@ function LandPicker({
   landDone: Record<string, boolean>;
   landCorrect: Record<string, number>;
 }) {
-  const startLand = useQuiz((s) => s.startLand);
+  const startLandNow = useQuiz((s) => s.startLand);
+  // lands with topics (like Sports) ask what to play first
+  const [asking, setAsking] = useState<string | null>(null);
+  const startLand = (id: string) => (topicsFor(id).length ? setAsking(id) : startLandNow(id));
   const firstOpen = list.find((land) => !landDone[land.id]) ?? list[0];
   const [picked, setPicked] = useState(firstOpen?.id ?? "");
   const [spinning, setSpinning] = useState(false);
@@ -715,6 +720,17 @@ function LandPicker({
 
   return (
     <div className="land-picker">
+      {asking ? (
+        <TopicPicker
+          landId={asking}
+          landName={list.find((item) => item.id === asking)?.name ?? ""}
+          onClose={() => setAsking(null)}
+          onStart={(pick) => {
+            setAsking(null);
+            startLandNow(asking, pick);
+          }}
+        />
+      ) : null}
       <div className={cn("land-spotlight", done && "is-cleared")} aria-live="polite">
         <span className={cn("land-emblem is-big", `land-${land.id}`, done && "is-cleared")}>
           <img src={landArt(land.id)} alt="" />
@@ -1013,7 +1029,8 @@ function Play() {
             key={item.id}
             value={draft}
             onChange={(event) => setDraft(event.target.value)}
-            type="password"
+            // a plain text box: the letters stay visible and no "save password" prompt appears
+            type="text"
             name="quizy-spell-attempt"
             lang="zxx"
             inputMode="text"
