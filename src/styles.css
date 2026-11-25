@@ -1761,3 +1761,15 @@ textarea {
 .camp-extras { display: grid; gap: 0.5rem; }
 .camp-extras > * { margin-top: 0 !important; }
 .camp-compact .resume-card, .camp-compact form > div:has(> .resume) { margin-top: 0.75rem; }
+
+/* ───────── "What do you want to play?" topic picker ───────── */
+.topic-backdrop { position: fixed; inset: 0; z-index: 70; display: flex; align-items: flex-end; justify-content: center; background: rgba(20, 16, 8, 0.45); padding: 0.75rem; }
+@media (min-width: 640px) { .topic-backdrop { align-items: center; } }
+.topic-sheet { width: min(34rem, 100%); max-height: calc(100dvh - 1.5rem); overflow-y: auto; border-radius: 1.6rem; background: var(--color-surface, #fffaf1); padding: 1rem 1rem 1.1rem; box-shadow: 0 20px 50px rgba(30, 20, 5, 0.3); }
+.topic-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem; }
+.topic-grid button { display: flex; min-height: 3rem; align-items: center; gap: 0.45rem; border: 1px solid var(--color-line); border-radius: 1rem; background: #fffdf8; padding: 0.4rem 0.7rem; text-align: left; font-weight: 800; line-height: 1.15; }
+.topic-grid button span { font-size: 1.35rem; }
+.topic-grid button.is-active, .topic-chips button.is-active { border: 2px solid var(--color-gold); background: #fff1d4; }
+.topic-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.topic-chips button { min-height: 2.3rem; border: 1px solid var(--color-line); border-radius: 999px; background: #fffdf8; padding: 0.2rem 0.8rem; font-size: 0.85rem; font-weight: 800; }
+.topic-chips button:disabled { opacity: 0.35; cursor: not-allowed; }

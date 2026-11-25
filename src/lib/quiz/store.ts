@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { pickTitle, type LandPick } from "@/lib/quiz/topics";
 import {
   type Age,
   type Difficulty,
@@ -113,7 +114,7 @@ type State = {
   begin: () => void;
   go: (screen: Screen) => void;
   park: (screen?: Screen) => void;
-  startLand: (id: string) => void;
+  startLand: (id: string, pick?: LandPick | null) => void;
   answerChoice: (index: number) => void;
   submitSpell: (typed: string) => void;
   useHint: () => void;
@@ -237,12 +238,13 @@ export const useQuiz = create<State>()(
           bonusRevealed: false,
         });
       },
-      startLand: (id) => {
+      startLand: (id, pick = null) => {
         const land = landById(id);
         if (!land) return;
         const s = get();
         const key = `${s.name}|${id}|${s.difficulty}`;
-        const items = pickLandQuestions(land, s.age, s.difficulty, s.history[key] ?? [], blockedSentences(s.history));
+        const items = pickLandQuestions(land, s.age, s.difficulty, s.history[key] ?? [], blockedSentences(s.history), pick);
+        const picked = pickTitle(id, pick);
         if (!items.length) return;
         let history = s.history;
         for (const item of items) history = remember(history, key, item.id);
@@ -253,7 +255,7 @@ export const useQuiz = create<State>()(
           round: {
             mode: "land",
             landId: id,
-            title: s.difficulty === "advanced" && s.challenge ? `${s.challenge} · ${land.name}` : land.name,
+            title: s.difficulty === "advanced" && s.challenge ? `${s.challenge} · ${land.name}` : picked ? `${land.name} · ${picked}` : land.name,
             items,
             index: 0,
             picks: items.map(() => null),

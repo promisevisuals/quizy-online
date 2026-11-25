@@ -1,4 +1,5 @@
 import raw from "@/data/bank.json";
+import { matchesPick, type LandPick } from "@/lib/quiz/topics";
 
 export type Difficulty = "easy" | "medium" | "difficult" | "advanced";
 export type Age = "young" | "old";
@@ -13,6 +14,12 @@ export type ChoiceQ = {
   difficulty: Difficulty;
   age8: boolean;
   replace: boolean;
+  /** Which part of the land this question belongs to (e.g. "football"), for the topic menu. */
+  topic?: string;
+  /** Extra topics this question also counts for. */
+  also?: string[];
+  /** Finer labels such as "era:2010s" or "team:nigeria". */
+  tags?: string[];
 };
 
 export type SpellQ = {
@@ -23,6 +30,9 @@ export type SpellQ = {
   difficulty: Difficulty;
   age8: boolean;
   replace: boolean;
+  topic?: string;
+  also?: string[];
+  tags?: string[];
 };
 
 export type BankQ = ChoiceQ | SpellQ;
@@ -241,8 +251,9 @@ export function pickLandQuestions(
   difficulty: Difficulty,
   usedIds: string[],
   blocked: Set<string> = new Set(),
+  pick: LandPick | null = null,
 ): PlayItem[] {
-  const bank = questionsFor(land);
+  const bank = questionsFor(land).filter((question) => matchesPick(question, pick));
   const used = new Set(usedIds);
   const avoid = new Set(blocked);
   for (const question of bank) {
@@ -416,3 +427,11 @@ export function stopSpeak() {
   if (typeof window === "undefined" || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
 }
+
+/** How many different questions a topic choice has (for showing counts in the menu). */
+export function countForPick(landId: string, pick: LandPick | null) {
+  const land = landById(landId);
+  if (!land) return 0;
+  return dedupeBank(questionsFor(land).filter((question) => matchesPick(question, pick))).length;
+}
+
