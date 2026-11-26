@@ -44,14 +44,14 @@ export const FUN_GAMES: FunGame[] = [
     id: "match",
     name: "Sweet Swap",
     art: "/art/games/match.svg",
-    note: "Swap sweets to line up three or more. Make striped sweets, bombs and rainbow balls to beat each level.",
+    note: "Swap sweets to line up three or more. Striped sweets, bombs, rainbow balls, jelly, boosters and a sweet finale.",
     needLands: 3,
   },
   {
     id: "bounce",
     name: "Bouncy Ball",
     art: "/art/games/bounce.svg",
-    note: "Roll and jump through jungle levels. Collect every ring to open the gate and dodge the thorns.",
+    note: "20 levels in 3 worlds, each with a boss. Squash bugs, grab shields, fire and wings, and collect every ring.",
     needLands: 4,
   },
 ];

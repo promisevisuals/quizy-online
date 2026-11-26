@@ -16,15 +16,22 @@ export type Piece = { id: number; color: number; special: Special; hits?: number
 export type Grid = (Piece | null)[][];
 export type Pos = [number, number]; // [x, y]
 
-export type Goal = { kind: "score"; target: number } | { kind: "collect"; color: number; count: number } | { kind: "crates"; count: number };
+export type Goal =
+  | { kind: "score"; target: number }
+  | { kind: "collect"; color: number; count: number }
+  | { kind: "crates"; count: number }
+  | { kind: "jelly"; count: number };
 
-export type Level = { n: number; moves: number; colors: number; crates: number; goal: Goal; target: number };
+export type Level = { n: number; moves: number; colors: number; crates: number; jelly: number; goal: Goal; target: number };
 
 export type Difficulty = "easy" | "medium" | "hard" | "expert";
 
 export type Match = {
   grid: Grid;
   level: Level;
+  /** Jelly under the sweets: pop a sweet on it to clear it. */
+  jelly: boolean[][];
+  jellyLeft: number;
   score: number;
   movesLeft: number;
   collected: number;
@@ -41,19 +48,23 @@ const MOVE_BONUS: Record<Difficulty, number> = { easy: 6, medium: 2, hard: 0, ex
 export function levelFor(n: number, difficulty: Difficulty = "medium"): Level {
   const colors = n <= (difficulty === "easy" ? 8 : 3) ? 5 : 6;
   const moves = Math.max(12, 22 - Math.floor(n / 4) + MOVE_BONUS[difficulty]);
-  const kind = n % 3;
+  const kind = n % 4;
   let goal: Goal;
   let crates = 0;
-  if (kind === 1) goal = { kind: "score", target: 1800 + n * 500 };
+  let jelly = 0;
+  if (kind === 1) goal = { kind: "score", target: 1800 + n * 450 };
   else if (kind === 2) goal = { kind: "collect", color: n % colors, count: Math.min(45, 14 + n * 2) };
-  else {
+  else if (kind === 3) {
     crates = Math.min(20, 5 + n);
     goal = { kind: "crates", count: crates };
+  } else {
+    jelly = Math.min(40, 12 + n * 2);
+    goal = { kind: "jelly", count: jelly };
   }
-  if (n > 6 && kind !== 0) crates = Math.min(8, Math.floor(n / 3));
+  if (n > 6 && (kind === 1 || kind === 2)) crates = Math.min(8, Math.floor(n / 3));
   // the score that counts as "great" for stars
   const target = goal.kind === "score" ? goal.target : moves * 140;
-  return { n, moves, colors, crates, goal, target };
+  return { n, moves, colors, crates, jelly, goal, target };
 }
 
 function at(g: Grid, x: number, y: number) {
@@ -98,7 +109,7 @@ function key([x, y]: Pos) {
 }
 
 export function newMatch(level: Level, rng: () => number = Math.random): Match {
-  const m: Match = { grid: [], level, score: 0, movesLeft: level.moves, collected: 0, cratesLeft: 0, nextId: 1, cascade: 0, rng };
+  const m: Match = { grid: [], level, jelly: [], jellyLeft: 0, score: 0, movesLeft: level.moves, collected: 0, cratesLeft: 0, nextId: 1, cascade: 0, rng };
   for (let tries = 0; tries < 50; tries++) {
     m.grid = Array.from({ length: SIZE }, () => Array<Piece | null>(SIZE).fill(null));
     for (let y = 0; y < SIZE; y++) {
@@ -125,6 +136,14 @@ export function newMatch(level: Level, rng: () => number = Math.random): Match {
     m.cratesLeft = placed;
     if (!findRuns(m.grid).length && findMove(m.grid)) break;
   }
+  // jelly spreads out from the middle of the board
+  m.jelly = Array.from({ length: SIZE }, () => Array<boolean>(SIZE).fill(false));
+  const spots: Pos[] = [];
+  for (let y = 0; y < SIZE; y++) for (let x = 0; x < SIZE; x++) spots.push([x, y]);
+  const mid = (SIZE - 1) / 2;
+  spots.sort((a, b) => Math.hypot(a[0] - mid, (a[1] - mid) * 1.1) - Math.hypot(b[0] - mid, (b[1] - mid) * 1.1) + (rng() - 0.5) * 0.8);
+  for (const [x, y] of spots.slice(0, level.jelly)) m.jelly[y]![x] = true;
+  m.jellyLeft = level.jelly;
   return m;
 }
 
@@ -212,7 +231,13 @@ function clearCells(m: Match, start: Pos[], keep: Set<number>, made: Pos[]): Ste
       if (n?.color === -1) crateHits.add(key([pos[0] + dx, pos[1] + dy]));
     }
   }
-  for (const c of cleared) g[c.y]![c.x] = null;
+  for (const c of cleared) {
+    g[c.y]![c.x] = null;
+    if (m.jelly[c.y]?.[c.x]) {
+      m.jelly[c.y]![c.x] = false;
+      m.jellyLeft -= 1;
+    }
+  }
   for (const k of crateHits) {
     const x = k % SIZE;
     const y = Math.floor(k / SIZE);
@@ -381,6 +406,7 @@ export function goalDone(m: Match) {
   const goal = m.level.goal;
   if (goal.kind === "score") return m.score >= goal.target;
   if (goal.kind === "collect") return m.collected >= goal.count;
+  if (goal.kind === "jelly") return m.jellyLeft <= 0;
   return m.cratesLeft <= 0;
 }
 
@@ -388,6 +414,7 @@ export function goalProgress(m: Match): { have: number; need: number } {
   const goal = m.level.goal;
   if (goal.kind === "score") return { have: Math.min(m.score, goal.target), need: goal.target };
   if (goal.kind === "collect") return { have: Math.min(m.collected, goal.count), need: goal.count };
+  if (goal.kind === "jelly") return { have: goal.count - m.jellyLeft, need: goal.count };
   return { have: goal.count - m.cratesLeft, need: goal.count };
 }
 
@@ -406,4 +433,68 @@ export function seededRng(seed: number) {
     s ^= s << 5;
     return ((s >>> 0) % 1_000_000) / 1_000_000;
   };
+}
+
+/** Hammer booster (and the finale): smash one sweet, setting off its special if it has one. */
+export function smash(m: Match, pos: Pos): Step | null {
+  const p = at(m.grid, pos[0], pos[1]);
+  if (!p) return null;
+  m.cascade = 0;
+  return clearCells(m, [pos], new Set(), []);
+}
+
+/** Shuffle booster: mix the sweets, keeping specials and crates. */
+export function shuffleNow(m: Match) {
+  const g = m.grid;
+  const spots: Pos[] = [];
+  const pieces: Piece[] = [];
+  for (let y = 0; y < SIZE; y++)
+    for (let x = 0; x < SIZE; x++)
+      if (isSweet(g[y]![x])) {
+        spots.push([x, y]);
+        pieces.push(g[y]![x]!);
+      }
+  for (let tries = 0; tries < 200; tries++) {
+    for (let i = pieces.length - 1; i > 0; i--) {
+      const j = Math.floor(m.rng() * (i + 1));
+      [pieces[i], pieces[j]] = [pieces[j]!, pieces[i]!];
+    }
+    spots.forEach(([x, y], i) => (g[y]![x] = pieces[i]!));
+    if (!findRuns(g).length && findMove(g)) return;
+  }
+}
+
+/**
+ * The sweet finale after a level is won: each move left turns a sweet into a striped one
+ * and sets it off, then any specials still on the board go off too. Returns null when done.
+ */
+export function finaleStep(m: Match): Step | null {
+  const g = m.grid;
+  const plain: Pos[] = [];
+  const specials: Pos[] = [];
+  for (let y = 0; y < SIZE; y++)
+    for (let x = 0; x < SIZE; x++) {
+      const p = g[y]![x];
+      if (!p || p.color === -1) continue;
+      if (p.special) specials.push([x, y]);
+      else plain.push([x, y]);
+    }
+  if (m.movesLeft > 0 && plain.length) {
+    const [x, y] = plain[Math.floor(m.rng() * plain.length)]!;
+    g[y]![x]!.special = m.rng() < 0.5 ? "row" : "col";
+    m.movesLeft -= 1;
+    m.score += 60;
+    return smash(m, [x, y]);
+  }
+  if (specials.length) return smash(m, specials[0]!);
+  return null;
+}
+
+/** Words for big moves, like a cheering crowd. */
+export function cheer(cascade: number, blasts: number): string {
+  if (blasts >= 3 || cascade >= 6) return "Divine!";
+  if (blasts >= 2 || cascade >= 5) return "Delicious!";
+  if (cascade >= 4) return "Tasty!";
+  if (cascade >= 3 || blasts >= 1) return "Sweet!";
+  return "";
 }

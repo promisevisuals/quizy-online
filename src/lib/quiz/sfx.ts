@@ -173,4 +173,50 @@ export const sfx = {
   win() {
     [523, 659, 784, 1047, 784, 1047].forEach((f, i) => play([{ f, at: i * 0.11, len: 0.2, type: "triangle", vol: 0.2 }]));
   },
+  /** Squash! */
+  stomp() {
+    play([{ f: 520, to: 180, len: 0.12, type: "square", vol: 0.1 }]);
+    crunch(0, 0.05, 0.12);
+  },
+  /** Ouch: a power-up was lost. */
+  hurt() {
+    play([
+      { f: 700, to: 300, len: 0.18, type: "sawtooth", vol: 0.09 },
+      { f: 500, to: 200, at: 0.12, len: 0.2, type: "sawtooth", vol: 0.07 },
+    ]);
+  },
+  /** A power-up is yours. */
+  power() {
+    [523, 784, 659, 1047, 1319].forEach((f, i) => play([{ f, at: i * 0.06, len: 0.12, type: "square", vol: 0.07 }]));
+  },
+  /** A gem. */
+  gem() {
+    play([{ f: 1568, len: 0.06, type: "sine", vol: 0.12 }, { f: 2093, at: 0.05, len: 0.1, type: "sine", vol: 0.1 }]);
+  },
+  /** A block bumped from below. */
+  bump() {
+    play([{ f: 220, to: 330, len: 0.08, type: "square", vol: 0.08 }]);
+  },
+  /** Spitting fire. */
+  fire() {
+    play([{ f: 900, to: 300, len: 0.12, type: "sawtooth", vol: 0.06 }]);
+    crunch(0, 0.08, 0.06);
+  },
+  /** A cannon or a boss shoots. */
+  shoot() {
+    play([{ f: 160, to: 70, len: 0.15, type: "triangle", vol: 0.16 }]);
+    crunch(0, 0.1, 0.1);
+  },
+  /** Rumble: a boss lands or a stone starts to fall. */
+  quake() {
+    play([{ f: 70, to: 40, len: 0.3, type: "sawtooth", vol: 0.12 }]);
+  },
+  /** Hit the boss! */
+  bossHit() {
+    play([{ f: 300, to: 900, len: 0.15, type: "square", vol: 0.1 }, { f: 120, at: 0.05, len: 0.25, type: "sawtooth", vol: 0.1 }]);
+  },
+  /** A big win fanfare (boss beaten, sweet crush). */
+  fanfare() {
+    [392, 523, 659, 784, 659, 784, 1047].forEach((f, i) => play([{ f, at: i * 0.12, len: 0.22, type: "square", vol: 0.08 }, { f: f / 2, at: i * 0.12, len: 0.22, type: "triangle", vol: 0.1 }]));
+  },
 };

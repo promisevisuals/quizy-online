@@ -4,7 +4,7 @@ import { sfx } from "@/lib/quiz/sfx";
 import { useQuiz } from "@/lib/quiz/store";
 import { SHAPES, SPECIAL, aiMove, canPlay, goMarket, newWhot, play, top, type Card, type Shape, type Whot as WhotGame } from "@/lib/quiz/whot";
 import { GameStage } from "@/components/quiz/GameStage";
-import { LevelChoice, NoTickets, TicketCount, TicketHint, useTicket } from "@/components/quiz/FunGameKit";
+import { LevelChoice, MadeBy, NoTickets, TicketCount, TicketHint, useTicket } from "@/components/quiz/FunGameKit";
 
 const RIVALS = [
   { name: "Ada", face: "👧🏾" },
@@ -197,6 +197,7 @@ export function Whot() {
             </>
           )}
           <p className="mt-2 text-xs font-bold text-muted">Games won: {wins}</p>
+          <MadeBy />
         </div>
       ) : (
         <div className="whot-table">
@@ -295,6 +296,7 @@ export function Whot() {
                 <button type="button" className="mt-2 block text-sm font-bold text-muted underline" onClick={() => setPhase("setup")}>
                   Change players or level
                 </button>
+                <MadeBy />
               </div>
             </div>
           )}

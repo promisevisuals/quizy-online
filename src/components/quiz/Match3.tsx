@@ -1,18 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Star } from "lucide-react";
+import { Hammer, Plus, Shuffle, Star } from "lucide-react";
 import { LEVEL_NAMES, loadLevel, saveLevel, type ArcadeLevel } from "@/lib/quiz/arcade";
 import {
   COLOR_NAMES,
   SIZE,
   adjacent,
+  cheer,
   collapse,
   ensureMove,
+  finaleStep,
   findMove,
   goalDone,
   goalProgress,
   levelFor,
   matchStep,
   newMatch,
+  shuffleNow,
+  smash,
   stars as starsFor,
   trySwap,
   type Match,
@@ -23,7 +27,26 @@ import {
 import { sfx } from "@/lib/quiz/sfx";
 import { useQuiz } from "@/lib/quiz/store";
 import { GameStage } from "@/components/quiz/GameStage";
-import { LevelChoice, NoTickets, TicketCount, TicketHint, useTicket } from "@/components/quiz/FunGameKit";
+import { LevelChoice, MadeBy, NoTickets, TicketCount, TicketHint, useTicket } from "@/components/quiz/FunGameKit";
+
+type Boosters = { hammer: number; shuffle: number; moves: number };
+const BOOST_KEY = "quizy-sweet-boosters";
+function loadBoosters(): Boosters {
+  try {
+    const raw = JSON.parse(localStorage.getItem(BOOST_KEY) ?? "null");
+    if (raw && typeof raw.hammer === "number") return raw;
+  } catch {
+    /* fresh start */
+  }
+  return { hammer: 2, shuffle: 1, moves: 1 };
+}
+function saveBoosters(b: Boosters) {
+  try {
+    localStorage.setItem(BOOST_KEY, JSON.stringify(b));
+  } catch {
+    /* storage may be off */
+  }
+}
 
 const COLORS = ["#e8413f", "#f08a24", "#f5c518", "#3dbb5c", "#3a86e8", "#9a52d9"];
 const DARK = ["#a51f22", "#b45a0b", "#b98d00", "#1f7c39", "#1d58a8", "#6a2ba3"];
@@ -54,6 +77,19 @@ export function Match3() {
   const [noTicket, setNoTicket] = useState(false);
   const [runCoins, setRunCoins] = useState(0);
   const [toast, setToast] = useState("");
+  const [boosters, setBoostersState] = useState<Boosters>({ hammer: 0, shuffle: 0, moves: 0 });
+  const [hammerOn, setHammerOn] = useState(false);
+  const hammerRef = useRef(false);
+  hammerRef.current = hammerOn;
+  const [gift, setGift] = useState("");
+  useEffect(() => setBoostersState(loadBoosters()), []);
+  const setBoosters = useCallback((fn: (b: Boosters) => Boosters) => {
+    setBoostersState((b) => {
+      const next = fn(b);
+      saveBoosters(next);
+      return next;
+    });
+  }, []);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [wrapEl, setWrapEl] = useState<HTMLDivElement | null>(null);
@@ -95,14 +131,15 @@ export function Match3() {
     bump();
   }
 
-  function startRun() {
+  function startRun(from = 1) {
     if (!ticket.spend()) {
       setNoTicket(true);
       return;
     }
     setNoTicket(false);
     setRunCoins(0);
-    loadLevelN(1);
+    setHammerOn(false);
+    loadLevelN(from);
     sfx.start();
     setPhase("playing");
   }
@@ -180,11 +217,19 @@ export function Match3() {
     busy.current = true;
     let step: Step | null = first;
     let cascade = 0;
+    let blasts = 0;
+    let said = "";
     const m = matchRef.current;
     while (step) {
       addDying(step);
       sfx.pop(cascade);
-      if (cascade >= 2) showToast(cascade >= 4 ? "Sweet!!" : cascade >= 3 ? "Delicious!" : "Tasty!");
+      blasts += step.blasts;
+      const word = cheer(cascade + 1, blasts);
+      if (word && word !== said) {
+        said = word;
+        showToast(word);
+        sfx.levelUp();
+      }
       bump();
       await wait(190);
       collapse(m);
@@ -196,6 +241,7 @@ export function Match3() {
     }
     if (goalDone(m)) {
       await wait(250);
+      await finale();
       levelWon();
     } else if (m.movesLeft <= 0) {
       await wait(250);
@@ -216,10 +262,55 @@ export function Match3() {
     m.grid.forEach((row, y) => row.forEach((p, x) => p && drawn.current.set(p.id, { x: x + (Math.random() - 0.5) * 2, y: y + (Math.random() - 0.5) * 2 })));
   }
 
+  /** Sweet finale: every move left becomes a striped sweet that goes off. */
+  async function finale() {
+    const m = matchRef.current;
+    if (m.movesLeft > 0 || m.grid.some((row) => row.some((p) => p?.special))) {
+      showToast("Sweet Finale!");
+      sfx.fanfare();
+      await wait(600);
+    }
+    let guard = 0;
+    let step = finaleStep(m);
+    while (step && guard++ < 60) {
+      addDying(step);
+      sfx.pop(Math.min(guard, 10));
+      bump();
+      await wait(140);
+      collapse(m);
+      placeNewPieces();
+      bump();
+      await untilSettled();
+      let cascade = matchStep(m);
+      while (cascade) {
+        addDying(cascade);
+        bump();
+        await wait(120);
+        collapse(m);
+        placeNewPieces();
+        bump();
+        await untilSettled();
+        cascade = matchStep(m);
+      }
+      step = finaleStep(m);
+    }
+  }
+
   function levelWon() {
     const m = matchRef.current;
-    m.score += m.movesLeft * 60;
     const st = starsFor(m);
+    // a little gift: a booster for 3 stars, and another every 5 levels
+    const gifts: string[] = [];
+    if (st === 3) gifts.push("hammer");
+    if (m.level.n % 5 === 0) gifts.push(["shuffle", "moves", "hammer"][Math.floor(m.level.n / 5) % 3]!);
+    if (gifts.length) {
+      setBoosters((b) => {
+        const next = { ...b };
+        for (const g of gifts) next[g as keyof Boosters] += 1;
+        return next;
+      });
+      setGift(gifts.map((g) => (g === "hammer" ? "🔨 Hammer" : g === "shuffle" ? "🔀 Shuffle" : "➕ 5 moves")).join(" + "));
+    } else setGift("");
     const coins = 10 + st * 5;
     setRunCoins((c) => c + coins);
     const reached = m.level.n;
@@ -232,6 +323,35 @@ export function Match3() {
   function levelLost() {
     sfx.gameOver();
     setPhase("lost");
+  }
+
+  function smashAt(pos: Pos) {
+    const m = matchRef.current;
+    const p = m.grid[pos[1]]![pos[0]];
+    if (!p || busy.current) return;
+    setHammerOn(false);
+    setBoosters((b) => ({ ...b, hammer: Math.max(0, b.hammer - 1) }));
+    sfx.blast();
+    const step = smash(m, pos);
+    if (step) void resolve(step);
+  }
+
+  function doShuffle() {
+    if (busy.current || boosters.shuffle <= 0 || phaseRef.current !== "playing") return;
+    setBoosters((b) => ({ ...b, shuffle: b.shuffle - 1 }));
+    shuffleNow(matchRef.current);
+    snapToGrid();
+    sfx.draw();
+    bump();
+  }
+
+  function addMoves() {
+    if (busy.current || boosters.moves <= 0 || phaseRef.current !== "playing") return;
+    setBoosters((b) => ({ ...b, moves: b.moves - 1 }));
+    matchRef.current.movesLeft += 5;
+    sfx.levelUp();
+    showToast("+5 moves!");
+    bump();
   }
 
   function attempt(a: Pos, b: Pos) {
@@ -295,6 +415,14 @@ export function Match3() {
         ctx.fillStyle = (x + y) % 2 ? "rgba(120,72,30,0.20)" : "rgba(120,72,30,0.12)";
         rr(ctx, x * cell + 1, y * cell + 1, cell - 2, cell - 2, cell * 0.18);
         ctx.fill();
+        if (m.jelly[y]?.[x]) {
+          ctx.fillStyle = "rgba(240,98,170,0.55)";
+          rr(ctx, x * cell + 2, y * cell + 2, cell - 4, cell - 4, cell * 0.22);
+          ctx.fill();
+          ctx.fillStyle = "rgba(255,255,255,0.35)";
+          rr(ctx, x * cell + cell * 0.18, y * cell + cell * 0.12, cell * 0.4, cell * 0.12, cell * 0.06);
+          ctx.fill();
+        }
       }
     const sel = selected.current;
     if (sel) {
@@ -343,6 +471,10 @@ export function Match3() {
     if (busy.current || phaseRef.current !== "playing") return;
     const pos = cellAt(e);
     if (!pos) return;
+    if (hammerRef.current) {
+      smashAt(pos);
+      return;
+    }
     (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
     press.current = { pos, x: e.clientX, y: e.clientY, used: false };
   }
@@ -378,7 +510,9 @@ export function Match3() {
       ? `Score ${goal.target.toLocaleString()}`
       : goal.kind === "collect"
         ? `Pop ${goal.count} ${COLOR_NAMES[goal.color]} sweets`
-        : `Break ${goal.count} crates`;
+        : goal.kind === "jelly"
+          ? `Clear ${goal.count} jelly squares`
+          : `Break ${goal.count} crates`;
   const st = starsFor(m);
 
   return (
@@ -399,7 +533,13 @@ export function Match3() {
         <span className="match-level">Level {levelN}</span>
         <span className="min-w-0 flex-1">
           <b className="flex items-center gap-1 text-sm">
-            {goal.kind === "collect" ? <i className="match-dot" style={{ background: COLORS[goal.color] }} aria-hidden /> : goal.kind === "crates" ? <span aria-hidden>📦</span> : null}
+            {goal.kind === "collect" ? (
+              <i className="match-dot" style={{ background: COLORS[goal.color] }} aria-hidden />
+            ) : goal.kind === "crates" ? (
+              <span aria-hidden>📦</span>
+            ) : goal.kind === "jelly" ? (
+              <i className="match-dot" style={{ background: "#f062aa" }} aria-hidden />
+            ) : null}
             {goalText}
           </b>
           <span className="match-bar" aria-hidden>
@@ -423,7 +563,12 @@ export function Match3() {
           onPointerCancel={() => (press.current = null)}
           aria-label="Sweet Swap board. Drag a sweet onto its neighbour, or tap two neighbours, to swap them."
         />
-        {toast ? <p className="match-toast">{toast}</p> : null}
+        {toast ? (
+          <p key={toast} className="match-toast">
+            {toast}
+          </p>
+        ) : null}
+        {hammerOn ? <p className="match-hint">Tap a sweet to smash it 🔨</p> : null}
         {phase !== "playing" && (
           <div className="snake-overlay" role="status">
             <div className="snake-card">
@@ -431,7 +576,8 @@ export function Match3() {
                 <>
                   <p className="font-display text-2xl font-semibold">Sweet Swap</p>
                   <p className="mt-1 text-sm">Swap two sweets to line up 3 or more of the same colour. Beat each level's goal before your moves run out.</p>
-                  <p className="mt-1 text-xs font-bold text-muted">4 in a line = striped · L or T = bomb · 5 in a line = rainbow ball</p>
+                  <p className="mt-1 text-xs font-bold text-muted">4 in a line = striped · L or T = bomb · 5 in a line = rainbow ball. Swap two specials together for a giant blast!</p>
+                  <p className="mt-1 text-xs text-muted">Boosters: 🔨 smash any sweet · 🔀 shuffle · ➕ 5 extra moves. Win 3 stars to earn more.</p>
                   <div className="mt-3">
                     <LevelChoice level={diff} onChange={chooseDiff} blurb={`${BLURBS[diff]}. Best: level ${best}`} />
                   </div>
@@ -448,6 +594,7 @@ export function Match3() {
                   <p className="mt-1 font-extrabold">
                     {m.score.toLocaleString()} points · {runCoins} coins so far
                   </p>
+                  {gift ? <p className="mt-1 text-sm font-extrabold text-gold">Gift: {gift}!</p> : null}
                   <button type="button" onClick={() => { loadLevelN(levelN + 1); setPhase("playing"); sfx.start(); }} className="mt-3 min-h-12 rounded-2xl bg-primary px-8 font-extrabold text-primary-fg">
                     Next level
                   </button>
@@ -476,15 +623,48 @@ export function Match3() {
                   <NoTickets />
                 ) : (
                   <>
-                    <button type="button" onClick={startRun} className="mt-3 min-h-12 rounded-2xl bg-primary px-8 font-extrabold text-primary-fg">
-                      {phase === "lost" ? "Try again from level 1" : "Start"}
-                    </button>
+                    <div className="mt-3 flex flex-wrap justify-center gap-2">
+                      {phase === "lost" ? (
+                        <button type="button" onClick={() => startRun(levelN)} className="min-h-12 rounded-2xl bg-primary px-6 font-extrabold text-primary-fg">
+                          Try level {levelN} again
+                        </button>
+                      ) : best >= 1 ? (
+                        <button type="button" onClick={() => startRun(best + 1)} className="min-h-12 rounded-2xl bg-primary px-6 font-extrabold text-primary-fg">
+                          Continue at level {best + 1}
+                        </button>
+                      ) : null}
+                      <button
+                        type="button"
+                        onClick={() => startRun(1)}
+                        className={phase === "lost" || best >= 1 ? "min-h-12 rounded-2xl border border-line px-5 font-extrabold" : "min-h-12 rounded-2xl bg-primary px-8 font-extrabold text-primary-fg"}
+                      >
+                        {phase === "lost" || best >= 1 ? "Level 1" : "Start"}
+                      </button>
+                    </div>
                     <TicketHint />
                   </>
                 ))}
+              {phase !== "playing" ? <MadeBy /> : null}
             </div>
           </div>
         )}
+      </div>
+      <div className="match-boosters" aria-label="Boosters">
+        <button type="button" className={hammerOn ? "is-on" : ""} disabled={boosters.hammer <= 0 || phase !== "playing"} onClick={() => setHammerOn((h) => !h)} aria-label={`Hammer, ${boosters.hammer} left`}>
+          <Hammer className="size-5" aria-hidden />
+          <span>Hammer</span>
+          <b>{boosters.hammer}</b>
+        </button>
+        <button type="button" disabled={boosters.shuffle <= 0 || phase !== "playing"} onClick={doShuffle} aria-label={`Shuffle, ${boosters.shuffle} left`}>
+          <Shuffle className="size-5" aria-hidden />
+          <span>Shuffle</span>
+          <b>{boosters.shuffle}</b>
+        </button>
+        <button type="button" disabled={boosters.moves <= 0 || phase !== "playing"} onClick={addMoves} aria-label={`Five more moves, ${boosters.moves} left`}>
+          <Plus className="size-5" aria-hidden />
+          <span>5 moves</span>
+          <b>{boosters.moves}</b>
+        </button>
       </div>
     </GameStage>
   );

@@ -69,3 +69,15 @@ export function TicketHint() {
     </p>
   );
 }
+
+/** A small "made by" mark for the end of a game card. */
+export function MadeBy() {
+  return (
+    <p className="made-by">
+      <span className="made-by-pv" aria-hidden>
+        PV
+      </span>
+      A PromiseVisuals game
+    </p>
+  );
+}
