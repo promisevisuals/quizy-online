@@ -1946,3 +1946,7 @@ html[data-app="kings"] .land-emblem.is-small { box-shadow: 0 0 0 2px #fff, 0 0 0
 html[data-app="kings"] .app-footer-credit { background: rgba(253, 248, 255, 0.88); }
 html[data-app="kings"] .pv-credit { color: rgba(36, 18, 61, 0.66); }
 html[data-app="kings"] .scenic-banner img { object-position: center 70%; }
+/* The Bethlehem banner is slim enough to keep on every screen. */
+@media (max-height: 1000px) {
+  html[data-app="kings"] .scenic-banner.is-trail { display: block; height: 5rem; }
+}

@@ -275,7 +275,7 @@ function TopBar({ onHelp }: { onHelp: () => void }) {
             className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-line px-3 text-sm font-extrabold"
           >
             <ArrowLeft className="size-4" aria-hidden />
-            {screen === "map" ? "Camp" : "Trail"}
+            {screen === "map" ? (IS_KINGS ? "Home" : "Camp") : IS_KINGS ? "Sections" : "Trail"}
           </button>
         )}
         <button
