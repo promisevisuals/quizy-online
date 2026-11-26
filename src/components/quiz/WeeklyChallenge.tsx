@@ -3,8 +3,9 @@ import { Download, MessageCircle, Share2, Trophy } from "lucide-react";
 import { recordActivity, useQuizSession } from "@/lib/quiz/cloud";
 import { WEEKLY_COUNT, daysUntilNextWeek, weekKey, type Age } from "@/lib/quiz/logic";
 import { useQuiz, type WeeklyResult } from "@/lib/quiz/store";
+import { APP, IS_KINGS } from "@/lib/app";
 
-export const QUIZY_SITE = "https://quizy.promisevisuals.com";
+export const QUIZY_SITE = APP.siteUrl;
 const AGE_LABEL: Record<Age, string> = { young: "Ages 5–7", old: "Ages 8–10" };
 
 function clock(seconds: number) {
@@ -109,7 +110,7 @@ export async function drawScoreCard(result: WeeklyResult, name: string) {
   } else {
     ctx.fillStyle = "#fffaf1";
     ctx.font = `700 110px ${display}`;
-    ctx.fillText("Quizy", w / 2, 160);
+    ctx.fillText(APP.name, w / 2, 160);
   }
 
   ctx.fillStyle = "#d4920b";
@@ -264,7 +265,7 @@ function ScoreCard({ result, name }: { result: WeeklyResult; name: string }) {
   }, [user, result]);
 
   const text = useMemo(
-    () => `🏆 I scored ${result.correct}/${result.total} on this week's Quizy challenge in ${clock(result.seconds)}! Can you beat it? Play free: ${QUIZY_SITE}/?weekly=1`,
+    () => `🏆 I scored ${result.correct}/${result.total} on this week's ${APP.name} challenge in ${clock(result.seconds)}! Can you beat it? Play free: ${QUIZY_SITE}/?weekly=1`,
     [result],
   );
   const fileName = `quizy-${result.week.toLowerCase()}-${result.correct}of${result.total}.png`;
@@ -287,9 +288,9 @@ function ScoreCard({ result, name }: { result: WeeklyResult; name: string }) {
       const blob = await (await fetch(image)).blob();
       const file = new File([blob], fileName, { type: "image/png" });
       if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], text, title: "Quizy weekly challenge" });
+        await navigator.share({ files: [file], text, title: `${APP.name} weekly challenge` });
       } else if (navigator.share) {
-        await navigator.share({ text, title: "Quizy weekly challenge" });
+        await navigator.share({ text, title: `${APP.name} weekly challenge` });
       } else {
         download();
         setNote("Card saved. Share it from your photos.");

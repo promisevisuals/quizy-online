@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { commandCall, grantAdmin, listAdmins, listFeedback, revokeAdmin, type AdminList, loadFeedbackReport, loadTraffic, type FeedbackReport, useQuizSession, type CommandSettings, type CommandSummary, type CommandUser, type Traffic } from "@/lib/quiz/cloud";
+import { APP, IS_KINGS } from "@/lib/app";
 
 const TEMPLATES: Record<string, [string, string]> = {
   praise: [
     "Outstanding Explorer",
-    "I see the effort you are putting into Quizy. Your consistency, progress and determination have not gone unnoticed. Keep exploring, keep learning and keep earning those badges.",
+    `I see the effort you are putting into ${APP.name}. Your consistency, progress and determination have not gone unnoticed. Keep exploring, keep learning and keep earning those badges.`,
   ],
   badge: ["Badge Hunter", "Congratulations on the badges you are earning. Keep exploring. More discoveries are waiting."],
   streak: ["Streak Champion", "Your consistency is impressive. Keep coming back, keep challenging yourself and protect that streak."],
@@ -62,7 +63,7 @@ export function CommandCenter() {
     return (
       <section className="mx-auto max-w-xl">
         <h2 className="font-display text-3xl font-semibold">Command Center</h2>
-        <p className="mt-2 text-muted">Sign in with the Quizy owner account. This stays inside that account.</p>
+        <p className="mt-2 text-muted">Sign in with the {APP.name} owner account. This stays inside that account.</p>
         <Link to="/login" className="mt-4 inline-flex min-h-12 items-center rounded-2xl bg-primary px-5 font-extrabold text-primary-fg">
           Sign in
         </Link>
@@ -84,7 +85,7 @@ export function CommandCenter() {
       <div>
         <p className="text-sm font-extrabold uppercase tracking-widest text-gold">Owner</p>
         <h2 className="font-display text-3xl font-semibold">Command Center</h2>
-        <p className="text-muted">Explorers, messages and switches from the existing Quizy command service. Email addresses stay masked.</p>
+        <p className="text-muted">Explorers, messages and switches for {APP.name}. Quizy and King's Bible Quest each keep their own players and switches. Email addresses stay masked.</p>
       </div>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
         {(
@@ -154,11 +155,11 @@ export function CommandCenter() {
             subject,
             message: body,
             email_requested: true,
-            sender_name: "Quizy Expedition Commander",
+            sender_name: IS_KINGS ? "King's Bible Quest" : "Quizy Expedition Commander",
           })
             .then((result) => {
               setBody("");
-              setNote(`Delivered inside Quizy to ${result.sent_count ?? picked.length} explorer(s). ${result.email_status ?? ""}`);
+              setNote(`Delivered inside ${APP.name} to ${result.sent_count ?? picked.length} explorer(s). ${result.email_status ?? ""}`);
             })
             .catch((caught: unknown) => setError(caught instanceof Error ? caught.message : "Message failed"));
         }}
@@ -327,7 +328,7 @@ function TrafficPanel() {
 
 const SOURCE_NAMES: Record<string, string> = {
   direct: "Typed the link / bookmark",
-  share: "A shared Quizy link",
+  share: `A shared ${APP.name} link`,
   whatsapp: "WhatsApp",
   facebook: "Facebook",
   instagram: "Instagram",
@@ -429,7 +430,7 @@ function AdminsPanel() {
     setNote(null);
     grantAdmin(email.trim(), role)
       .then((result) => {
-        setNote({ text: `${result.name} is now ${result.role === "owner" ? "an owner" : "an admin"}. They'll see the Command Center next time they open Quizy signed in.`, good: true });
+        setNote({ text: `${result.name} is now ${result.role === "owner" ? "an owner" : "an admin"}. They'll see the Command Center next time they open ${APP.name} signed in.`, good: true });
         setEmail("");
         return load();
       })
@@ -455,7 +456,7 @@ function AdminsPanel() {
       {list?.can_manage ? (
         <>
           <p className="mt-1 text-sm text-muted">
-            Type the email of someone who already has a Quizy account. <b>Admins</b> can use the Command Center; <b>owners</b> can also add and remove people.
+            Type the email of someone who already has an account. <b>Admins</b> can use the Command Center; <b>owners</b> can also add and remove people.
           </p>
           <form
             className="mt-3 grid gap-2 sm:grid-cols-[1fr_auto_auto]"

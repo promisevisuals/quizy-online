@@ -156,7 +156,14 @@ export default defineConfig(({ command, isPreview }) => ({
     port: 8081,
     strictPort: true,
   },
-  resolve: { tsconfigPaths: true },
+  resolve: {
+    tsconfigPaths: true,
+    // King's Bible Quest builds from the same code with the Bible question bank.
+    alias:
+      process.env.VITE_APP_ID === "kings"
+        ? [{ find: /^@\/data\/bank\.json$/, replacement: join(import.meta.dirname, "src/data/bible.json") }]
+        : [],
+  },
   plugins: [
     pgliteBootstrapPlugin(),
     // Before tanstackStart so /auth/popup never falls through to the SPA.

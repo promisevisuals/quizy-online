@@ -63,6 +63,7 @@ import { QuickFeedback } from "@/components/quiz/QuickFeedback";
 import { TopicPicker } from "@/components/quiz/TopicPicker";
 import { topicsFor } from "@/lib/quiz/topics";
 import { WHATSAPP_LINK } from "@/lib/quiz/contact";
+import { APP, IS_KINGS, landArtFor } from "@/lib/app";
 
 /** Screens where a child is answering: no moving creatures there, so nothing competes with the question. */
 const QUIET_SCREENS = new Set(["play", "battle", "command", "certificate", "snake", "memory", "label", "bricks", "whot", "match", "bounce"]);
@@ -72,15 +73,15 @@ function cn(...inputs: ClassValue[]) {
 }
 
 const AGES: { id: Age; label: string; note: string }[] = [
-  { id: "young", label: "Ages 5–7", note: "Shorter words and warmer questions." },
-  { id: "old", label: "Ages 8–10", note: "A fuller trail for older explorers." },
+  { id: "young", label: APP.ages.young, note: APP.ages.youngNote },
+  { id: "old", label: APP.ages.old, note: APP.ages.oldNote },
 ];
 
 const LEVELS: { id: Difficulty; label: string; note: string }[] = [
   { id: "easy", label: "Easy", note: "Warm-up" },
   { id: "medium", label: "Medium", note: "Think it through" },
   { id: "difficult", label: "Difficult", note: "Challenge" },
-  { id: "advanced", label: "Advanced", note: "Beast through Volcano — the harder add-on bank." },
+  { id: "advanced", label: "Advanced", note: IS_KINGS ? "The hardest questions in the Book." : "Beast through Volcano — the harder add-on bank." },
 ];
 
 const OPEN_FLAGS: PublicFlags = {
@@ -88,7 +89,7 @@ const OPEN_FLAGS: PublicFlags = {
   registrationsEnabled: true,
   featureBattle: true,
   featureDaily: true,
-  featureAcademy: true,
+  featureAcademy: APP.academy,
   featureNews: true,
   featureSports: true,
   announcement: "",
@@ -130,7 +131,7 @@ export function QuizApp() {
   }, []);
 
   return (
-    <main className={cn("expedition-app min-h-screen text-fg", screen === "camp" && "is-camp", screen === "map" && "is-map", !QUIET_SCREENS.has(screen) && "has-jungle")}>
+    <main className={cn("expedition-app min-h-screen text-fg", IS_KINGS && "is-kings", screen === "camp" && "is-camp", screen === "map" && "is-map", !QUIET_SCREENS.has(screen) && "has-jungle")}>
       <div className="world-bg" aria-hidden="true">
         <img src="/art/compass.jpg" alt="" className="world-compass" />
       </div>
@@ -153,9 +154,9 @@ export function QuizApp() {
         )}
         {screen === "map" && (
           <figure className="scenic-banner is-trail">
-            <img src="/art/table.jpg" alt="" />
-            <TrailDrift />
-            <BannerCreatures scene="trail" />
+            <img src={APP.banner} alt="" />
+            {APP.jungle && <TrailDrift />}
+            {APP.jungle && <BannerCreatures scene="trail" />}
           </figure>
         )}
         <div key={`${screen}-${round?.index ?? "x"}-${round?.title ?? ""}`} className={cn("screen-in flex-1", screen === "camp" ? "mt-2" : "mt-4")}>
@@ -184,7 +185,7 @@ export function QuizApp() {
         </div>
         <PvCredit className="app-footer-credit" />
       </div>
-      {!QUIET_SCREENS.has(screen) && <JungleLife />}
+      {APP.jungle && !QUIET_SCREENS.has(screen) && <JungleLife />}
       {gate && <TrailGate onEnter={() => setGate(null)} />}
       {help && <HelpMap onClose={() => setHelp(false)} />}
     </main>
@@ -207,15 +208,15 @@ function TrailGate({ onEnter }: { onEnter: () => void }) {
   return (
     <button type="button" className="trail-gate" onClick={onEnter}>
       <span className="trail-gate-card">
-        <img src="/quizy-mark.png" alt="" className="splash-logo" />
-        <span className="font-display text-3xl font-semibold leading-none">Quizy</span>
-        <span className="text-sm font-extrabold uppercase tracking-widest text-gold">The trail is open</span>
+        <img src={APP.mark} alt="" className="splash-logo" />
+        <span className="font-display text-3xl font-semibold leading-none">{APP.name}</span>
+        <span className="text-sm font-extrabold uppercase tracking-widest text-gold">{APP.gateLine}</span>
         <span className="splash-dots" aria-hidden="true">
           <i />
           <i />
           <i />
         </span>
-        <span className="text-sm font-bold text-muted">Setting out… tap to enter</span>
+        <span className="text-sm font-bold text-muted">{APP.gateNote}</span>
         <PvCredit />
       </span>
     </button>
@@ -249,11 +250,11 @@ function TopBar({ onHelp }: { onHelp: () => void }) {
     <header className="trail-bar flex flex-nowrap items-center justify-between gap-2">
       <button type="button" className="flex shrink-0 items-center gap-3" onClick={() => park(name ? "map" : "camp")}>
         <span className="logo-plate">
-          <img src="/quizy-mark.png" alt="" />
+          <img src={APP.mark} alt="" />
         </span>
         <span className="text-left">
-          <span className="block font-display text-xl font-semibold leading-none">Quizy</span>
-          <span className="hidden text-sm text-muted sm:block">One question at a time</span>
+          <span className="block font-display text-xl font-semibold leading-none">{APP.name}</span>
+          <span className="hidden text-sm text-muted sm:block">{APP.tagline}</span>
         </span>
       </button>
       <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
@@ -274,7 +275,7 @@ function TopBar({ onHelp }: { onHelp: () => void }) {
             className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-line px-3 text-sm font-extrabold"
           >
             <ArrowLeft className="size-4" aria-hidden />
-            {screen === "map" ? "Camp" : "Trail"}
+            {screen === "map" ? (IS_KINGS ? "Home" : "Camp") : IS_KINGS ? "Sections" : "Trail"}
           </button>
         )}
         <button
@@ -330,7 +331,7 @@ function AccountChip() {
           .finally(() => setBusy(false));
       }}
       className="inline-flex min-h-11 max-w-44 items-center truncate rounded-2xl border border-line px-3 text-sm font-extrabold"
-      title="Sign out of this Quizy account"
+      title={`Sign out of this ${APP.name} account`}
     >
       {busy ? "Signing out" : label}
     </button>
@@ -422,7 +423,7 @@ function InstallButton() {
       }}
       className="mt-4 inline-flex min-h-11 items-center rounded-2xl border border-line px-4 font-extrabold"
     >
-      Add Quizy to this device
+      Add {APP.name} to this device
     </button>
   );
 }
@@ -496,7 +497,7 @@ function Camp({ flags }: { flags: PublicFlags }) {
         <div>
           <div>
             <label className="block text-xs font-extrabold uppercase tracking-wide text-muted" htmlFor="explorer">
-              Explorer name
+              {APP.playerLabel}
             </label>
             <input
               id="explorer"
@@ -575,24 +576,10 @@ function Camp({ flags }: { flags: PublicFlags }) {
   );
 }
 
-const LAND_BLURBS: Record<string, string> = {
-  animal: "Lions, bees, whales and how they survive.",
-  space: "Planets, stars, rockets and the Moon.",
-  ocean: "Reefs, tides and creatures of the deep.",
-  number: "Sums, shapes, patterns and puzzles.",
-  world: "Countries, capitals, rivers and maps.",
-  news: "What is happening in 2026.",
-  science: "Forces, light, sound and materials.",
-  body: "Your heart, bones, brain and senses.",
-  logic: "Riddles and brain teasers.",
-  africa: "Stories, kingdoms and cultures.",
-  tech: "Computers, coding and inventions.",
-  sports: "Football, athletics, tennis and more.",
-  spelling: "Hear the word, then spell it.",
-};
+const LAND_BLURBS: Record<string, string> = APP.blurbs;
 
 function landArt(id: string) {
-  return id === "body" ? "/art/lands/body.svg" : `/art/lands/${id}.jpg`;
+  return landArtFor(id);
 }
 
 type TrailTab = "lands" | "weekly" | "games" | "more";
@@ -612,7 +599,7 @@ function Trail({ flags }: { flags: PublicFlags }) {
   const pct = visible.length ? Math.round((cleared / visible.length) * 100) : 0;
 
   const tabs: { id: TrailTab; label: string; icon: LucideIcon }[] = [
-    { id: "lands", label: "Lands", icon: MapIcon },
+    { id: "lands", label: IS_KINGS ? "Sections" : "Lands", icon: MapIcon },
     { id: "weekly", label: "Weekly", icon: Medal },
     { id: "games", label: "Games", icon: Gamepad2 },
     { id: "more", label: "More", icon: Sparkles },
@@ -626,10 +613,10 @@ function Trail({ flags }: { flags: PublicFlags }) {
             <span>{cleared}</span>
           </span>
           <div>
-            <p className="text-xs font-extrabold uppercase tracking-widest text-gold">{name || "Explorer"}</p>
-            <h2 className="font-display text-2xl font-semibold leading-tight sm:text-3xl">The trail</h2>
+            <p className="text-xs font-extrabold uppercase tracking-widest text-gold">{name || APP.playerFallback}</p>
+            <h2 className="font-display text-2xl font-semibold leading-tight sm:text-3xl">{APP.trailTitle}</h2>
             <p className="text-sm text-muted">
-              {cleared} of {visible.length} lands · {totalStars} {totalStars === 1 ? "star" : "stars"}
+              {cleared} of {visible.length} {APP.landsWord} · {totalStars} {totalStars === 1 ? "star" : "stars"}
             </p>
           </div>
         </div>
@@ -765,7 +752,7 @@ function LandPicker({
               type="button"
               onClick={surprise}
               className={cn("inline-flex min-h-11 items-center gap-2 rounded-2xl border border-line bg-surface-2 px-3 font-extrabold", spinning && "is-rolling")}
-              aria-label="Surprise me: pick a land for me"
+              aria-label={`Surprise me: pick a ${APP.landWord} for me`}
             >
               <Dices className="size-5 text-gold" aria-hidden />
               <span className="hidden sm:inline">Surprise me</span>
@@ -773,7 +760,7 @@ function LandPicker({
           </div>
         </div>
       </div>
-      <div className="land-bubbles" role="listbox" aria-label="Choose a land">
+      <div className="land-bubbles" role="listbox" aria-label={`Choose a ${APP.landWord}`}>
         {list.map((item, index) => {
           const score = landCorrect[item.id] ?? 0;
           const isDone = !!landDone[item.id];
@@ -830,7 +817,7 @@ function GameCorner() {
   return (
     <div className="grid gap-4">
       <FunGames />
-      <div>
+      {APP.learningGames && <div>
         <p className="mb-2 text-xs font-extrabold uppercase tracking-widest text-gold">Learning games · always open</p>
         <div className="game-corner grid gap-3 sm:grid-cols-3">      {games.map((game, index) => (
         <button
@@ -855,7 +842,7 @@ function GameCorner() {
       ))}
       <p className="col-span-full text-sm text-muted">Every finished game earns coins for lives and hints. Pick Easy to Expert inside each game.</p>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }
@@ -881,7 +868,7 @@ function FunGames() {
         <div className="min-w-0">
           <p className="text-xs font-extrabold uppercase tracking-widest text-gold">Fun games · earned by learning</p>
           <p className="text-sm text-muted">
-            Score {passMark(10)}/10 or more on a land to earn 3 game tickets. Each pass of a new land unlocks another game.
+            Score {passMark(10)}/10 or more on a {APP.landWord} to earn 3 game tickets. Each pass of a new {APP.landWord} unlocks another game.
           </p>
         </div>
         <span className="fun-tickets" aria-label={owner ? "Owner: free play" : `${tickets} game tickets`}>
@@ -903,8 +890,8 @@ function FunGames() {
               onClick={() => {
                 if (access.open) go(game.id);
                 else if (access.reason === "locked")
-                  setNote(`${game.name} opens when you pass ${game.needLands} different ${game.needLands === 1 ? "land" : "lands"} with ${passMark(10)}/10 or more. You've passed ${passed}.`);
-                else setNote("No game tickets left. Play a land and score 7/10 or more to earn 3 more.");
+                  setNote(`${game.name} opens when you pass ${game.needLands} different ${game.needLands === 1 ? APP.landWord : APP.landsWord} with ${passMark(10)}/10 or more. You've passed ${passed}.`);
+                else setNote(`No game tickets left. Play a ${APP.landWord} and score 7/10 or more to earn 3 more.`);
               }}
               aria-label={`${game.name}${locked ? ", locked" : ""}`}
             >
@@ -919,7 +906,7 @@ function FunGames() {
               </span>
               <span className="block font-display text-lg font-semibold leading-tight">{game.name}</span>
               <span className="block text-xs font-bold text-muted">
-                {locked ? `Pass ${game.needLands} ${game.needLands === 1 ? "land" : "lands"} to open` : bestText[game.id]}
+                {locked ? `Pass ${game.needLands} ${game.needLands === 1 ? APP.landWord : APP.landsWord} to open` : bestText[game.id]}
               </span>
               <span className="fun-note text-xs text-muted">{game.note}</span>
             </button>
@@ -1571,10 +1558,10 @@ function Certificate() {
   const park = useQuiz((s) => s.park);
   return (
     <section className="mx-auto max-w-xl rounded-card border-4 border-gold bg-surface p-8 text-center">
-      <p className="text-sm font-extrabold uppercase tracking-widest text-gold">Quizy expedition</p>
-      <h2 className="mt-2 font-display text-4xl font-semibold">Trail certificate</h2>
+      <p className="text-sm font-extrabold uppercase tracking-widest text-gold">{IS_KINGS ? "King's Bible Quest" : "Quizy expedition"}</p>
+      <h2 className="mt-2 font-display text-4xl font-semibold">{IS_KINGS ? "Bible Quest certificate" : "Trail certificate"}</h2>
       <p className="mt-4 text-lg">
-        This certifies that <span className="font-extrabold">{name}</span> cleared every land.
+        This certifies that <span className="font-extrabold">{name}</span> cleared every {APP.landWord}.
       </p>
       <p className="mt-2 text-muted">
         {totalStars} stars · {coins} coins · best streak {bestStreak}
