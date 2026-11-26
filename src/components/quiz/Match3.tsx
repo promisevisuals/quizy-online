@@ -644,7 +644,7 @@ export function Match3() {
                     <TicketHint />
                   </>
                 ))}
-              {phase !== "playing" ? <MadeBy /> : null}
+              <MadeBy />
             </div>
           </div>
         )}
