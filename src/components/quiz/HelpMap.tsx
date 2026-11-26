@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { sendFeedback, useQuizSession } from "@/lib/quiz/cloud";
 import { WHATSAPP_LINK } from "@/lib/quiz/contact";
+import { APP, IS_KINGS } from "@/lib/app";
 
 const PINS = [
   { id: "play", title: "How to play", detail: "Explorer's camp", icon: Tent },
@@ -90,11 +91,11 @@ function Destination({ id, onBack }: { id: Exclude<Pin, "home">; onBack: () => v
         </>
       )}
       {id === "problem" && <NoteForm kind="problem" title="Report a problem" prompt="What happened, and which land were you in?" />}
-      {id === "idea" && <NoteForm kind="idea" title="Send an idea" prompt="What would make Quizy more fun or clearer for children?" />}
+      {id === "idea" && <NoteForm kind="idea" title="Send an idea" prompt={`What would make ${APP.name} more fun or clearer?`} />}
       {id === "family" && (
         <>
           <h3 className="font-display text-2xl font-semibold text-fg">For families</h3>
-          <p>Quizy is a learning game. Play together, talk about the explanation, and take breaks.</p>
+          <p>{APP.name} is a learning game. Play together, talk about the explanation, and take breaks.</p>
           <p>Do not type passwords, addresses, phone numbers, or other private details into feedback. Children should use a family email if an account is created.</p>
           <p>Online battle shows a display name and a score to the other players in that room, not an email address.</p>
         </>
@@ -109,9 +110,9 @@ function Destination({ id, onBack }: { id: Exclude<Pin, "home">; onBack: () => v
       {id === "terms" && (
         <>
           <h3 className="font-display text-2xl font-semibold text-fg">Terms and privacy</h3>
-          <p>Quizy is an educational game. Questions and explanations are for learning. They are not professional advice.</p>
+          <p>{APP.name} is an educational game. Questions and explanations are for learning. They are not professional advice.</p>
           <p>An account stores your explorer name, progress, and the questions you were on, so another device can continue. We do not sell that information. Email addresses are hidden from other explorers. The owner can see a masked address in the Command Center.</p>
-          <p>Copyright © 2026 Uche Promise Egbe. Quizy and its question banks are proprietary. Do not copy the banks, the name, or the brand mark without permission. Third-party music is not included in this build.</p>
+          <p>Copyright © 2026 Uche Promise Egbe. {APP.name} and its question banks are proprietary. Do not copy the banks, the name, or the brand mark without permission. Third-party music is not included in this build.</p>
         </>
       )}
     </div>
@@ -143,7 +144,7 @@ function NoteForm({ kind, title, prompt }: { kind: "problem" | "idea"; title: st
       <h3 className="font-display text-2xl font-semibold text-fg">{title}</h3>
       <p>{prompt} Leave out passwords and private details.</p>
       <p className="mt-1 text-sm">
-        Prefer to talk? <a className="font-extrabold text-primary underline" href={WHATSAPP_LINK} target="_blank" rel="noreferrer">Message Quizy on WhatsApp</a>.
+        Prefer to talk? <a className="font-extrabold text-primary underline" href={WHATSAPP_LINK} target="_blank" rel="noreferrer">Message {APP.name} on WhatsApp</a>.
       </p>
       <textarea
         value={body}

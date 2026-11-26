@@ -1891,3 +1891,58 @@ textarea {
 .match-boosters button:disabled { opacity: 0.45; }
 .match-boosters button.is-on { border: 2px solid #e8413f; background: #fff0eb; }
 .match-hint { position: absolute; bottom: 0.4rem; left: 50%; transform: translateX(-50%); border-radius: 999px; background: rgba(42, 36, 22, 0.85); padding: 0.25rem 0.8rem; font-size: 0.85rem; font-weight: 800; color: #fff; pointer-events: none; white-space: nowrap; }
+
+/* ───────── King's Bible Quest theme (html[data-app="kings"]) ───────── */
+html[data-app="kings"] {
+  --color-bg: #2a0b4d;
+  --color-surface: #fdf8ff;
+  --color-surface-2: #f1e6fb;
+  --color-fg: #24123d;
+  --color-muted: #64508a;
+  --color-primary: #5b2a9c;
+  --color-primary-fg: #fffaf1;
+  --color-gold: #c98a0c;
+  --color-gold-fg: #2c1c04;
+  --color-line: #dccbf0;
+  --font-display: "Baloo 2", "Nunito", ui-sans-serif, sans-serif;
+}
+html[data-app="kings"],
+html[data-app="kings"] body { background: #2a0b4d; }
+html[data-app="kings"] .world-bg {
+  background:
+    radial-gradient(2px 2px at 12% 18%, #fff6d6 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 32% 8%, #fff6d6 50%, transparent 51%),
+    radial-gradient(2px 2px at 58% 22%, #fff6d6 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 78% 12%, #fff6d6 50%, transparent 51%),
+    radial-gradient(2px 2px at 90% 34%, #fff6d6 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 6% 46%, #fff6d6 50%, transparent 51%),
+    radial-gradient(60% 40% at 70% 10%, rgba(255, 214, 120, 0.22), transparent 70%),
+    linear-gradient(180deg, #1f0b45 0%, #4a1c8a 45%, #8d3f9c 80%, #e08a7a 100%);
+}
+html[data-app="kings"] .world-compass { display: none; }
+html[data-app="kings"] .trail-gate,
+html[data-app="kings"] .trail-gate.is-intro {
+  background:
+    radial-gradient(40% 30% at 50% 22%, rgba(255, 220, 130, 0.35), transparent 70%),
+    linear-gradient(180deg, #1f0b45 0%, #4a1c8a 55%, #b05a8c 100%);
+}
+html[data-app="kings"] .trail-gate-card,
+html[data-app="kings"] .trail-bar { background: rgba(253, 248, 255, 0.94); }
+html[data-app="kings"] .logo-plate { background: #2a0b4d; box-shadow: 0 0 0 2px #e9b83a; }
+html[data-app="kings"] .expedition-app .screen-in {
+  border-color: rgba(233, 184, 58, 0.55);
+  background-color: rgba(253, 248, 255, 0.96);
+  background-image:
+    radial-gradient(circle at 8% 0%, rgba(255, 255, 255, 0.9), transparent 26%),
+    radial-gradient(circle at 100% 100%, rgba(155, 92, 220, 0.14), transparent 34%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.85) inset, 0 18px 40px rgba(20, 6, 40, 0.35);
+}
+html[data-app="kings"] .land-spotlight { background: linear-gradient(180deg, #fffdff, #f3e8ff); }
+html[data-app="kings"] .land-bubble.is-picked,
+html[data-app="kings"] .trail-tab.is-active,
+html[data-app="kings"] .trail-ring > span { background: #fdf8ff; }
+html[data-app="kings"] .trail-ring { background: conic-gradient(var(--color-gold) var(--pct), #e6d6f7 0); }
+html[data-app="kings"] .land-emblem.is-small { box-shadow: 0 0 0 2px #fff, 0 0 0 3px #e9b83a; }
+html[data-app="kings"] .app-footer-credit { background: rgba(253, 248, 255, 0.88); }
+html[data-app="kings"] .pv-credit { color: rgba(36, 18, 61, 0.66); }
+html[data-app="kings"] .scenic-banner img { object-position: center 70%; }

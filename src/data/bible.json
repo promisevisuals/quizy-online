@@ -1,0 +1,6225 @@
+{
+ "lands": [
+  {
+   "id": "creation",
+   "name": "In the Beginning",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "creation-k1",
+     "q": "Who made the heavens and the earth?",
+     "opts": [
+      "Adam",
+      "Moses",
+      "God",
+      "Noah"
+     ],
+     "a": 2,
+     "exp": "“In the beginning God created the heaven and the earth.” (Genesis 1:1)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-k2",
+     "q": "What did God make on the very first day?",
+     "opts": [
+      "Animals",
+      "People",
+      "Trees",
+      "Light"
+     ],
+     "a": 3,
+     "exp": "God said, “Let there be light”: and there was light. (Genesis 1:3–5)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-k3",
+     "q": "On which day did God rest?",
+     "opts": [
+      "The first day",
+      "The seventh day",
+      "The tenth day",
+      "The third day"
+     ],
+     "a": 1,
+     "exp": "God rested on the seventh day and blessed it. (Genesis 2:2–3)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-k4",
+     "q": "Who was the first man God made?",
+     "opts": [
+      "David",
+      "Abraham",
+      "Adam",
+      "Noah"
+     ],
+     "a": 2,
+     "exp": "God formed man from the dust and called him Adam. (Genesis 2:7, 2:20)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-k5",
+     "q": "What was the name of the first woman?",
+     "opts": [
+      "Mary",
+      "Eve",
+      "Sarah",
+      "Ruth"
+     ],
+     "a": 1,
+     "exp": "Adam called his wife Eve, the mother of all living. (Genesis 3:20)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-k6",
+     "q": "In which garden did Adam and Eve live?",
+     "opts": [
+      "Babylon",
+      "Jericho",
+      "Eden",
+      "Gethsemane"
+     ],
+     "a": 2,
+     "exp": "God planted a garden eastward in Eden. (Genesis 2:8)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-k7",
+     "q": "Which animal tricked Eve in the garden?",
+     "opts": [
+      "A lion",
+      "A goat",
+      "A fox",
+      "A serpent"
+     ],
+     "a": 3,
+     "exp": "The serpent was more subtil than any beast of the field. (Genesis 3:1)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-k8",
+     "q": "Who built a big ark to save his family from the flood?",
+     "opts": [
+      "Peter",
+      "Noah",
+      "Jonah",
+      "Moses"
+     ],
+     "a": 1,
+     "exp": "God told Noah, “Make thee an ark of gopher wood.” (Genesis 6:14)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-k9",
+     "q": "How did the animals go into the ark?",
+     "opts": [
+      "One by one",
+      "Ten by ten",
+      "Two by two",
+      "In a big crowd"
+     ],
+     "a": 2,
+     "exp": "They went in two and two unto Noah into the ark. (Genesis 7:9)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-k10",
+     "q": "What did God put in the sky as a promise after the flood?",
+     "opts": [
+      "A star",
+      "A cloud",
+      "The moon",
+      "A rainbow"
+     ],
+     "a": 3,
+     "exp": "God set His bow in the cloud as a sign of His promise. (Genesis 9:13)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-k11",
+     "q": "Which bird came back to Noah with an olive leaf?",
+     "opts": [
+      "A sparrow",
+      "A dove",
+      "A raven",
+      "An eagle"
+     ],
+     "a": 1,
+     "exp": "The dove came back with an olive leaf in her mouth. (Genesis 8:11)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-k12",
+     "q": "Who were Adam and Eve's first two sons?",
+     "opts": [
+      "James and John",
+      "Jacob and Esau",
+      "Peter and Andrew",
+      "Cain and Abel"
+     ],
+     "a": 3,
+     "exp": "Eve bare Cain, and then his brother Abel. (Genesis 4:1–2)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-g1",
+     "q": "For how many days and nights did it rain in the flood?",
+     "opts": [
+      "100",
+      "12",
+      "40",
+      "7"
+     ],
+     "a": 2,
+     "exp": "The rain was upon the earth forty days and forty nights. (Genesis 7:12)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-g2",
+     "q": "On which mountains did Noah's ark come to rest?",
+     "opts": [
+      "Sinai",
+      "Zion",
+      "Ararat",
+      "Carmel"
+     ],
+     "a": 2,
+     "exp": "The ark rested upon the mountains of Ararat. (Genesis 8:4)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-g3",
+     "q": "What were the names of Noah's three sons?",
+     "opts": [
+      "Cain, Abel and Seth",
+      "Abram, Nahor and Haran",
+      "Reuben, Simeon and Levi",
+      "Shem, Ham and Japheth"
+     ],
+     "a": 3,
+     "exp": "Noah begat three sons: Shem, Ham, and Japheth. (Genesis 6:10)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-g4",
+     "q": "On which day did God make the sun, moon and stars?",
+     "opts": [
+      "The fourth day",
+      "The first day",
+      "The second day",
+      "The sixth day"
+     ],
+     "a": 0,
+     "exp": "The greater light, the lesser light and the stars were made on the fourth day. (Genesis 1:14–19)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-g5",
+     "q": "What did Abel offer to God?",
+     "opts": [
+      "Firstlings of his flock",
+      "Gold and silver",
+      "Fruit of the ground",
+      "Bread and wine"
+     ],
+     "a": 0,
+     "exp": "Abel brought the firstlings of his flock; Cain brought fruit of the ground. (Genesis 4:3–4)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-g6",
+     "q": "Which son of Adam was born after Abel died?",
+     "opts": [
+      "Enos",
+      "Seth",
+      "Enoch",
+      "Lamech"
+     ],
+     "a": 1,
+     "exp": "Eve bare a son and called his name Seth. (Genesis 4:25)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-g7",
+     "q": "Who “walked with God: and he was not; for God took him”?",
+     "opts": [
+      "Noah",
+      "Enoch",
+      "Methuselah",
+      "Elijah"
+     ],
+     "a": 1,
+     "exp": "Enoch walked with God, and God took him. (Genesis 5:24)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-g8",
+     "q": "How old was Methuselah when he died, the longest life in the Bible?",
+     "opts": [
+      "1,000 years",
+      "930 years",
+      "777 years",
+      "969 years"
+     ],
+     "a": 3,
+     "exp": "All the days of Methuselah were nine hundred sixty and nine years. (Genesis 5:27)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-g9",
+     "q": "Where did God confuse the people's language?",
+     "opts": [
+      "Babel",
+      "Eden",
+      "Ur",
+      "Nineveh"
+     ],
+     "a": 0,
+     "exp": "Therefore is the name of it called Babel. (Genesis 11:9)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-g10",
+     "q": "Who was called “a mighty hunter before the LORD”?",
+     "opts": [
+      "Esau",
+      "Nimrod",
+      "Lamech",
+      "Ishmael"
+     ],
+     "a": 1,
+     "exp": "Nimrod was a mighty hunter before the LORD. (Genesis 10:9)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-g11",
+     "q": "How many people were saved in Noah's ark?",
+     "opts": [
+      "Forty",
+      "Two",
+      "Twelve",
+      "Eight"
+     ],
+     "a": 3,
+     "exp": "Few, that is, eight souls were saved by water. (1 Peter 3:20)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-g12",
+     "q": "What wood was Noah told to build the ark from?",
+     "opts": [
+      "Acacia wood",
+      "Gopher wood",
+      "Olive wood",
+      "Cedar wood"
+     ],
+     "a": 1,
+     "exp": "Make thee an ark of gopher wood. (Genesis 6:14)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "creation-g13",
+     "q": "How old was Noah when the flood came?",
+     "opts": [
+      "120 years",
+      "600 years",
+      "500 years",
+      "950 years"
+     ],
+     "a": 1,
+     "exp": "Noah was six hundred years old when the flood of waters was upon the earth. (Genesis 7:6)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "patriarchs",
+   "name": "Abraham to Joseph",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "patriarchs-k1",
+     "q": "God promised Abraham children as many as the…",
+     "opts": [
+      "Birds in the air",
+      "Trees in the forest",
+      "Fish in the sea",
+      "Stars in the sky"
+     ],
+     "a": 3,
+     "exp": "Look now toward heaven, and tell the stars… So shall thy seed be. (Genesis 15:5)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-k2",
+     "q": "What was the name of Abraham and Sarah's son?",
+     "opts": [
+      "Isaac",
+      "Jacob",
+      "Samuel",
+      "Joseph"
+     ],
+     "a": 0,
+     "exp": "Sarah bare Abraham a son, and he called him Isaac. (Genesis 21:2–3)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-k3",
+     "q": "Who had a coat of many colours?",
+     "opts": [
+      "Joseph",
+      "David",
+      "Moses",
+      "Daniel"
+     ],
+     "a": 0,
+     "exp": "Israel made Joseph a coat of many colours. (Genesis 37:3)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-k4",
+     "q": "What did Joseph's brothers do to him?",
+     "opts": [
+      "Gave him a party",
+      "Made him king",
+      "Built him a house",
+      "Sold him"
+     ],
+     "a": 3,
+     "exp": "They sold Joseph to the Ishmeelites for twenty pieces of silver. (Genesis 37:28)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-k5",
+     "q": "Which twin brother sold his birthright for a bowl of stew?",
+     "opts": [
+      "Jacob",
+      "Esau",
+      "Abel",
+      "Isaac"
+     ],
+     "a": 1,
+     "exp": "Esau sold his birthright unto Jacob for bread and pottage. (Genesis 25:33–34)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-k6",
+     "q": "Jacob dreamed of a ladder reaching up to heaven. Who went up and down on it?",
+     "opts": [
+      "Kings",
+      "Birds",
+      "Shepherds",
+      "Angels"
+     ],
+     "a": 3,
+     "exp": "The angels of God were ascending and descending on it. (Genesis 28:12)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-k7",
+     "q": "How many sons did Jacob have?",
+     "opts": [
+      "12",
+      "7",
+      "10",
+      "3"
+     ],
+     "a": 0,
+     "exp": "Now the sons of Jacob were twelve. (Genesis 35:22)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-k8",
+     "q": "In which land did Joseph become a great ruler?",
+     "opts": [
+      "Greece",
+      "Rome",
+      "Egypt",
+      "Babylon"
+     ],
+     "a": 2,
+     "exp": "Pharaoh set Joseph over all the land of Egypt. (Genesis 41:41)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-k9",
+     "q": "How old was Abraham when Isaac was born?",
+     "opts": [
+      "50",
+      "70",
+      "100",
+      "20"
+     ],
+     "a": 2,
+     "exp": "Abraham was an hundred years old when Isaac was born. (Genesis 21:5)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-k10",
+     "q": "What did God give Abraham to offer instead of Isaac?",
+     "opts": [
+      "A lamb",
+      "A goat",
+      "A ram",
+      "A dove"
+     ],
+     "a": 2,
+     "exp": "Abraham looked, and behold a ram caught in a thicket by his horns. (Genesis 22:13)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-k11",
+     "q": "Joseph could tell what dreams meant. Whose dreams did he explain in prison?",
+     "opts": [
+      "Two shepherds",
+      "Two kings",
+      "The butler and the baker",
+      "Two soldiers"
+     ],
+     "a": 2,
+     "exp": "Joseph explained the dreams of the butler and the baker. (Genesis 40)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-g1",
+     "q": "What was Abraham's name before God changed it?",
+     "opts": [
+      "Abram",
+      "Ahab",
+      "Abiram",
+      "Aram"
+     ],
+     "a": 0,
+     "exp": "Neither shall thy name any more be called Abram, but… Abraham. (Genesis 17:5)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-g2",
+     "q": "From which city did Abram set out?",
+     "opts": [
+      "Damascus",
+      "Babylon",
+      "Hebron",
+      "Ur of the Chaldees"
+     ],
+     "a": 3,
+     "exp": "They went forth from Ur of the Chaldees, to go into the land of Canaan. (Genesis 11:31)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-g3",
+     "q": "Who was Isaac's wife?",
+     "opts": [
+      "Rebekah",
+      "Rachel",
+      "Leah",
+      "Sarah"
+     ],
+     "a": 0,
+     "exp": "Isaac took Rebekah, and she became his wife. (Genesis 24:67)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-g4",
+     "q": "What new name did God give Jacob after he wrestled until dawn?",
+     "opts": [
+      "Israel",
+      "Joshua",
+      "Benjamin",
+      "Judah"
+     ],
+     "a": 0,
+     "exp": "Thy name shall be called no more Jacob, but Israel. (Genesis 32:28)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-g5",
+     "q": "Which two sisters did Jacob marry?",
+     "opts": [
+      "Leah and Rachel",
+      "Ruth and Orpah",
+      "Sarah and Hagar",
+      "Mary and Martha"
+     ],
+     "a": 0,
+     "exp": "Laban gave Jacob Leah and then Rachel. (Genesis 29)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-g6",
+     "q": "Who was Joseph's younger full brother?",
+     "opts": [
+      "Dan",
+      "Reuben",
+      "Benjamin",
+      "Judah"
+     ],
+     "a": 2,
+     "exp": "Rachel's sons were Joseph and Benjamin. (Genesis 35:24)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-g7",
+     "q": "What did Pharaoh dream about, which Joseph explained?",
+     "opts": [
+      "A burning bush",
+      "A ladder to heaven",
+      "Seven fat and seven thin cows",
+      "Twelve stars bowing"
+     ],
+     "a": 2,
+     "exp": "Seven well favoured kine and seven ill favoured kine. (Genesis 41:1–7)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-g8",
+     "q": "For how many pieces of silver was Joseph sold?",
+     "opts": [
+      "Ten",
+      "Fifty",
+      "Twenty",
+      "Thirty"
+     ],
+     "a": 2,
+     "exp": "They sold Joseph for twenty pieces of silver. (Genesis 37:28)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-g9",
+     "q": "What happened to Lot's wife when she looked back at Sodom?",
+     "opts": [
+      "She became a pillar of salt",
+      "She turned to stone",
+      "She was carried away",
+      "She went blind"
+     ],
+     "a": 0,
+     "exp": "She became a pillar of salt. (Genesis 19:26)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-g10",
+     "q": "Which priest-king of Salem blessed Abram with bread and wine?",
+     "opts": [
+      "Jethro",
+      "Abimelech",
+      "Balaam",
+      "Melchizedek"
+     ],
+     "a": 3,
+     "exp": "Melchizedek king of Salem brought forth bread and wine. (Genesis 14:18)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-g11",
+     "q": "Who was the mother of Ishmael?",
+     "opts": [
+      "Hagar",
+      "Sarah",
+      "Bilhah",
+      "Keturah"
+     ],
+     "a": 0,
+     "exp": "Hagar bare Abram a son: and Abram called his son's name Ishmael. (Genesis 16:15)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "patriarchs-g12",
+     "q": "In which cave were Abraham and Sarah buried?",
+     "opts": [
+      "Bethel",
+      "Machpelah",
+      "Engedi",
+      "Adullam"
+     ],
+     "a": 1,
+     "exp": "Abraham buried Sarah in the cave of the field of Machpelah. (Genesis 23:19)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "exodus",
+   "name": "Moses & the Exodus",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "exodus-k1",
+     "q": "Where was baby Moses hidden?",
+     "opts": [
+      "In a basket by the river",
+      "In a cave",
+      "In a tree",
+      "Under a bed"
+     ],
+     "a": 0,
+     "exp": "His mother laid him in an ark of bulrushes by the river's brink. (Exodus 2:3)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-k2",
+     "q": "Who found baby Moses in the river?",
+     "opts": [
+      "Pharaoh's daughter",
+      "A shepherd",
+      "A fisherman",
+      "A soldier"
+     ],
+     "a": 0,
+     "exp": "The daughter of Pharaoh came down to wash and saw the ark. (Exodus 2:5)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-k3",
+     "q": "God spoke to Moses from a bush that was…",
+     "opts": [
+      "Covered in snow",
+      "Made of gold",
+      "Full of birds",
+      "On fire but not burnt up"
+     ],
+     "a": 3,
+     "exp": "The bush burned with fire, and the bush was not consumed. (Exodus 3:2)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-k4",
+     "q": "What sea did God part so the Israelites could walk through?",
+     "opts": [
+      "The Dead Sea",
+      "The Sea of Galilee",
+      "The Great Sea",
+      "The Red Sea"
+     ],
+     "a": 3,
+     "exp": "The children of Israel went into the midst of the sea upon the dry ground. (Exodus 14:22)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-k5",
+     "q": "What food fell from heaven in the wilderness?",
+     "opts": [
+      "Rice",
+      "Manna",
+      "Fish",
+      "Pizza"
+     ],
+     "a": 1,
+     "exp": "The house of Israel called the name thereof Manna. (Exodus 16:31)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-k6",
+     "q": "How many commandments did God give Moses?",
+     "opts": [
+      "Twelve",
+      "Three",
+      "Seven",
+      "Ten"
+     ],
+     "a": 3,
+     "exp": "He wrote upon the tables the words of the covenant, the ten commandments. (Exodus 34:28)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-k7",
+     "q": "On which mountain did God give the Ten Commandments?",
+     "opts": [
+      "Mount Ararat",
+      "Mount Carmel",
+      "Mount of Olives",
+      "Mount Sinai"
+     ],
+     "a": 3,
+     "exp": "The LORD came down upon mount Sinai. (Exodus 19:20)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-k8",
+     "q": "Who was Moses' brother who spoke for him?",
+     "opts": [
+      "Caleb",
+      "Jethro",
+      "Joshua",
+      "Aaron"
+     ],
+     "a": 3,
+     "exp": "Is not Aaron the Levite thy brother? He shall be thy spokesman. (Exodus 4:14–16)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-k9",
+     "q": "How many plagues did God send on Egypt?",
+     "opts": [
+      "Three",
+      "Seven",
+      "Twelve",
+      "Ten"
+     ],
+     "a": 3,
+     "exp": "Egypt suffered ten plagues, ending with the death of the firstborn. (Exodus 7–12)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-k10",
+     "q": "What did the Israelites make and worship while Moses was on the mountain?",
+     "opts": [
+      "A golden calf",
+      "A wooden horse",
+      "A stone lion",
+      "A silver snake"
+     ],
+     "a": 0,
+     "exp": "Aaron made it a molten calf. (Exodus 32:4)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-k11",
+     "q": "What did Moses' staff turn into in front of Pharaoh?",
+     "opts": [
+      "A serpent",
+      "A tree",
+      "A sword",
+      "A bird"
+     ],
+     "a": 0,
+     "exp": "Aaron cast down his rod… and it became a serpent. (Exodus 7:10)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-g1",
+     "q": "What was the first plague on Egypt?",
+     "opts": [
+      "Frogs",
+      "Locusts",
+      "Water turned to blood",
+      "Darkness"
+     ],
+     "a": 2,
+     "exp": "All the waters that were in the river were turned to blood. (Exodus 7:20)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-g2",
+     "q": "What was the last and worst plague?",
+     "opts": [
+      "Death of the firstborn",
+      "Boils",
+      "Hail",
+      "Lice"
+     ],
+     "a": 0,
+     "exp": "The LORD smote all the firstborn in the land of Egypt. (Exodus 12:29)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-g3",
+     "q": "Who was Moses' father-in-law?",
+     "opts": [
+      "Aaron",
+      "Jethro",
+      "Laban",
+      "Hur"
+     ],
+     "a": 1,
+     "exp": "Moses kept the flock of Jethro his father in law. (Exodus 3:1)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-g4",
+     "q": "For how many years did Israel wander in the wilderness?",
+     "opts": [
+      "70",
+      "400",
+      "40",
+      "10"
+     ],
+     "a": 2,
+     "exp": "Your children shall wander in the wilderness forty years. (Numbers 14:33)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-g5",
+     "q": "Who held up Moses' hands during the battle with Amalek?",
+     "opts": [
+      "Eleazar and Ithamar",
+      "Aaron and Hur",
+      "Joshua and Caleb",
+      "Nadab and Abihu"
+     ],
+     "a": 1,
+     "exp": "Aaron and Hur stayed up his hands. (Exodus 17:12)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-g6",
+     "q": "What name did God give Himself to Moses at the burning bush?",
+     "opts": [
+      "The Ancient of Days",
+      "The Holy One",
+      "The Most High",
+      "I AM THAT I AM"
+     ],
+     "a": 3,
+     "exp": "God said unto Moses, I AM THAT I AM. (Exodus 3:14)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-g7",
+     "q": "Which two spies gave a good report of Canaan?",
+     "opts": [
+      "Nadab and Abihu",
+      "Joshua and Caleb",
+      "Eldad and Medad",
+      "Aaron and Hur"
+     ],
+     "a": 1,
+     "exp": "Joshua and Caleb said the land is an exceeding good land. (Numbers 14:6–7)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-g8",
+     "q": "What did Moses lift up so that people bitten by serpents could live?",
+     "opts": [
+      "A golden calf",
+      "A bronze serpent",
+      "His staff",
+      "The ark"
+     ],
+     "a": 1,
+     "exp": "Moses made a serpent of brass, and put it upon a pole. (Numbers 21:9)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-g9",
+     "q": "Whose donkey spoke to him on the road?",
+     "opts": [
+      "Balaam",
+      "Balak",
+      "Gideon",
+      "Korah"
+     ],
+     "a": 0,
+     "exp": "The LORD opened the mouth of the ass. (Numbers 22:28)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-g10",
+     "q": "What feast remembers the night the Lord passed over Israel's houses?",
+     "opts": [
+      "Tabernacles",
+      "Passover",
+      "Purim",
+      "Pentecost"
+     ],
+     "a": 1,
+     "exp": "It is the LORD's passover. (Exodus 12:11)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-g11",
+     "q": "From which mountain did Moses see the Promised Land before he died?",
+     "opts": [
+      "Mount Sinai",
+      "Mount Nebo",
+      "Mount Tabor",
+      "Mount Hermon"
+     ],
+     "a": 1,
+     "exp": "Moses went up unto the mountain of Nebo… and the LORD shewed him all the land. (Deuteronomy 34:1)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "exodus-g12",
+     "q": "What were the two stone tablets kept inside?",
+     "opts": [
+      "A clay jar",
+      "Pharaoh's palace",
+      "The ark of the covenant",
+      "The temple tower"
+     ],
+     "a": 2,
+     "exp": "Thou shalt put into the ark the testimony which I shall give thee. (Exodus 25:16)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "kings",
+   "name": "Judges & Kings",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "kings-k1",
+     "q": "Which city's walls fell down when the people shouted?",
+     "opts": [
+      "Babylon",
+      "Nineveh",
+      "Jericho",
+      "Jerusalem"
+     ],
+     "a": 2,
+     "exp": "The people shouted… and the wall fell down flat. (Joshua 6:20)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-k2",
+     "q": "Who beat the giant Goliath?",
+     "opts": [
+      "Saul",
+      "David",
+      "Jonathan",
+      "Samson"
+     ],
+     "a": 1,
+     "exp": "David prevailed over the Philistine with a sling and with a stone. (1 Samuel 17:50)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-k3",
+     "q": "What did David use to beat Goliath?",
+     "opts": [
+      "A spear",
+      "A bow and arrow",
+      "A sword",
+      "A sling and a stone"
+     ],
+     "a": 3,
+     "exp": "David took a stone, and slang it, and smote the Philistine. (1 Samuel 17:49)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-k4",
+     "q": "Which strong man's power was linked to his long hair?",
+     "opts": [
+      "Gideon",
+      "Goliath",
+      "Samson",
+      "Joshua"
+     ],
+     "a": 2,
+     "exp": "If I be shaven, then my strength will go from me. (Judges 16:17)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-k5",
+     "q": "What job did young David do before he became king?",
+     "opts": [
+      "Shepherd",
+      "Fisherman",
+      "Carpenter",
+      "Baker"
+     ],
+     "a": 0,
+     "exp": "David kept his father's sheep. (1 Samuel 17:15)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-k6",
+     "q": "Which wise king built a great temple for God?",
+     "opts": [
+      "Saul",
+      "Herod",
+      "Solomon",
+      "Ahab"
+     ],
+     "a": 2,
+     "exp": "Solomon built the house of the LORD. (1 Kings 6)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-k7",
+     "q": "Who was the first king of Israel?",
+     "opts": [
+      "Solomon",
+      "David",
+      "Samuel",
+      "Saul"
+     ],
+     "a": 3,
+     "exp": "Samuel anointed Saul to be captain over Israel. (1 Samuel 10:1)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-k8",
+     "q": "Young Samuel heard God calling him at night. What did he answer?",
+     "opts": [
+      "Leave me alone",
+      "Speak; for thy servant heareth",
+      "Ask someone else",
+      "I am too young"
+     ],
+     "a": 1,
+     "exp": "Samuel answered, Speak; for thy servant heareth. (1 Samuel 3:10)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-k9",
+     "q": "What did Solomon ask God for?",
+     "opts": [
+      "Money",
+      "Wisdom",
+      "A long life",
+      "A big army"
+     ],
+     "a": 1,
+     "exp": "Give therefore thy servant an understanding heart. (1 Kings 3:9)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-k10",
+     "q": "David played music for King Saul. What instrument did he play?",
+     "opts": [
+      "A harp",
+      "A drum",
+      "A trumpet",
+      "A flute"
+     ],
+     "a": 0,
+     "exp": "David took an harp, and played with his hand. (1 Samuel 16:23)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-k11",
+     "q": "Who was David's best friend?",
+     "opts": [
+      "Goliath",
+      "Nathan",
+      "Absalom",
+      "Jonathan"
+     ],
+     "a": 3,
+     "exp": "The soul of Jonathan was knit with the soul of David. (1 Samuel 18:1)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-g1",
+     "q": "Who led Israel into the Promised Land after Moses?",
+     "opts": [
+      "Caleb",
+      "Joshua",
+      "Aaron",
+      "Gideon"
+     ],
+     "a": 1,
+     "exp": "Moses my servant is dead; now therefore arise… thou, and all this people. (Joshua 1:2)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-g2",
+     "q": "With how many men did Gideon defeat the Midianites?",
+     "opts": [
+      "12",
+      "3,000",
+      "300",
+      "10,000"
+     ],
+     "a": 2,
+     "exp": "By the three hundred men that lapped will I save you. (Judges 7:7)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-g3",
+     "q": "Who was the only woman judge of Israel named in the book of Judges?",
+     "opts": [
+      "Miriam",
+      "Jael",
+      "Deborah",
+      "Hannah"
+     ],
+     "a": 2,
+     "exp": "Deborah, a prophetess… judged Israel at that time. (Judges 4:4)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-g4",
+     "q": "Who said to Naomi, “Whither thou goest, I will go”?",
+     "opts": [
+      "Esther",
+      "Ruth",
+      "Orpah",
+      "Hannah"
+     ],
+     "a": 1,
+     "exp": "Ruth said, Intreat me not to leave thee… whither thou goest, I will go. (Ruth 1:16)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-g5",
+     "q": "Whom did Ruth marry?",
+     "opts": [
+      "Elimelech",
+      "Jesse",
+      "Boaz",
+      "Obed"
+     ],
+     "a": 2,
+     "exp": "So Boaz took Ruth, and she was his wife. (Ruth 4:13)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-g6",
+     "q": "Who anointed David as king while he was still a boy?",
+     "opts": [
+      "Eli",
+      "Nathan",
+      "Saul",
+      "Samuel"
+     ],
+     "a": 3,
+     "exp": "Samuel took the horn of oil, and anointed him. (1 Samuel 16:13)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-g7",
+     "q": "Which prophet told David the story of the poor man's lamb?",
+     "opts": [
+      "Nathan",
+      "Elijah",
+      "Samuel",
+      "Gad"
+     ],
+     "a": 0,
+     "exp": "The LORD sent Nathan unto David… Thou art the man. (2 Samuel 12:1–7)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-g8",
+     "q": "Which son of David rebelled and was caught by his hair in a tree?",
+     "opts": [
+      "Amnon",
+      "Adonijah",
+      "Absalom",
+      "Solomon"
+     ],
+     "a": 2,
+     "exp": "His head caught hold of the oak. (2 Samuel 18:9)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-g9",
+     "q": "Which queen visited Solomon to test him with hard questions?",
+     "opts": [
+      "Jezebel",
+      "Esther",
+      "Vashti",
+      "The queen of Sheba"
+     ],
+     "a": 3,
+     "exp": "She came to prove him with hard questions. (1 Kings 10:1)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-g10",
+     "q": "How tall was Goliath, according to the King James Version?",
+     "opts": [
+      "Ten cubits",
+      "Six cubits and a span",
+      "Twelve feet exactly",
+      "Four cubits"
+     ],
+     "a": 1,
+     "exp": "Goliath, of Gath, whose height was six cubits and a span. (1 Samuel 17:4)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-g11",
+     "q": "After Solomon, the kingdom split. What was the northern kingdom called?",
+     "opts": [
+      "Edom",
+      "Moab",
+      "Israel",
+      "Judah"
+     ],
+     "a": 2,
+     "exp": "Ten tribes followed Jeroboam as Israel; Judah stayed with Rehoboam. (1 Kings 12)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "kings-g12",
+     "q": "Which people were Samson's great enemies?",
+     "opts": [
+      "The Egyptians",
+      "The Philistines",
+      "The Moabites",
+      "The Amalekites"
+     ],
+     "a": 1,
+     "exp": "The lords of the Philistines came up unto Delilah. (Judges 16:5)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "prophets",
+   "name": "Prophets & Heroes",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "prophets-k1",
+     "q": "Who was swallowed by a great fish?",
+     "opts": [
+      "Jonah",
+      "Paul",
+      "Peter",
+      "Noah"
+     ],
+     "a": 0,
+     "exp": "The LORD had prepared a great fish to swallow up Jonah. (Jonah 1:17)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-k2",
+     "q": "How long was Jonah inside the fish?",
+     "opts": [
+      "Forty days",
+      "A whole year",
+      "Three days and three nights",
+      "One hour"
+     ],
+     "a": 2,
+     "exp": "Jonah was in the belly of the fish three days and three nights. (Jonah 1:17)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-k3",
+     "q": "Who was thrown into a den of lions but was not hurt?",
+     "opts": [
+      "Daniel",
+      "David",
+      "Samson",
+      "Joseph"
+     ],
+     "a": 0,
+     "exp": "My God hath sent his angel, and hath shut the lions' mouths. (Daniel 6:22)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-k4",
+     "q": "Which birds brought food to Elijah by the brook?",
+     "opts": [
+      "Owls",
+      "Ravens",
+      "Eagles",
+      "Doves"
+     ],
+     "a": 1,
+     "exp": "The ravens brought him bread and flesh in the morning. (1 Kings 17:6)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-k5",
+     "q": "How did Elijah go up to heaven?",
+     "opts": [
+      "Up a ladder",
+      "On a cloud of birds",
+      "On a camel",
+      "In a whirlwind with a chariot of fire"
+     ],
+     "a": 3,
+     "exp": "Elijah went up by a whirlwind into heaven. (2 Kings 2:11)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-k6",
+     "q": "Which three friends were thrown into a fiery furnace?",
+     "opts": [
+      "Peter, James and John",
+      "Shem, Ham and Japheth",
+      "Moses, Aaron and Hur",
+      "Shadrach, Meshach and Abednego"
+     ],
+     "a": 3,
+     "exp": "They did not burn; a fourth man walked with them in the fire. (Daniel 3:25)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-k7",
+     "q": "Why was Daniel thrown to the lions?",
+     "opts": [
+      "He ran away",
+      "He kept praying to God",
+      "He fought the king",
+      "He stole food"
+     ],
+     "a": 1,
+     "exp": "Daniel kneeled three times a day and prayed. (Daniel 6:10)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-k8",
+     "q": "Which brave queen saved her people from wicked Haman?",
+     "opts": [
+      "Sheba",
+      "Vashti",
+      "Jezebel",
+      "Esther"
+     ],
+     "a": 3,
+     "exp": "Who knoweth whether thou art come to the kingdom for such a time as this? (Esther 4:14)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-k9",
+     "q": "To which city did God send Jonah?",
+     "opts": [
+      "Jerusalem",
+      "Rome",
+      "Bethlehem",
+      "Nineveh"
+     ],
+     "a": 3,
+     "exp": "Arise, go to Nineveh, that great city. (Jonah 1:2)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-k10",
+     "q": "Who took Elijah's place as prophet?",
+     "opts": [
+      "Jonah",
+      "Samuel",
+      "Elisha",
+      "Isaiah"
+     ],
+     "a": 2,
+     "exp": "Elijah cast his mantle upon Elisha. (1 Kings 19:19)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-k11",
+     "q": "Which king built a big gold statue and said everyone must bow down to it?",
+     "opts": [
+      "Herod",
+      "Pharaoh",
+      "Solomon",
+      "Nebuchadnezzar"
+     ],
+     "a": 3,
+     "exp": "Nebuchadnezzar the king made an image of gold. (Daniel 3:1)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-g1",
+     "q": "On which mountain did Elijah face the prophets of Baal?",
+     "opts": [
+      "Mount Nebo",
+      "Mount Sinai",
+      "Mount Zion",
+      "Mount Carmel"
+     ],
+     "a": 3,
+     "exp": "Gather to me all Israel unto mount Carmel. (1 Kings 18:19)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-g2",
+     "q": "Which wicked queen was married to King Ahab?",
+     "opts": [
+      "Athaliah",
+      "Jezebel",
+      "Michal",
+      "Vashti"
+     ],
+     "a": 1,
+     "exp": "Ahab took to wife Jezebel the daughter of Ethbaal. (1 Kings 16:31)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-g3",
+     "q": "Which Syrian captain was healed of leprosy by washing in the Jordan seven times?",
+     "opts": [
+      "Naaman",
+      "Nahor",
+      "Nabal",
+      "Nadab"
+     ],
+     "a": 0,
+     "exp": "His flesh came again like unto the flesh of a little child. (2 Kings 5:14)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-g4",
+     "q": "What words appeared on the wall at Belshazzar's feast?",
+     "opts": [
+      "Mene, Mene, Tekel, Upharsin",
+      "Repent and believe",
+      "Let my people go",
+      "Holy, Holy, Holy"
+     ],
+     "a": 0,
+     "exp": "This is the writing that was written: MENE, MENE, TEKEL, UPHARSIN. (Daniel 5:25)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-g5",
+     "q": "Which prophet saw a valley of dry bones come to life?",
+     "opts": [
+      "Isaiah",
+      "Ezekiel",
+      "Amos",
+      "Jeremiah"
+     ],
+     "a": 1,
+     "exp": "O ye dry bones, hear the word of the LORD. (Ezekiel 37:4)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-g6",
+     "q": "Which prophet is called “the weeping prophet”?",
+     "opts": [
+      "Hosea",
+      "Isaiah",
+      "Jeremiah",
+      "Joel"
+     ],
+     "a": 2,
+     "exp": "Oh that… mine eyes [were] a fountain of tears. (Jeremiah 9:1)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-g7",
+     "q": "Who rebuilt the walls of Jerusalem in 52 days?",
+     "opts": [
+      "Zerubbabel",
+      "Nehemiah",
+      "Ezra",
+      "Haggai"
+     ],
+     "a": 1,
+     "exp": "So the wall was finished… in fifty and two days. (Nehemiah 6:15)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-g8",
+     "q": "Which prophet wrote, “unto us a child is born, unto us a son is given”?",
+     "opts": [
+      "Micah",
+      "Isaiah",
+      "Daniel",
+      "Malachi"
+     ],
+     "a": 1,
+     "exp": "For unto us a child is born, unto us a son is given. (Isaiah 9:6)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-g9",
+     "q": "Which prophet foretold that the Messiah would be born in Bethlehem?",
+     "opts": [
+      "Micah",
+      "Obadiah",
+      "Joel",
+      "Hosea"
+     ],
+     "a": 0,
+     "exp": "But thou, Bethlehem Ephratah… out of thee shall he come forth. (Micah 5:2)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-g10",
+     "q": "What was Daniel's Babylonian name?",
+     "opts": [
+      "Abednego",
+      "Belshazzar",
+      "Shadrach",
+      "Belteshazzar"
+     ],
+     "a": 3,
+     "exp": "Unto Daniel he gave the name of Belteshazzar. (Daniel 1:7)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-g11",
+     "q": "What was Esther's Hebrew name?",
+     "opts": [
+      "Huldah",
+      "Hadassah",
+      "Hagar",
+      "Hannah"
+     ],
+     "a": 1,
+     "exp": "He brought up Hadassah, that is, Esther. (Esther 2:7)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-g12",
+     "q": "What plant did God grow to shade Jonah outside Nineveh?",
+     "opts": [
+      "A fig tree",
+      "A vine",
+      "A gourd",
+      "A palm"
+     ],
+     "a": 2,
+     "exp": "The LORD God prepared a gourd… that it might be a shadow over his head. (Jonah 4:6)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "prophets-g13",
+     "q": "For how many years did Jeremiah say Judah would serve Babylon?",
+     "opts": [
+      "Seven",
+      "Seventy",
+      "Forty",
+      "Four hundred"
+     ],
+     "a": 1,
+     "exp": "These nations shall serve the king of Babylon seventy years. (Jeremiah 25:11)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "psalms",
+   "name": "Psalms & Proverbs",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "psalms-k1",
+     "q": "Finish the verse: “The LORD is my…”",
+     "opts": [
+      "Friend",
+      "Teacher",
+      "Shepherd",
+      "King"
+     ],
+     "a": 2,
+     "exp": "The LORD is my shepherd; I shall not want. (Psalm 23:1)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-k2",
+     "q": "Who wrote many of the Psalms?",
+     "opts": [
+      "David",
+      "Paul",
+      "Moses",
+      "Noah"
+     ],
+     "a": 0,
+     "exp": "Many Psalms are titled “A Psalm of David”, the sweet psalmist of Israel. (2 Samuel 23:1)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-k3",
+     "q": "Psalm 119:105 says God's word is a lamp unto my…",
+     "opts": [
+      "Feet",
+      "Eyes",
+      "Ears",
+      "Hands"
+     ],
+     "a": 0,
+     "exp": "Thy word is a lamp unto my feet, and a light unto my path. (Psalm 119:105)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-k4",
+     "q": "What does Psalm 150 tell everything that has breath to do?",
+     "opts": [
+      "Stay quiet",
+      "Go to sleep",
+      "Run fast",
+      "Praise the LORD"
+     ],
+     "a": 3,
+     "exp": "Let every thing that hath breath praise the LORD. (Psalm 150:6)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-k5",
+     "q": "Which tiny animal does Proverbs tell lazy people to learn from?",
+     "opts": [
+      "The horse",
+      "The eagle",
+      "The lion",
+      "The ant"
+     ],
+     "a": 3,
+     "exp": "Go to the ant, thou sluggard; consider her ways, and be wise. (Proverbs 6:6)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-k6",
+     "q": "“This is the day which the LORD hath made; we will…”",
+     "opts": [
+      "Stay in bed",
+      "Rejoice and be glad in it",
+      "Go to work",
+      "Eat and drink"
+     ],
+     "a": 1,
+     "exp": "We will rejoice and be glad in it. (Psalm 118:24)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-k7",
+     "q": "Who wrote most of the book of Proverbs?",
+     "opts": [
+      "Solomon",
+      "Isaiah",
+      "David",
+      "Daniel"
+     ],
+     "a": 0,
+     "exp": "The proverbs of Solomon the son of David, king of Israel. (Proverbs 1:1)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-k8",
+     "q": "“A soft answer turneth away…”",
+     "opts": [
+      "Friends",
+      "Money",
+      "Sleep",
+      "Wrath"
+     ],
+     "a": 3,
+     "exp": "A soft answer turneth away wrath. (Proverbs 15:1)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-k9",
+     "q": "How many Psalms are in the Bible?",
+     "opts": [
+      "66",
+      "100",
+      "12",
+      "150"
+     ],
+     "a": 3,
+     "exp": "The book of Psalms has 150 psalms.",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-k10",
+     "q": "Proverbs says, “Train up a child in the way he should…”",
+     "opts": [
+      "Eat",
+      "Play",
+      "Go",
+      "Sleep"
+     ],
+     "a": 2,
+     "exp": "Train up a child in the way he should go. (Proverbs 22:6)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-k11",
+     "q": "In Psalm 23, the Good Shepherd leads me beside the still…",
+     "opts": [
+      "Roads",
+      "Trees",
+      "Waters",
+      "Mountains"
+     ],
+     "a": 2,
+     "exp": "He leadeth me beside the still waters. (Psalm 23:2)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-g1",
+     "q": "“The fear of the LORD is the beginning of…”",
+     "opts": [
+      "Strength",
+      "Knowledge",
+      "Riches",
+      "Sorrow"
+     ],
+     "a": 1,
+     "exp": "The fear of the LORD is the beginning of knowledge. (Proverbs 1:7)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-g2",
+     "q": "“Trust in the LORD with all thine heart; and lean not unto…”",
+     "opts": [
+      "Thine own understanding",
+      "Thy neighbour",
+      "The rich",
+      "Thy strength"
+     ],
+     "a": 0,
+     "exp": "Lean not unto thine own understanding. (Proverbs 3:5)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-g3",
+     "q": "Which is the longest Psalm (and longest chapter in the Bible)?",
+     "opts": [
+      "Psalm 150",
+      "Psalm 91",
+      "Psalm 23",
+      "Psalm 119"
+     ],
+     "a": 3,
+     "exp": "Psalm 119 has 176 verses.",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-g4",
+     "q": "Which is the shortest Psalm (and shortest chapter in the Bible)?",
+     "opts": [
+      "Psalm 23",
+      "Psalm 117",
+      "Psalm 134",
+      "Psalm 1"
+     ],
+     "a": 1,
+     "exp": "Psalm 117 has only two verses.",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-g5",
+     "q": "“He that dwelleth in the secret place of the most High shall abide under the shadow of…”",
+     "opts": [
+      "The mountains",
+      "The temple",
+      "The Almighty",
+      "The angels"
+     ],
+     "a": 2,
+     "exp": "Shall abide under the shadow of the Almighty. (Psalm 91:1)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-g6",
+     "q": "Which Psalm did David write after Nathan confronted him about Bathsheba?",
+     "opts": [
+      "Psalm 23",
+      "Psalm 100",
+      "Psalm 51",
+      "Psalm 1"
+     ],
+     "a": 2,
+     "exp": "“Create in me a clean heart, O God.” Psalm 51 is titled for that moment. (Psalm 51:10)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-g7",
+     "q": "Proverbs 31 describes a…",
+     "opts": [
+      "Faithful servant",
+      "Rich merchant",
+      "Wise king",
+      "Virtuous woman"
+     ],
+     "a": 3,
+     "exp": "Who can find a virtuous woman? for her price is far above rubies. (Proverbs 31:10)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-g8",
+     "q": "“Pride goeth before destruction, and an haughty spirit before…”",
+     "opts": [
+      "A battle",
+      "A feast",
+      "A fall",
+      "Riches"
+     ],
+     "a": 2,
+     "exp": "An haughty spirit before a fall. (Proverbs 16:18)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-g9",
+     "q": "Which book says “To every thing there is a season”?",
+     "opts": [
+      "Psalms",
+      "Ecclesiastes",
+      "Proverbs",
+      "Job"
+     ],
+     "a": 1,
+     "exp": "To every thing there is a season, and a time to every purpose. (Ecclesiastes 3:1)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-g10",
+     "q": "Which man lost everything but said, “the LORD gave, and the LORD hath taken away”?",
+     "opts": [
+      "Jonah",
+      "Joel",
+      "Jacob",
+      "Job"
+     ],
+     "a": 3,
+     "exp": "Blessed be the name of the LORD. (Job 1:21)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-g11",
+     "q": "Psalm 22 begins with words Jesus cried on the cross. Which?",
+     "opts": [
+      "Father, forgive them",
+      "It is finished",
+      "Into thy hands I commend my spirit",
+      "My God, my God, why hast thou forsaken me?"
+     ],
+     "a": 3,
+     "exp": "Psalm 22:1; Jesus cried these words in Matthew 27:46.",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-g12",
+     "q": "Who is named as the writer of Psalm 90?",
+     "opts": [
+      "David",
+      "Asaph",
+      "Solomon",
+      "Moses"
+     ],
+     "a": 3,
+     "exp": "A Prayer of Moses the man of God. (Psalm 90, title)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "psalms-g13",
+     "q": "“Iron sharpeneth iron; so a man sharpeneth the countenance of his…”",
+     "opts": [
+      "Friend",
+      "Enemy",
+      "Servant",
+      "King"
+     ],
+     "a": 0,
+     "exp": "So a man sharpeneth the countenance of his friend. (Proverbs 27:17)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "jesus",
+   "name": "Jesus' Birth & Life",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "jesus-k1",
+     "q": "In which town was Jesus born?",
+     "opts": [
+      "Bethlehem",
+      "Jerusalem",
+      "Rome",
+      "Nazareth"
+     ],
+     "a": 0,
+     "exp": "Jesus was born in Bethlehem of Judaea. (Matthew 2:1)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-k2",
+     "q": "Who was the mother of Jesus?",
+     "opts": [
+      "Mary",
+      "Elizabeth",
+      "Sarah",
+      "Martha"
+     ],
+     "a": 0,
+     "exp": "Mary… of whom was born Jesus, who is called Christ. (Matthew 1:16)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-k3",
+     "q": "Where was baby Jesus laid after He was born?",
+     "opts": [
+      "In a boat",
+      "In a cave of lions",
+      "In a palace",
+      "In a manger"
+     ],
+     "a": 3,
+     "exp": "She laid him in a manger; because there was no room in the inn. (Luke 2:7)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-k4",
+     "q": "What guided the wise men to Jesus?",
+     "opts": [
+      "A river",
+      "An angel's map",
+      "A dove",
+      "A star"
+     ],
+     "a": 3,
+     "exp": "The star… went before them, till it came and stood over where the young child was. (Matthew 2:9)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-k5",
+     "q": "Which angel told Mary she would have a baby?",
+     "opts": [
+      "Raphael",
+      "Michael",
+      "Gabriel",
+      "Lucifer"
+     ],
+     "a": 2,
+     "exp": "The angel Gabriel was sent from God… to a virgin… Mary. (Luke 1:26–27)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-k6",
+     "q": "What was Joseph's job?",
+     "opts": [
+      "Soldier",
+      "Fisherman",
+      "Shepherd",
+      "Carpenter"
+     ],
+     "a": 3,
+     "exp": "Is not this the carpenter's son? (Matthew 13:55)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-k7",
+     "q": "How many disciples did Jesus choose to be His apostles?",
+     "opts": [
+      "12",
+      "7",
+      "3",
+      "40"
+     ],
+     "a": 0,
+     "exp": "He ordained twelve, that they should be with him. (Mark 3:14)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-k8",
+     "q": "Who baptized Jesus?",
+     "opts": [
+      "Peter",
+      "John the Baptist",
+      "Andrew",
+      "Paul"
+     ],
+     "a": 1,
+     "exp": "Then cometh Jesus… to John, to be baptized of him. (Matthew 3:13)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-k9",
+     "q": "What came down like a dove when Jesus was baptized?",
+     "opts": [
+      "A real dove",
+      "The Spirit of God",
+      "A star",
+      "An angel"
+     ],
+     "a": 1,
+     "exp": "He saw the Spirit of God descending like a dove. (Matthew 3:16)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-k10",
+     "q": "Who heard the angels sing on the night Jesus was born?",
+     "opts": [
+      "Shepherds",
+      "Fishermen",
+      "Soldiers",
+      "Kings"
+     ],
+     "a": 0,
+     "exp": "There were… shepherds abiding in the field, keeping watch over their flock. (Luke 2:8)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-k11",
+     "q": "Which gifts did the wise men bring?",
+     "opts": [
+      "Bread, fish and wine",
+      "Silver, bronze and iron",
+      "Toys, clothes and food",
+      "Gold, frankincense and myrrh"
+     ],
+     "a": 3,
+     "exp": "They presented unto him gifts; gold, and frankincense, and myrrh. (Matthew 2:11)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-k12",
+     "q": "Which disciple was a tax collector?",
+     "opts": [
+      "Thomas",
+      "Peter",
+      "John",
+      "Matthew"
+     ],
+     "a": 3,
+     "exp": "He saw a man, named Matthew, sitting at the receipt of custom. (Matthew 9:9)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-g1",
+     "q": "In which town did Jesus grow up?",
+     "opts": [
+      "Bethlehem",
+      "Capernaum",
+      "Nazareth",
+      "Jericho"
+     ],
+     "a": 2,
+     "exp": "He came and dwelt in a city called Nazareth. (Matthew 2:23)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-g2",
+     "q": "How old was Jesus when He was found teaching in the temple?",
+     "opts": [
+      "Twenty",
+      "Thirty",
+      "Eight",
+      "Twelve"
+     ],
+     "a": 3,
+     "exp": "When he was twelve years old, they went up to Jerusalem. (Luke 2:42)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-g3",
+     "q": "For how many days was Jesus tempted in the wilderness?",
+     "opts": [
+      "Seven",
+      "Forty",
+      "Twelve",
+      "Three"
+     ],
+     "a": 1,
+     "exp": "Being forty days tempted of the devil. (Luke 4:2)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-g4",
+     "q": "To which country did Joseph take Mary and Jesus to escape Herod?",
+     "opts": [
+      "Persia",
+      "Syria",
+      "Egypt",
+      "Greece"
+     ],
+     "a": 2,
+     "exp": "Take the young child and his mother, and flee into Egypt. (Matthew 2:13)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-g5",
+     "q": "Who was the cousin of Mary and mother of John the Baptist?",
+     "opts": [
+      "Salome",
+      "Joanna",
+      "Elisabeth",
+      "Anna"
+     ],
+     "a": 2,
+     "exp": "Thy cousin Elisabeth, she hath also conceived a son. (Luke 1:36)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-g6",
+     "q": "Which old man in the temple held baby Jesus and praised God?",
+     "opts": [
+      "Nicodemus",
+      "Zacharias",
+      "Simeon",
+      "Lazarus"
+     ],
+     "a": 2,
+     "exp": "Lord, now lettest thou thy servant depart in peace. (Luke 2:25–29)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-g7",
+     "q": "Which two brothers were fishermen called “sons of thunder”?",
+     "opts": [
+      "James and John",
+      "Thomas and Matthew",
+      "Peter and Andrew",
+      "Philip and Bartholomew"
+     ],
+     "a": 0,
+     "exp": "He surnamed them Boanerges, which is, The sons of thunder. (Mark 3:17)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-g8",
+     "q": "Which Pharisee came to Jesus by night and was told he must be born again?",
+     "opts": [
+      "Gamaliel",
+      "Caiaphas",
+      "Nicodemus",
+      "Joseph of Arimathaea"
+     ],
+     "a": 2,
+     "exp": "Except a man be born again, he cannot see the kingdom of God. (John 3:3)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-g9",
+     "q": "How old was Jesus when He began His ministry, according to Luke?",
+     "opts": [
+      "Forty",
+      "About thirty",
+      "Twenty-five",
+      "Twelve"
+     ],
+     "a": 1,
+     "exp": "Jesus himself began to be about thirty years of age. (Luke 3:23)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-g10",
+     "q": "Which Roman emperor ordered the census when Jesus was born?",
+     "opts": [
+      "Claudius",
+      "Nero",
+      "Tiberius",
+      "Caesar Augustus"
+     ],
+     "a": 3,
+     "exp": "There went out a decree from Caesar Augustus. (Luke 2:1)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-g11",
+     "q": "What does “Emmanuel” mean?",
+     "opts": [
+      "Son of David",
+      "Prince of Peace",
+      "Saviour",
+      "God with us"
+     ],
+     "a": 3,
+     "exp": "They shall call his name Emmanuel, which being interpreted is, God with us. (Matthew 1:23)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "jesus-g12",
+     "q": "Which disciple, brought by Philip, asked “Can there any good thing come out of Nazareth?”",
+     "opts": [
+      "Simon the Zealot",
+      "Thaddaeus",
+      "Nathanael",
+      "Thomas"
+     ],
+     "a": 2,
+     "exp": "Nathanael said unto him, Can there any good thing come out of Nazareth? (John 1:46)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "miracles",
+   "name": "Miracles of Jesus",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "miracles-k1",
+     "q": "What did Jesus turn water into at a wedding?",
+     "opts": [
+      "Juice",
+      "Honey",
+      "Milk",
+      "Wine"
+     ],
+     "a": 3,
+     "exp": "The water that was made wine. (John 2:9)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-k2",
+     "q": "How many people did Jesus feed with five loaves and two fish?",
+     "opts": [
+      "About 500",
+      "About 5,000 men",
+      "About 100",
+      "About 50"
+     ],
+     "a": 1,
+     "exp": "They that had eaten were about five thousand men, beside women and children. (Matthew 14:21)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-k3",
+     "q": "Who gave the five loaves and two fish?",
+     "opts": [
+      "A soldier",
+      "A king",
+      "A boy",
+      "A priest"
+     ],
+     "a": 2,
+     "exp": "There is a lad here, which hath five barley loaves, and two small fishes. (John 6:9)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-k4",
+     "q": "What did Jesus walk on?",
+     "opts": [
+      "Fire",
+      "Water",
+      "Rooftops",
+      "Clouds"
+     ],
+     "a": 1,
+     "exp": "Jesus went unto them, walking on the sea. (Matthew 14:25)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-k5",
+     "q": "What did Jesus say to the stormy sea?",
+     "opts": [
+      "Go away",
+      "Be loud",
+      "Rise up",
+      "Peace, be still"
+     ],
+     "a": 3,
+     "exp": "He arose, and rebuked the wind, and said unto the sea, Peace, be still. (Mark 4:39)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-k6",
+     "q": "Which friend of Jesus did He raise from the dead after four days?",
+     "opts": [
+      "Lazarus",
+      "Thomas",
+      "Peter",
+      "Zacchaeus"
+     ],
+     "a": 0,
+     "exp": "Lazarus, come forth. (John 11:43)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-k7",
+     "q": "Which disciple walked on water toward Jesus, then began to sink?",
+     "opts": [
+      "Andrew",
+      "Peter",
+      "Judas",
+      "John"
+     ],
+     "a": 1,
+     "exp": "Peter… walked on the water… but when he saw the wind boisterous, he was afraid. (Matthew 14:29–30)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-k8",
+     "q": "How many baskets of leftovers were picked up after feeding the 5,000?",
+     "opts": [
+      "Seven",
+      "Two",
+      "Five",
+      "Twelve"
+     ],
+     "a": 3,
+     "exp": "They took up of the fragments that remained twelve baskets full. (Matthew 14:20)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-k9",
+     "q": "How did the friends of a sick man get him to Jesus in a crowded house?",
+     "opts": [
+      "Waited outside",
+      "Lowered him through the roof",
+      "Dug a tunnel",
+      "Carried him through a window"
+     ],
+     "a": 1,
+     "exp": "They uncovered the roof… they let down the bed. (Mark 2:4)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-k10",
+     "q": "How many lepers did Jesus heal when only one came back to say thank you?",
+     "opts": [
+      "Twelve",
+      "Three",
+      "Ten",
+      "Seven"
+     ],
+     "a": 2,
+     "exp": "Were there not ten cleansed? but where are the nine? (Luke 17:17)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-k11",
+     "q": "Jesus healed a man who was born…",
+     "opts": [
+      "A king",
+      "Rich",
+      "A giant",
+      "Blind"
+     ],
+     "a": 3,
+     "exp": "He spat on the ground, made clay… and he came seeing. (John 9:6–7)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-g1",
+     "q": "In which town was the wedding where Jesus did His first miracle?",
+     "opts": [
+      "Capernaum",
+      "Bethany",
+      "Nain",
+      "Cana"
+     ],
+     "a": 3,
+     "exp": "This beginning of miracles did Jesus in Cana of Galilee. (John 2:11)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-g2",
+     "q": "Whose 12-year-old daughter did Jesus raise, saying “Talitha cumi”?",
+     "opts": [
+      "Zacchaeus",
+      "Nicodemus",
+      "Simon",
+      "Jairus"
+     ],
+     "a": 3,
+     "exp": "Talitha cumi; which is… Damsel, I say unto thee, arise. (Mark 5:41)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-g3",
+     "q": "What was the name of the blind beggar healed near Jericho?",
+     "opts": [
+      "Bartimaeus",
+      "Barnabas",
+      "Bartholomew",
+      "Barabbas"
+     ],
+     "a": 0,
+     "exp": "Blind Bartimaeus, the son of Timaeus, sat by the highway side begging. (Mark 10:46)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-g4",
+     "q": "Where did Jesus send the demons called “Legion”?",
+     "opts": [
+      "Into the desert",
+      "Into a tree",
+      "Into the sea alone",
+      "Into a herd of swine"
+     ],
+     "a": 3,
+     "exp": "The unclean spirits went out, and entered into the swine. (Mark 5:13)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-g5",
+     "q": "In which town did Jesus raise a widow's only son during his funeral?",
+     "opts": [
+      "Cana",
+      "Emmaus",
+      "Bethany",
+      "Nain"
+     ],
+     "a": 3,
+     "exp": "He went into a city called Nain… a dead man carried out, the only son of his mother. (Luke 7:11–12)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-g6",
+     "q": "Which servant's ear did Jesus heal in the garden when it was cut off?",
+     "opts": [
+      "Matthias",
+      "Malchus",
+      "Mark",
+      "Manaen"
+     ],
+     "a": 1,
+     "exp": "The servant's name was Malchus. (John 18:10; healed in Luke 22:51)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-g7",
+     "q": "How many fish did the disciples catch when Jesus told them to cast the net on the right side after He rose?",
+     "opts": [
+      "100",
+      "12",
+      "153",
+      "77"
+     ],
+     "a": 2,
+     "exp": "Full of great fishes, an hundred and fifty and three. (John 21:11)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-g8",
+     "q": "Where did Peter find a coin to pay the temple tax?",
+     "opts": [
+      "In a fish's mouth",
+      "In his sandal",
+      "In a basket",
+      "Under a stone"
+     ],
+     "a": 0,
+     "exp": "When thou hast opened his mouth, thou shalt find a piece of money. (Matthew 17:27)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-g9",
+     "q": "How long had the woman been sick who touched the hem of Jesus' garment?",
+     "opts": [
+      "Forty years",
+      "Twelve years",
+      "Thirty-eight years",
+      "Seven years"
+     ],
+     "a": 1,
+     "exp": "A woman, which had an issue of blood twelve years. (Mark 5:25)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-g10",
+     "q": "How long had the man at the pool of Bethesda been sick?",
+     "opts": [
+      "Thirty-eight years",
+      "Twelve years",
+      "Eighteen years",
+      "Forty years"
+     ],
+     "a": 0,
+     "exp": "A certain man was there, which had an infirmity thirty and eight years. (John 5:5)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-g11",
+     "q": "How many were fed in the second feeding, with seven loaves?",
+     "opts": [
+      "About 5,000",
+      "About 1,000",
+      "About 3,000",
+      "About 4,000"
+     ],
+     "a": 3,
+     "exp": "They that had eaten were about four thousand. (Mark 8:9)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "miracles-g12",
+     "q": "Which tree did Jesus curse because it had no fruit?",
+     "opts": [
+      "An olive tree",
+      "A palm tree",
+      "A sycamore",
+      "A fig tree"
+     ],
+     "a": 3,
+     "exp": "He saw a fig tree… and found nothing thereon, but leaves only. (Matthew 21:19)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "parables",
+   "name": "Parables & Teachings",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "parables-k1",
+     "q": "In the story, who stopped to help the hurt man on the road?",
+     "opts": [
+      "The Good Samaritan",
+      "A soldier",
+      "A priest",
+      "A Levite"
+     ],
+     "a": 0,
+     "exp": "A certain Samaritan… had compassion on him. (Luke 10:33)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-k2",
+     "q": "How many sheep did the shepherd leave to find the one lost sheep?",
+     "opts": [
+      "50",
+      "1,000",
+      "99",
+      "10"
+     ],
+     "a": 2,
+     "exp": "Doth he not leave the ninety and nine… and seeketh that which is gone astray? (Matthew 18:12)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-k3",
+     "q": "The wise man built his house upon the…",
+     "opts": [
+      "Grass",
+      "Water",
+      "Sand",
+      "Rock"
+     ],
+     "a": 3,
+     "exp": "A wise man, which built his house upon a rock. (Matthew 7:24)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-k4",
+     "q": "What happened to the house the foolish man built on the sand?",
+     "opts": [
+      "It grew taller",
+      "It flew away",
+      "It turned to gold",
+      "It fell down"
+     ],
+     "a": 3,
+     "exp": "It fell: and great was the fall of it. (Matthew 7:27)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-k5",
+     "q": "In the story of the lost son, what did the father do when his son came home?",
+     "opts": [
+      "Ran and hugged him and had a party",
+      "Was angry",
+      "Sent him away",
+      "Made him sleep outside"
+     ],
+     "a": 0,
+     "exp": "His father… ran, and fell on his neck, and kissed him. (Luke 15:20)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-k6",
+     "q": "What prayer did Jesus teach His disciples?",
+     "opts": [
+      "The Lord's Prayer",
+      "Hannah's Prayer",
+      "The Psalm of Moses",
+      "The Song of Mary"
+     ],
+     "a": 0,
+     "exp": "After this manner therefore pray ye: Our Father which art in heaven. (Matthew 6:9)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-k7",
+     "q": "Jesus said faith as small as a grain of which seed can do great things?",
+     "opts": [
+      "Apple seed",
+      "Rice grain",
+      "Corn seed",
+      "Mustard seed"
+     ],
+     "a": 3,
+     "exp": "If ye have faith as a grain of mustard seed. (Matthew 17:20)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-k8",
+     "q": "Jesus said, “Let your light so shine before men, that they may see your…”",
+     "opts": [
+      "Strong arms",
+      "Big house",
+      "Good works",
+      "Nice clothes"
+     ],
+     "a": 2,
+     "exp": "That they may see your good works, and glorify your Father. (Matthew 5:16)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-k9",
+     "q": "Which short man climbed a tree to see Jesus?",
+     "opts": [
+      "Bartimaeus",
+      "Nicodemus",
+      "Peter",
+      "Zacchaeus"
+     ],
+     "a": 3,
+     "exp": "He ran before, and climbed up into a sycomore tree to see him. (Luke 19:4)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-k10",
+     "q": "What did Jesus say when His disciples tried to send children away?",
+     "opts": [
+      "Come back tomorrow",
+      "Children must wait outside",
+      "Only grown-ups may come",
+      "Suffer little children to come unto me"
+     ],
+     "a": 3,
+     "exp": "Suffer little children… to come unto me. (Matthew 19:14)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-k11",
+     "q": "The poor widow gave two small coins. Jesus said she gave…",
+     "opts": [
+      "The wrong coins",
+      "More than all the rich",
+      "Too little",
+      "Nothing important"
+     ],
+     "a": 1,
+     "exp": "This poor widow hath cast more in, than all they. (Mark 12:43)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-g1",
+     "q": "What is the greatest commandment, according to Jesus?",
+     "opts": [
+      "Honour thy parents",
+      "Do not steal",
+      "Love the Lord thy God with all thy heart",
+      "Keep the Sabbath"
+     ],
+     "a": 2,
+     "exp": "This is the first and great commandment. (Matthew 22:37–38)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-g2",
+     "q": "In the parable of the sower, where did the seed bear good fruit?",
+     "opts": [
+      "Good ground",
+      "By the wayside",
+      "Among thorns",
+      "Stony places"
+     ],
+     "a": 0,
+     "exp": "Other fell into good ground, and brought forth fruit. (Matthew 13:8)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-g3",
+     "q": "In the parable of the ten virgins, why were five foolish?",
+     "opts": [
+      "They forgot the bridegroom's name",
+      "They fell asleep",
+      "They took no oil for their lamps",
+      "They came too early"
+     ],
+     "a": 2,
+     "exp": "The foolish took their lamps, and took no oil with them. (Matthew 25:3)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-g4",
+     "q": "In the parable of the talents, what did the wicked servant do with his one talent?",
+     "opts": [
+      "Spent it",
+      "Gave it to the poor",
+      "Doubled it",
+      "Hid it in the earth"
+     ],
+     "a": 3,
+     "exp": "He that had received one went and digged in the earth, and hid his lord's money. (Matthew 25:18)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-g5",
+     "q": "How many times did Jesus tell Peter to forgive?",
+     "opts": [
+      "Seventy times seven",
+      "Three times",
+      "Once",
+      "Seven times"
+     ],
+     "a": 0,
+     "exp": "I say not unto thee, Until seven times: but, Until seventy times seven. (Matthew 18:22)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-g6",
+     "q": "What are the sayings that begin “Blessed are…” in the Sermon on the Mount called?",
+     "opts": [
+      "The Proverbs",
+      "The Psalms",
+      "The Beatitudes",
+      "The Commandments"
+     ],
+     "a": 2,
+     "exp": "Blessed are the poor in spirit: for theirs is the kingdom of heaven. (Matthew 5:3)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-g7",
+     "q": "In the story of the rich man and Lazarus, where was Lazarus carried after he died?",
+     "opts": [
+      "The wilderness",
+      "Jerusalem",
+      "The temple",
+      "Abraham's bosom"
+     ],
+     "a": 3,
+     "exp": "The beggar died, and was carried by the angels into Abraham's bosom. (Luke 16:22)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-g8",
+     "q": "Who did Jesus say the merchant sold everything to buy?",
+     "opts": [
+      "A golden crown",
+      "A pearl of great price",
+      "A field of wheat",
+      "A flock of sheep"
+     ],
+     "a": 1,
+     "exp": "When he had found one pearl of great price, went and sold all that he had. (Matthew 13:46)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-g9",
+     "q": "Finish the Golden Rule: “all things whatsoever ye would that men should do to you…”",
+     "opts": [
+      "Do ye even so to them",
+      "Keep it secret",
+      "Expect it back",
+      "Write it down"
+     ],
+     "a": 0,
+     "exp": "Do ye even so to them: for this is the law and the prophets. (Matthew 7:12)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-g10",
+     "q": "Which two people passed by the hurt man before the Good Samaritan came?",
+     "opts": [
+      "A Pharisee and a scribe",
+      "A soldier and a merchant",
+      "A priest and a Levite",
+      "A king and a servant"
+     ],
+     "a": 2,
+     "exp": "A certain priest… likewise a Levite… passed by on the other side. (Luke 10:31–32)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-g11",
+     "q": "In the parable of the lost son, what job did he take when he ran out of money?",
+     "opts": [
+      "Carrying water",
+      "Tending sheep",
+      "Fishing",
+      "Feeding swine"
+     ],
+     "a": 3,
+     "exp": "He sent him into his fields to feed swine. (Luke 15:15)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "parables-g12",
+     "q": "Jesus said “I am the way, the truth, and the life”. What comes next?",
+     "opts": [
+      "Follow me and be happy",
+      "Love one another",
+      "No man cometh unto the Father, but by me",
+      "The kingdom is at hand"
+     ],
+     "a": 2,
+     "exp": "No man cometh unto the Father, but by me. (John 14:6)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "cross",
+   "name": "The Cross & Resurrection",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "cross-k1",
+     "q": "What did people wave when Jesus rode into Jerusalem?",
+     "opts": [
+      "Swords",
+      "Flags",
+      "Towels",
+      "Palm branches"
+     ],
+     "a": 3,
+     "exp": "They took branches of palm trees, and went forth to meet him. (John 12:13)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-k2",
+     "q": "What animal did Jesus ride into Jerusalem?",
+     "opts": [
+      "An elephant",
+      "A donkey",
+      "A horse",
+      "A camel"
+     ],
+     "a": 1,
+     "exp": "Thy King cometh… sitting upon an ass. (Matthew 21:5)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-k3",
+     "q": "Which disciple betrayed Jesus?",
+     "opts": [
+      "John",
+      "Judas Iscariot",
+      "Peter",
+      "Thomas"
+     ],
+     "a": 1,
+     "exp": "Judas Iscariot, one of the twelve, went unto the chief priests. (Mark 14:10)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-k4",
+     "q": "On which day did Jesus rise from the dead?",
+     "opts": [
+      "The third day",
+      "The fortieth day",
+      "The first day",
+      "The seventh day"
+     ],
+     "a": 0,
+     "exp": "He rose again the third day according to the scriptures. (1 Corinthians 15:4)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-k5",
+     "q": "Who was first to see Jesus after He rose?",
+     "opts": [
+      "Pilate",
+      "Judas",
+      "Peter",
+      "Mary Magdalene"
+     ],
+     "a": 3,
+     "exp": "He appeared first to Mary Magdalene. (Mark 16:9)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-k6",
+     "q": "What special meal did Jesus share with His disciples before He died?",
+     "opts": [
+      "The King's Banquet",
+      "The Wedding Feast",
+      "The Harvest Meal",
+      "The Last Supper"
+     ],
+     "a": 3,
+     "exp": "This do in remembrance of me. (Luke 22:19)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-k7",
+     "q": "What did Jesus wash at the Last Supper?",
+     "opts": [
+      "The table",
+      "His clothes",
+      "His disciples' feet",
+      "The dishes"
+     ],
+     "a": 2,
+     "exp": "He… began to wash the disciples' feet. (John 13:5)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-k8",
+     "q": "How many times did Peter say he did not know Jesus?",
+     "opts": [
+      "Three",
+      "One",
+      "Seven",
+      "Twelve"
+     ],
+     "a": 0,
+     "exp": "Before the cock crow, thou shalt deny me thrice. (Matthew 26:34)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-k9",
+     "q": "Which disciple would not believe until he saw Jesus' wounds?",
+     "opts": [
+      "Thomas",
+      "Philip",
+      "Andrew",
+      "James"
+     ],
+     "a": 0,
+     "exp": "Except I shall see in his hands the print of the nails… I will not believe. (John 20:25)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-k10",
+     "q": "What was rolled in front of Jesus' tomb?",
+     "opts": [
+      "A golden gate",
+      "A wooden door",
+      "A big tree",
+      "A great stone"
+     ],
+     "a": 3,
+     "exp": "He rolled a great stone to the door of the sepulchre. (Matthew 27:60)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-k11",
+     "q": "Why did Jesus die on the cross?",
+     "opts": [
+      "By mistake",
+      "To take away our sins",
+      "Because He lost a fight",
+      "Because He was weak"
+     ],
+     "a": 1,
+     "exp": "Christ died for our sins according to the scriptures. (1 Corinthians 15:3)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-g1",
+     "q": "For how many pieces of silver did Judas betray Jesus?",
+     "opts": [
+      "Ten",
+      "Twenty",
+      "Forty",
+      "Thirty"
+     ],
+     "a": 3,
+     "exp": "They covenanted with him for thirty pieces of silver. (Matthew 26:15)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-g2",
+     "q": "In which garden did Jesus pray before He was arrested?",
+     "opts": [
+      "Eden",
+      "Gethsemane",
+      "Golgotha",
+      "Bethany"
+     ],
+     "a": 1,
+     "exp": "Then cometh Jesus with them unto a place called Gethsemane. (Matthew 26:36)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-g3",
+     "q": "Which Roman governor sentenced Jesus?",
+     "opts": [
+      "Felix",
+      "Pontius Pilate",
+      "Herod Antipas",
+      "Caiaphas"
+     ],
+     "a": 1,
+     "exp": "Pilate… delivered Jesus, when he had scourged him, to be crucified. (Mark 15:15)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-g4",
+     "q": "Which prisoner did the crowd ask Pilate to release instead of Jesus?",
+     "opts": [
+      "Barnabas",
+      "Malchus",
+      "Barabbas",
+      "Bartimaeus"
+     ],
+     "a": 2,
+     "exp": "They cried out all at once… release unto us Barabbas. (Luke 23:18)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-g5",
+     "q": "Who carried Jesus' cross part of the way?",
+     "opts": [
+      "Simon of Cyrene",
+      "Joseph of Arimathaea",
+      "Simon Peter",
+      "John"
+     ],
+     "a": 0,
+     "exp": "A man of Cyrene, Simon by name: him they compelled to bear his cross. (Matthew 27:32)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-g6",
+     "q": "What does “Golgotha” mean?",
+     "opts": [
+      "The place of a skull",
+      "The king's road",
+      "The hill of olives",
+      "The garden tomb"
+     ],
+     "a": 0,
+     "exp": "Golgotha, that is to say, a place of a skull. (Matthew 27:33)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-g7",
+     "q": "Who gave his own tomb for Jesus' body?",
+     "opts": [
+      "Nicodemus",
+      "Joseph of Arimathaea",
+      "Lazarus",
+      "Simon the leper"
+     ],
+     "a": 1,
+     "exp": "Joseph of Arimathaea… laid it in his own new tomb. (Matthew 27:57–60)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-g8",
+     "q": "What were Jesus' last words on the cross, according to John?",
+     "opts": [
+      "It is finished",
+      "Today shalt thou be with me",
+      "I thirst",
+      "Woman, behold thy son"
+     ],
+     "a": 0,
+     "exp": "He said, It is finished: and he bowed his head, and gave up the ghost. (John 19:30)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-g9",
+     "q": "To which village were two disciples walking when the risen Jesus joined them?",
+     "opts": [
+      "Bethany",
+      "Nain",
+      "Cana",
+      "Emmaus"
+     ],
+     "a": 3,
+     "exp": "Two of them went that same day to a village called Emmaus. (Luke 24:13)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-g10",
+     "q": "For how many days did the risen Jesus appear before going up to heaven?",
+     "opts": [
+      "Seven",
+      "Three",
+      "Fifty",
+      "Forty"
+     ],
+     "a": 3,
+     "exp": "Being seen of them forty days. (Acts 1:3)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-g11",
+     "q": "Who was the high priest when Jesus was tried?",
+     "opts": [
+      "Caiaphas",
+      "Gamaliel",
+      "Ananias",
+      "Annas only"
+     ],
+     "a": 0,
+     "exp": "They led him away to Caiaphas the high priest. (Matthew 26:57)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-g12",
+     "q": "What was written over the cross?",
+     "opts": [
+      "Here is the Lamb",
+      "Jesus of Nazareth the King of the Jews",
+      "The Son of God",
+      "Blessed is he that cometh"
+     ],
+     "a": 1,
+     "exp": "JESUS OF NAZARETH THE KING OF THE JEWS. (John 19:19)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "cross-g13",
+     "q": "What happened to the veil of the temple when Jesus died?",
+     "opts": [
+      "It fell to the ground whole",
+      "It turned white",
+      "It was torn in two from top to bottom",
+      "It caught fire"
+     ],
+     "a": 2,
+     "exp": "The veil of the temple was rent in twain from the top to the bottom. (Matthew 27:51)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "church",
+   "name": "The Early Church",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "church-k1",
+     "q": "Who came upon the disciples on the day of Pentecost?",
+     "opts": [
+      "Moses",
+      "The Holy Spirit",
+      "A king",
+      "An angel"
+     ],
+     "a": 1,
+     "exp": "They were all filled with the Holy Ghost. (Acts 2:4)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-k2",
+     "q": "What appeared on the disciples' heads at Pentecost?",
+     "opts": [
+      "Halos of light",
+      "Golden crowns",
+      "Tongues like fire",
+      "Doves"
+     ],
+     "a": 2,
+     "exp": "There appeared unto them cloven tongues like as of fire. (Acts 2:3)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-k3",
+     "q": "What was Paul's name before it was changed?",
+     "opts": [
+      "Simon",
+      "Saul",
+      "Stephen",
+      "Silas"
+     ],
+     "a": 1,
+     "exp": "Saul, (who also is called Paul). (Acts 13:9)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-k4",
+     "q": "What happened to Saul on the road to Damascus?",
+     "opts": [
+      "He got lost",
+      "He found treasure",
+      "He met a lion",
+      "A bright light shone and he was blinded"
+     ],
+     "a": 3,
+     "exp": "Suddenly there shined round about him a light from heaven. (Acts 9:3)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-k5",
+     "q": "Who freed Peter from prison in the night?",
+     "opts": [
+      "Paul",
+      "An angel",
+      "A soldier",
+      "King Herod"
+     ],
+     "a": 1,
+     "exp": "The angel of the Lord came upon him… and his chains fell off. (Acts 12:7)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-k6",
+     "q": "What were Paul and Silas doing at midnight in prison?",
+     "opts": [
+      "Praying and singing",
+      "Crying",
+      "Sleeping",
+      "Digging out"
+     ],
+     "a": 0,
+     "exp": "At midnight Paul and Silas prayed, and sang praises unto God. (Acts 16:25)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-k7",
+     "q": "Who was the young man Paul called his son in the faith?",
+     "opts": [
+      "Luke",
+      "Mark",
+      "Titus",
+      "Timothy"
+     ],
+     "a": 3,
+     "exp": "Unto Timothy, my own son in the faith. (1 Timothy 1:2)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-k8",
+     "q": "Peter and John healed a lame man at the temple gate. What did the man do?",
+     "opts": [
+      "Ran away",
+      "Fell asleep",
+      "Walked and leaped and praised God",
+      "Asked for money again"
+     ],
+     "a": 2,
+     "exp": "He leaping up stood, and walked… walking, and leaping, and praising God. (Acts 3:8)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-k9",
+     "q": "Paul was shipwrecked and a snake bit him. What happened?",
+     "opts": [
+      "He died",
+      "He ran away",
+      "He became very sick",
+      "He shook it off and was not hurt"
+     ],
+     "a": 3,
+     "exp": "He shook off the beast into the fire, and felt no harm. (Acts 28:5)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-k10",
+     "q": "Where were believers first called Christians?",
+     "opts": [
+      "Antioch",
+      "Jerusalem",
+      "Rome",
+      "Corinth"
+     ],
+     "a": 0,
+     "exp": "The disciples were called Christians first in Antioch. (Acts 11:26)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-k11",
+     "q": "Who wrote many letters in the New Testament?",
+     "opts": [
+      "David",
+      "Paul",
+      "Moses",
+      "Noah"
+     ],
+     "a": 1,
+     "exp": "Paul wrote letters such as Romans, Corinthians and Galatians.",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-g1",
+     "q": "Who was the first Christian martyr?",
+     "opts": [
+      "Peter",
+      "Paul",
+      "Stephen",
+      "James"
+     ],
+     "a": 2,
+     "exp": "They stoned Stephen, calling upon God. (Acts 7:59)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-g2",
+     "q": "Who replaced Judas as the twelfth apostle?",
+     "opts": [
+      "Matthias",
+      "Barnabas",
+      "Silas",
+      "Timothy"
+     ],
+     "a": 0,
+     "exp": "The lot fell upon Matthias. (Acts 1:26)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-g3",
+     "q": "Which couple lied about the price of their land and died?",
+     "opts": [
+      "Zacharias and Elisabeth",
+      "Aquila and Priscilla",
+      "Felix and Drusilla",
+      "Ananias and Sapphira"
+     ],
+     "a": 3,
+     "exp": "Ananias, with Sapphira his wife, sold a possession, and kept back part. (Acts 5:1–2)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-g4",
+     "q": "Whom did Philip explain Isaiah to in a chariot?",
+     "opts": [
+      "A jailer",
+      "An Ethiopian eunuch",
+      "A Roman centurion",
+      "A sorcerer"
+     ],
+     "a": 1,
+     "exp": "A man of Ethiopia, an eunuch… sitting in his chariot read Esaias. (Acts 8:27–28)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-g5",
+     "q": "Which Roman centurion was the first Gentile convert in Acts 10?",
+     "opts": [
+      "Julius",
+      "Claudius Lysias",
+      "Felix",
+      "Cornelius"
+     ],
+     "a": 3,
+     "exp": "A certain man in Caesarea called Cornelius, a centurion. (Acts 10:1)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-g6",
+     "q": "Which seller of purple cloth believed in Philippi?",
+     "opts": [
+      "Phoebe",
+      "Lydia",
+      "Priscilla",
+      "Dorcas"
+     ],
+     "a": 1,
+     "exp": "A certain woman named Lydia, a seller of purple. (Acts 16:14)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-g7",
+     "q": "Whom did Peter raise from the dead at Joppa?",
+     "opts": [
+      "Eutychus",
+      "Lazarus",
+      "Tabitha (Dorcas)",
+      "Rhoda"
+     ],
+     "a": 2,
+     "exp": "Tabitha, arise. And she opened her eyes. (Acts 9:40)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-g8",
+     "q": "Which young man fell from a window during Paul's long sermon?",
+     "opts": [
+      "Onesimus",
+      "Tychicus",
+      "Trophimus",
+      "Eutychus"
+     ],
+     "a": 3,
+     "exp": "There sat in a window a certain young man named Eutychus… and fell down. (Acts 20:9)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-g9",
+     "q": "Which chapter is called the “love chapter”?",
+     "opts": [
+      "Hebrews 11",
+      "John 3",
+      "Romans 8",
+      "1 Corinthians 13"
+     ],
+     "a": 3,
+     "exp": "Charity suffereth long, and is kind. (1 Corinthians 13:4)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-g10",
+     "q": "Which chapter is known as the “faith chapter”, listing heroes of faith?",
+     "opts": [
+      "Hebrews 11",
+      "Galatians 5",
+      "Romans 4",
+      "James 2"
+     ],
+     "a": 0,
+     "exp": "Now faith is the substance of things hoped for. (Hebrews 11:1)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-g11",
+     "q": "Name the fruit of the Spirit that comes first in Galatians 5:22.",
+     "opts": [
+      "Joy",
+      "Love",
+      "Peace",
+      "Patience"
+     ],
+     "a": 1,
+     "exp": "The fruit of the Spirit is love, joy, peace… (Galatians 5:22)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-g12",
+     "q": "On which island was John when he received the Revelation?",
+     "opts": [
+      "Crete",
+      "Malta",
+      "Cyprus",
+      "Patmos"
+     ],
+     "a": 3,
+     "exp": "I John… was in the isle that is called Patmos. (Revelation 1:9)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "church-g13",
+     "q": "Which runaway slave did Paul send back to Philemon?",
+     "opts": [
+      "Onesimus",
+      "Epaphras",
+      "Demas",
+      "Tychicus"
+     ],
+     "a": 0,
+     "exp": "I beseech thee for my son Onesimus. (Philemon 1:10)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "women",
+   "name": "Women of the Bible",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "women-k1",
+     "q": "Who was Moses' big sister who watched over him in the river?",
+     "opts": [
+      "Rachel",
+      "Miriam",
+      "Mary",
+      "Martha"
+     ],
+     "a": 1,
+     "exp": "His sister stood afar off, to wit what would be done to him. (Exodus 2:4; Miriam, Numbers 26:59)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-k2",
+     "q": "Which sister sat at Jesus' feet listening while Martha was busy?",
+     "opts": [
+      "Eve",
+      "Ruth",
+      "Esther",
+      "Mary"
+     ],
+     "a": 3,
+     "exp": "Mary hath chosen that good part. (Luke 10:42)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-k3",
+     "q": "Who prayed for a baby and became the mother of Samuel?",
+     "opts": [
+      "Hannah",
+      "Rebekah",
+      "Sarah",
+      "Leah"
+     ],
+     "a": 0,
+     "exp": "For this child I prayed. (1 Samuel 1:27)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-k4",
+     "q": "Which woman laughed when told she would have a baby when she was very old?",
+     "opts": [
+      "Hannah",
+      "Sarah",
+      "Ruth",
+      "Eve"
+     ],
+     "a": 1,
+     "exp": "Sarah laughed within herself. (Genesis 18:12)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-k5",
+     "q": "Who was the first woman in the Bible?",
+     "opts": [
+      "Mary",
+      "Miriam",
+      "Eve",
+      "Sarah"
+     ],
+     "a": 2,
+     "exp": "Eve was the mother of all living. (Genesis 3:20)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-k6",
+     "q": "Rahab helped two spies. What did she hang from her window?",
+     "opts": [
+      "A white flag",
+      "A basket",
+      "A scarlet cord",
+      "A lamp"
+     ],
+     "a": 2,
+     "exp": "Thou shalt bind this line of scarlet thread in the window. (Joshua 2:18)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-k7",
+     "q": "Which woman gave water to Abraham's servant and his camels?",
+     "opts": [
+      "Rebekah",
+      "Leah",
+      "Hagar",
+      "Rachel"
+     ],
+     "a": 0,
+     "exp": "I will draw water for thy camels also. (Genesis 24:19)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-k8",
+     "q": "Who was Jacob's favourite wife?",
+     "opts": [
+      "Zilpah",
+      "Dinah",
+      "Leah",
+      "Rachel"
+     ],
+     "a": 3,
+     "exp": "Jacob loved Rachel. (Genesis 29:18)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-k9",
+     "q": "Which kind woman made coats for the poor and was raised by Peter?",
+     "opts": [
+      "Phoebe",
+      "Dorcas",
+      "Lydia",
+      "Rhoda"
+     ],
+     "a": 1,
+     "exp": "Shewing the coats and garments which Dorcas made. (Acts 9:39)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-k10",
+     "q": "Who did Jesus talk with at a well in Samaria?",
+     "opts": [
+      "Martha",
+      "Mary Magdalene",
+      "A Samaritan woman",
+      "Elisabeth"
+     ],
+     "a": 2,
+     "exp": "There cometh a woman of Samaria to draw water. (John 4:7)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-k11",
+     "q": "Who became queen and saved the Jewish people?",
+     "opts": [
+      "Esther",
+      "Vashti",
+      "Jezebel",
+      "Delilah"
+     ],
+     "a": 0,
+     "exp": "Esther went in unto the king to plead for her people. (Esther 8:3)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-g1",
+     "q": "Who was Ruth's mother-in-law?",
+     "opts": [
+      "Hannah",
+      "Elisabeth",
+      "Naomi",
+      "Orpah"
+     ],
+     "a": 2,
+     "exp": "Call me not Naomi, call me Mara. (Ruth 1:20)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-g2",
+     "q": "Which woman drove a tent peg through Sisera's head?",
+     "opts": [
+      "Abigail",
+      "Deborah",
+      "Delilah",
+      "Jael"
+     ],
+     "a": 3,
+     "exp": "Jael Heber's wife took a nail of the tent. (Judges 4:21)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-g3",
+     "q": "Which wise woman stopped David from taking revenge on her husband Nabal?",
+     "opts": [
+      "Michal",
+      "Abigail",
+      "Tamar",
+      "Bathsheba"
+     ],
+     "a": 1,
+     "exp": "Blessed be thy advice, and blessed be thou. (1 Samuel 25:33)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-g4",
+     "q": "Who was the mother of King Solomon?",
+     "opts": [
+      "Michal",
+      "Bathsheba",
+      "Ahinoam",
+      "Abigail"
+     ],
+     "a": 1,
+     "exp": "She bare a son, and he called his name Solomon. (2 Samuel 12:24)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-g5",
+     "q": "Which prophetess, aged 84, spoke of baby Jesus in the temple?",
+     "opts": [
+      "Miriam",
+      "Anna",
+      "Huldah",
+      "Deborah"
+     ],
+     "a": 1,
+     "exp": "Anna, a prophetess… a widow of about fourscore and four years. (Luke 2:36–37)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-g6",
+     "q": "Which couple taught Apollos the way of God more perfectly?",
+     "opts": [
+      "Ananias and Sapphira",
+      "Priscilla and Aquila",
+      "Zacharias and Elisabeth",
+      "Boaz and Ruth"
+     ],
+     "a": 1,
+     "exp": "Aquila and Priscilla… expounded unto him the way of God more perfectly. (Acts 18:26)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-g7",
+     "q": "Which woman anointed Jesus with costly ointment in Bethany, according to John?",
+     "opts": [
+      "Mary, sister of Lazarus",
+      "Mary Magdalene",
+      "Joanna",
+      "Martha"
+     ],
+     "a": 0,
+     "exp": "Then took Mary a pound of ointment of spikenard. (John 12:3)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-g8",
+     "q": "Which servant girl was so glad to hear Peter's voice she forgot to open the gate?",
+     "opts": [
+      "Lydia",
+      "Chloe",
+      "Phoebe",
+      "Rhoda"
+     ],
+     "a": 3,
+     "exp": "A damsel came to hearken, named Rhoda… she opened not the gate for gladness. (Acts 12:13–14)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-g9",
+     "q": "Which queen refused to come when King Ahasuerus called her?",
+     "opts": [
+      "Esther",
+      "Jezebel",
+      "Vashti",
+      "Athaliah"
+     ],
+     "a": 2,
+     "exp": "The queen Vashti refused to come at the king's commandment. (Esther 1:12)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-g10",
+     "q": "Which prophetess was consulted when the Book of the Law was found in Josiah's day?",
+     "opts": [
+      "Anna",
+      "Deborah",
+      "Noadiah",
+      "Huldah"
+     ],
+     "a": 3,
+     "exp": "Hilkiah the priest… went unto Huldah the prophetess. (2 Kings 22:14)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-g11",
+     "q": "Who was the mother of Moses?",
+     "opts": [
+      "Zipporah",
+      "Miriam",
+      "Jochebed",
+      "Elisheba"
+     ],
+     "a": 2,
+     "exp": "Amram's wife was Jochebed… and she bare unto Amram Aaron and Moses. (Numbers 26:59)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "women-g12",
+     "q": "Which woman from Canaan said even the dogs eat the crumbs from the master's table?",
+     "opts": [
+      "The Syrophenician woman",
+      "Rahab",
+      "The widow of Zarephath",
+      "The Samaritan woman"
+     ],
+     "a": 0,
+     "exp": "Yet the dogs under the table eat of the children's crumbs. (Mark 7:26–28)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "whosaid",
+   "name": "Who Said It?",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "whosaid-k1",
+     "q": "Who said, “Let there be light”?",
+     "opts": [
+      "Moses",
+      "God",
+      "David",
+      "Adam"
+     ],
+     "a": 1,
+     "exp": "God said, Let there be light. (Genesis 1:3)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-k2",
+     "q": "Who said, “Let my people go”?",
+     "opts": [
+      "Joseph",
+      "Pharaoh",
+      "Noah",
+      "Moses (for God)"
+     ],
+     "a": 3,
+     "exp": "Thus saith the LORD God of Israel, Let my people go. (Exodus 5:1)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-k3",
+     "q": "Who said, “Am I my brother's keeper?”",
+     "opts": [
+      "Esau",
+      "Joseph",
+      "Cain",
+      "Abel"
+     ],
+     "a": 2,
+     "exp": "Cain said, I know not: Am I my brother's keeper? (Genesis 4:9)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-k4",
+     "q": "Who said, “Speak; for thy servant heareth”?",
+     "opts": [
+      "Jonah",
+      "David",
+      "Eli",
+      "Samuel"
+     ],
+     "a": 3,
+     "exp": "Samuel answered, Speak; for thy servant heareth. (1 Samuel 3:10)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-k5",
+     "q": "Who said, “Follow me, and I will make you fishers of men”?",
+     "opts": [
+      "Jesus",
+      "John the Baptist",
+      "Peter",
+      "Paul"
+     ],
+     "a": 0,
+     "exp": "Jesus said, Follow me, and I will make you fishers of men. (Matthew 4:19)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-k6",
+     "q": "Who said, “Behold the Lamb of God”?",
+     "opts": [
+      "Isaiah",
+      "Mary",
+      "John the Baptist",
+      "Peter"
+     ],
+     "a": 2,
+     "exp": "John… saith, Behold the Lamb of God. (John 1:29)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-k7",
+     "q": "Who said, “Behold the handmaid of the Lord”?",
+     "opts": [
+      "Hannah",
+      "Martha",
+      "Elisabeth",
+      "Mary"
+     ],
+     "a": 3,
+     "exp": "Mary said, Behold the handmaid of the Lord. (Luke 1:38)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-k8",
+     "q": "Who said, “Thou art the Christ, the Son of the living God”?",
+     "opts": [
+      "Pilate",
+      "Peter",
+      "Thomas",
+      "Judas"
+     ],
+     "a": 1,
+     "exp": "Simon Peter answered… Thou art the Christ. (Matthew 16:16)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-k9",
+     "q": "Who said, “as for me and my house, we will serve the LORD”?",
+     "opts": [
+      "Joshua",
+      "David",
+      "Noah",
+      "Moses"
+     ],
+     "a": 0,
+     "exp": "As for me and my house, we will serve the LORD. (Joshua 24:15)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-k10",
+     "q": "Who said, “Here am I; send me”?",
+     "opts": [
+      "Jeremiah",
+      "Isaiah",
+      "Jonah",
+      "Elijah"
+     ],
+     "a": 1,
+     "exp": "Then said I, Here am I; send me. (Isaiah 6:8)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-k11",
+     "q": "Who said, “My Lord and my God” when he saw the risen Jesus?",
+     "opts": [
+      "Andrew",
+      "Peter",
+      "John",
+      "Thomas"
+     ],
+     "a": 3,
+     "exp": "Thomas answered… My Lord and my God. (John 20:28)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-g1",
+     "q": "Who said, “What is truth?”",
+     "opts": [
+      "Pontius Pilate",
+      "Caiaphas",
+      "Festus",
+      "Herod"
+     ],
+     "a": 0,
+     "exp": "Pilate saith unto him, What is truth? (John 18:38)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-g2",
+     "q": "Who said, “He must increase, but I must decrease”?",
+     "opts": [
+      "John the Baptist",
+      "Peter",
+      "Andrew",
+      "Paul"
+     ],
+     "a": 0,
+     "exp": "He must increase, but I must decrease. (John 3:30)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-g3",
+     "q": "Who said, “Almost thou persuadest me to be a Christian”?",
+     "opts": [
+      "Festus",
+      "Felix",
+      "King Agrippa",
+      "Gallio"
+     ],
+     "a": 2,
+     "exp": "Agrippa said unto Paul, Almost thou persuadest me to be a Christian. (Acts 26:28)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-g4",
+     "q": "Who said, “I have fought a good fight, I have finished my course”?",
+     "opts": [
+      "Paul",
+      "Timothy",
+      "Stephen",
+      "Peter"
+     ],
+     "a": 0,
+     "exp": "I have fought a good fight… I have kept the faith. (2 Timothy 4:7)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-g5",
+     "q": "Who said, “if I perish, I perish”?",
+     "opts": [
+      "Daniel",
+      "Jonah",
+      "Ruth",
+      "Esther"
+     ],
+     "a": 3,
+     "exp": "So will I go in unto the king… and if I perish, I perish. (Esther 4:16)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-g6",
+     "q": "Who said, “Though he slay me, yet will I trust in him”?",
+     "opts": [
+      "David",
+      "Jeremiah",
+      "Job",
+      "Habakkuk"
+     ],
+     "a": 2,
+     "exp": "Though he slay me, yet will I trust in him. (Job 13:15)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-g7",
+     "q": "Who said, “How long halt ye between two opinions?”",
+     "opts": [
+      "Elisha",
+      "Moses",
+      "Elijah",
+      "Samuel"
+     ],
+     "a": 2,
+     "exp": "If the LORD be God, follow him. (1 Kings 18:21)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-g8",
+     "q": "Who said, “Sirs, what must I do to be saved?”",
+     "opts": [
+      "The Philippian jailer",
+      "Cornelius",
+      "The rich young ruler",
+      "Nicodemus"
+     ],
+     "a": 0,
+     "exp": "Believe on the Lord Jesus Christ, and thou shalt be saved. (Acts 16:30–31)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-g9",
+     "q": "Who said, “Is any thing too hard for the LORD?”",
+     "opts": [
+      "Sarah",
+      "The LORD to Abraham",
+      "Gabriel to Mary",
+      "Moses"
+     ],
+     "a": 1,
+     "exp": "Is any thing too hard for the LORD? (Genesis 18:14)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-g10",
+     "q": "Who said, “Lord, remember me when thou comest into thy kingdom”?",
+     "opts": [
+      "The thief on the cross",
+      "Peter",
+      "A centurion",
+      "Joseph of Arimathaea"
+     ],
+     "a": 0,
+     "exp": "Today shalt thou be with me in paradise. (Luke 23:42–43)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-g11",
+     "q": "Who said, “Truly this was the Son of God”?",
+     "opts": [
+      "Peter",
+      "The centurion at the cross",
+      "Pilate's wife",
+      "Nicodemus"
+     ],
+     "a": 1,
+     "exp": "The centurion, and they that were with him… said, Truly this was the Son of God. (Matthew 27:54)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "whosaid-g12",
+     "q": "Who said, “It is more blessed to give than to receive”, as Paul reported?",
+     "opts": [
+      "Paul",
+      "Peter",
+      "Barnabas",
+      "Jesus"
+     ],
+     "a": 3,
+     "exp": "Remember the words of the Lord Jesus, how he said, It is more blessed to give than to receive. (Acts 20:35)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "books",
+   "name": "Books of the Bible",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "books-k1",
+     "q": "What is the first book of the Bible?",
+     "opts": [
+      "Psalms",
+      "Matthew",
+      "Exodus",
+      "Genesis"
+     ],
+     "a": 3,
+     "exp": "Genesis means “beginning”.",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-k2",
+     "q": "What is the last book of the Bible?",
+     "opts": [
+      "Revelation",
+      "Malachi",
+      "Jude",
+      "Acts"
+     ],
+     "a": 0,
+     "exp": "Revelation closes the Bible.",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-k3",
+     "q": "How many books are in the Bible?",
+     "opts": [
+      "27",
+      "39",
+      "66",
+      "100"
+     ],
+     "a": 2,
+     "exp": "39 in the Old Testament and 27 in the New Testament.",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-k4",
+     "q": "What is the first book of the New Testament?",
+     "opts": [
+      "Luke",
+      "John",
+      "Matthew",
+      "Mark"
+     ],
+     "a": 2,
+     "exp": "Matthew, Mark, Luke and John are the four Gospels.",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-k5",
+     "q": "The first four books of the New Testament are called the…",
+     "opts": [
+      "Prophets",
+      "Gospels",
+      "Letters",
+      "Psalms"
+     ],
+     "a": 1,
+     "exp": "Gospel means “good news”.",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-k6",
+     "q": "How many books are in the Old Testament?",
+     "opts": [
+      "39",
+      "12",
+      "27",
+      "66"
+     ],
+     "a": 0,
+     "exp": "The Old Testament has 39 books.",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-k7",
+     "q": "How many books are in the New Testament?",
+     "opts": [
+      "39",
+      "27",
+      "4",
+      "12"
+     ],
+     "a": 1,
+     "exp": "The New Testament has 27 books.",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-k8",
+     "q": "Which book comes right after the four Gospels?",
+     "opts": [
+      "Revelation",
+      "Acts",
+      "Hebrews",
+      "Romans"
+     ],
+     "a": 1,
+     "exp": "Acts of the Apostles tells how the church began.",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-k9",
+     "q": "Which book has the story of the whale-like fish?",
+     "opts": [
+      "Joel",
+      "Jonah",
+      "Judges",
+      "Job"
+     ],
+     "a": 1,
+     "exp": "The book of Jonah.",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-k10",
+     "q": "Which book comes after Genesis?",
+     "opts": [
+      "Joshua",
+      "Numbers",
+      "Leviticus",
+      "Exodus"
+     ],
+     "a": 3,
+     "exp": "Genesis, Exodus, Leviticus, Numbers, Deuteronomy.",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-k11",
+     "q": "Which book is full of songs and prayers?",
+     "opts": [
+      "Acts",
+      "Psalms",
+      "Judges",
+      "Numbers"
+     ],
+     "a": 1,
+     "exp": "Psalms is the Bible's song book.",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-g1",
+     "q": "Which is the last book of the Old Testament?",
+     "opts": [
+      "Daniel",
+      "Isaiah",
+      "Zechariah",
+      "Malachi"
+     ],
+     "a": 3,
+     "exp": "Malachi closes the Old Testament.",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-g2",
+     "q": "Who is traditionally believed to have written the first five books (the Pentateuch)?",
+     "opts": [
+      "Samuel",
+      "Ezra",
+      "Moses",
+      "Joshua"
+     ],
+     "a": 2,
+     "exp": "Genesis to Deuteronomy are called the Books of Moses.",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-g3",
+     "q": "Which Gospel writer was a doctor?",
+     "opts": [
+      "Luke",
+      "Mark",
+      "Matthew",
+      "John"
+     ],
+     "a": 0,
+     "exp": "Luke, the beloved physician. (Colossians 4:14)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-g4",
+     "q": "Who wrote the book of Acts?",
+     "opts": [
+      "John",
+      "Peter",
+      "Luke",
+      "Paul"
+     ],
+     "a": 2,
+     "exp": "Acts is addressed to Theophilus like Luke's Gospel. (Acts 1:1; Luke 1:3)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-g5",
+     "q": "Which book comes right after Acts?",
+     "opts": [
+      "James",
+      "Romans",
+      "Hebrews",
+      "Galatians"
+     ],
+     "a": 1,
+     "exp": "Acts, Romans, 1 Corinthians, 2 Corinthians…",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-g6",
+     "q": "Which book is the shortest in the Old Testament?",
+     "opts": [
+      "Haggai",
+      "Jonah",
+      "Ruth",
+      "Obadiah"
+     ],
+     "a": 3,
+     "exp": "Obadiah has just 21 verses.",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-g7",
+     "q": "Which are the three “Synoptic” Gospels?",
+     "opts": [
+      "Matthew, Mark and Luke",
+      "Mark, Luke and John",
+      "Matthew, Mark and John",
+      "Matthew, Luke and John"
+     ],
+     "a": 0,
+     "exp": "Synoptic means “seen together”; John's Gospel is different in style.",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-g8",
+     "q": "Which book comes between Nehemiah and Job?",
+     "opts": [
+      "Esther",
+      "Ezra",
+      "Ruth",
+      "Psalms"
+     ],
+     "a": 0,
+     "exp": "Ezra, Nehemiah, Esther, Job.",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-g9",
+     "q": "How many letters (epistles) are credited to Paul in most Bibles?",
+     "opts": [
+      "21",
+      "13",
+      "4",
+      "7"
+     ],
+     "a": 1,
+     "exp": "Romans through Philemon: 13 letters (14 if Hebrews is counted).",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-g10",
+     "q": "Which New Testament book is the shortest by number of words (in Greek)?",
+     "opts": [
+      "Philemon",
+      "Jude",
+      "3 John",
+      "2 John"
+     ],
+     "a": 2,
+     "exp": "3 John is the shortest by words; 2 John has fewer verses (13) but more words.",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-g11",
+     "q": "Which book comes between Micah and Habakkuk?",
+     "opts": [
+      "Zephaniah",
+      "Nahum",
+      "Amos",
+      "Joel"
+     ],
+     "a": 1,
+     "exp": "Micah, Nahum, Habakkuk, Zephaniah.",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "books-g12",
+     "q": "Which Gospel begins “In the beginning was the Word”?",
+     "opts": [
+      "Luke",
+      "Matthew",
+      "John",
+      "Mark"
+     ],
+     "a": 2,
+     "exp": "In the beginning was the Word, and the Word was with God. (John 1:1)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "verses",
+   "name": "Memory Verses",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "verses-k1",
+     "q": "“For God so loved the…”",
+     "opts": [
+      "Sky",
+      "Kings",
+      "World",
+      "Sea"
+     ],
+     "a": 2,
+     "exp": "For God so loved the world, that he gave his only begotten Son. (John 3:16)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-k2",
+     "q": "“Jesus…” (the shortest verse in the KJV)",
+     "opts": [
+      "Walked",
+      "Smiled",
+      "Prayed",
+      "Wept"
+     ],
+     "a": 3,
+     "exp": "Jesus wept. (John 11:35)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-k3",
+     "q": "“I can do all things through Christ which…”",
+     "opts": [
+      "Loves me",
+      "Sees me",
+      "Hears me",
+      "Strengtheneth me"
+     ],
+     "a": 3,
+     "exp": "I can do all things through Christ which strengtheneth me. (Philippians 4:13)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-k4",
+     "q": "“Children, obey your parents in the Lord: for this is…”",
+     "opts": [
+      "Hard",
+      "Fun",
+      "Right",
+      "New"
+     ],
+     "a": 2,
+     "exp": "For this is right. (Ephesians 6:1)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-k5",
+     "q": "“Be ye kind one to…”",
+     "opts": [
+      "Kings",
+      "Yourself",
+      "Another",
+      "Animals"
+     ],
+     "a": 2,
+     "exp": "Be ye kind one to another, tenderhearted, forgiving one another. (Ephesians 4:32)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-k6",
+     "q": "“God is…” (1 John 4:8)",
+     "opts": [
+      "Asleep",
+      "Angry",
+      "Love",
+      "Far"
+     ],
+     "a": 2,
+     "exp": "He that loveth not knoweth not God; for God is love. (1 John 4:8)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-k7",
+     "q": "“Thy word have I hid in mine heart, that I might not…”",
+     "opts": [
+      "Be afraid",
+      "Sin against thee",
+      "Lose it",
+      "Forget it"
+     ],
+     "a": 1,
+     "exp": "That I might not sin against thee. (Psalm 119:11)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-k8",
+     "q": "“Casting all your care upon him; for he…”",
+     "opts": [
+      "Is king",
+      "Hears all",
+      "Is strong",
+      "Careth for you"
+     ],
+     "a": 3,
+     "exp": "For he careth for you. (1 Peter 5:7)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-k9",
+     "q": "“A new commandment I give unto you, That ye…”",
+     "opts": [
+      "Love one another",
+      "Pray every day",
+      "Go to church",
+      "Obey the law"
+     ],
+     "a": 0,
+     "exp": "That ye love one another; as I have loved you. (John 13:34)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-k10",
+     "q": "“What time I am afraid, I will…”",
+     "opts": [
+      "Hide",
+      "Run away",
+      "Cry out",
+      "Trust in thee"
+     ],
+     "a": 3,
+     "exp": "What time I am afraid, I will trust in thee. (Psalm 56:3)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-k11",
+     "q": "“In the beginning God created the heaven and the…”",
+     "opts": [
+      "Angels",
+      "Sea",
+      "Earth",
+      "Stars"
+     ],
+     "a": 2,
+     "exp": "In the beginning God created the heaven and the earth. (Genesis 1:1)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-g1",
+     "q": "“For all have sinned, and come short of…”",
+     "opts": [
+      "The law",
+      "Perfection",
+      "The glory of God",
+      "Heaven"
+     ],
+     "a": 2,
+     "exp": "Come short of the glory of God. (Romans 3:23)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-g2",
+     "q": "“For the wages of sin is death; but the gift of God is…”",
+     "opts": [
+      "Wisdom and riches",
+      "Eternal life through Jesus Christ our Lord",
+      "A crown of gold",
+      "Joy and peace"
+     ],
+     "a": 1,
+     "exp": "Eternal life through Jesus Christ our Lord. (Romans 6:23)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-g3",
+     "q": "“For by grace are ye saved through faith; and that not of yourselves: it is…”",
+     "opts": [
+      "Of the law",
+      "Your reward",
+      "The gift of God",
+      "By your works"
+     ],
+     "a": 2,
+     "exp": "It is the gift of God: Not of works, lest any man should boast. (Ephesians 2:8–9)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-g4",
+     "q": "“And we know that all things work together for good to them that…”",
+     "opts": [
+      "Love God",
+      "Work hard",
+      "Are wise",
+      "Are rich"
+     ],
+     "a": 0,
+     "exp": "To them that love God, to them who are the called according to his purpose. (Romans 8:28)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-g5",
+     "q": "“If we confess our sins, he is faithful and just to forgive us our sins, and to…”",
+     "opts": [
+      "Cleanse us from all unrighteousness",
+      "Answer our prayers",
+      "Make us strong",
+      "Give us riches"
+     ],
+     "a": 0,
+     "exp": "To cleanse us from all unrighteousness. (1 John 1:9)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-g6",
+     "q": "“But they that wait upon the LORD shall renew their strength; they shall mount up with wings as…”",
+     "opts": [
+      "Doves",
+      "Angels",
+      "Sparrows",
+      "Eagles"
+     ],
+     "a": 3,
+     "exp": "They shall mount up with wings as eagles. (Isaiah 40:31)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-g7",
+     "q": "“For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of…”",
+     "opts": [
+      "Evil",
+      "War",
+      "Sadness",
+      "Fear"
+     ],
+     "a": 0,
+     "exp": "To give you an expected end. (Jeremiah 29:11)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-g8",
+     "q": "“Be still, and know that I am…”",
+     "opts": [
+      "Near",
+      "King",
+      "Here",
+      "God"
+     ],
+     "a": 3,
+     "exp": "Be still, and know that I am God. (Psalm 46:10)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-g9",
+     "q": "“Be careful for nothing; but in every thing by prayer and supplication with…”",
+     "opts": [
+      "Fasting",
+      "Thanksgiving",
+      "Tears",
+      "Patience"
+     ],
+     "a": 1,
+     "exp": "With thanksgiving let your requests be made known unto God. (Philippians 4:6)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-g10",
+     "q": "“Therefore if any man be in Christ, he is…”",
+     "opts": [
+      "Forgiven",
+      "Free",
+      "Blessed",
+      "A new creature"
+     ],
+     "a": 3,
+     "exp": "He is a new creature: old things are passed away. (2 Corinthians 5:17)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-g11",
+     "q": "“Go ye therefore, and teach all nations, baptizing them in the name of…”",
+     "opts": [
+      "The Father, and of the Son, and of the Holy Ghost",
+      "Jesus only",
+      "The apostles",
+      "Moses and Elijah"
+     ],
+     "a": 0,
+     "exp": "The Great Commission. (Matthew 28:19)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "verses-g12",
+     "q": "“Jesus Christ the same yesterday, and to day, and…”",
+     "opts": [
+      "For ever",
+      "Always near",
+      "Tomorrow",
+      "In heaven"
+     ],
+     "a": 0,
+     "exp": "Jesus Christ the same yesterday, and to day, and for ever. (Hebrews 13:8)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  },
+  {
+   "id": "animals",
+   "name": "Animals of the Bible",
+   "mode": "choice",
+   "count": 10,
+   "questions": [
+    {
+     "kind": "choice",
+     "id": "animals-k1",
+     "q": "Which animal spoke to Eve in the garden?",
+     "opts": [
+      "A cat",
+      "A dog",
+      "A serpent",
+      "A sheep"
+     ],
+     "a": 2,
+     "exp": "The serpent said unto the woman… (Genesis 3:1–4)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-k2",
+     "q": "Which animals did David protect his sheep from?",
+     "opts": [
+      "A lion and a bear",
+      "An eagle and a hawk",
+      "A wolf and a fox",
+      "A tiger and a snake"
+     ],
+     "a": 0,
+     "exp": "There came a lion, and a bear, and took a lamb out of the flock. (1 Samuel 17:34)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-k3",
+     "q": "Jesus said, “I am the good…” what?",
+     "opts": [
+      "Eagle",
+      "Fisherman",
+      "Lion",
+      "Shepherd"
+     ],
+     "a": 3,
+     "exp": "I am the good shepherd: the good shepherd giveth his life for the sheep. (John 10:11)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-k4",
+     "q": "Which bird did Noah send out first?",
+     "opts": [
+      "A raven",
+      "A dove",
+      "An owl",
+      "A parrot"
+     ],
+     "a": 0,
+     "exp": "He sent forth a raven. (Genesis 8:7)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-k5",
+     "q": "What jumped out of the rivers in the second plague of Egypt?",
+     "opts": [
+      "Crocodiles",
+      "Snakes",
+      "Frogs",
+      "Fish"
+     ],
+     "a": 2,
+     "exp": "The frogs came up, and covered the land of Egypt. (Exodus 8:6)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-k6",
+     "q": "What insects ate all the plants in the eighth plague?",
+     "opts": [
+      "Ants",
+      "Locusts",
+      "Butterflies",
+      "Bees"
+     ],
+     "a": 1,
+     "exp": "The locusts went up over all the land of Egypt. (Exodus 10:14)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-k7",
+     "q": "What did John the Baptist eat in the wilderness?",
+     "opts": [
+      "Manna",
+      "Figs and dates",
+      "Bread and fish",
+      "Locusts and wild honey"
+     ],
+     "a": 3,
+     "exp": "His meat was locusts and wild honey. (Matthew 3:4)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-k8",
+     "q": "Jesus is called the Lamb of God. He is also called the Lion of the tribe of…",
+     "opts": [
+      "Levi",
+      "Dan",
+      "Judah",
+      "Benjamin"
+     ],
+     "a": 2,
+     "exp": "The Lion of the tribe of Juda… hath prevailed. (Revelation 5:5)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-k9",
+     "q": "What did Samson find in the body of a lion he had killed?",
+     "opts": [
+      "A gold ring",
+      "A bird's nest",
+      "A sword",
+      "Bees and honey"
+     ],
+     "a": 3,
+     "exp": "There was a swarm of bees and honey in the carcase of the lion. (Judges 14:8)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-k10",
+     "q": "Which birds did God send to feed Israel in the wilderness, along with manna?",
+     "opts": [
+      "Ravens",
+      "Doves",
+      "Quails",
+      "Chickens"
+     ],
+     "a": 2,
+     "exp": "At even the quails came up, and covered the camp. (Exodus 16:13)",
+     "difficulty": "medium",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-k11",
+     "q": "What animal crowed after Peter denied Jesus three times?",
+     "opts": [
+      "A goat",
+      "A donkey",
+      "A rooster (cock)",
+      "A dog"
+     ],
+     "a": 2,
+     "exp": "Immediately the cock crew. (Matthew 26:74)",
+     "difficulty": "easy",
+     "age8": false,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-g1",
+     "q": "Jesus said it is easier for what animal to go through the eye of a needle than for a rich man to enter God's kingdom?",
+     "opts": [
+      "An elephant",
+      "An ox",
+      "A camel",
+      "A horse"
+     ],
+     "a": 2,
+     "exp": "It is easier for a camel to go through the eye of a needle. (Matthew 19:24)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-g2",
+     "q": "How many foxes did Samson catch to burn the Philistines' fields?",
+     "opts": [
+      "30",
+      "100",
+      "12",
+      "300"
+     ],
+     "a": 3,
+     "exp": "Samson went and caught three hundred foxes. (Judges 15:4)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-g3",
+     "q": "What animals did Elisha's curse bring out of the woods against the youths mocking him?",
+     "opts": [
+      "A pack of wolves",
+      "Two lions",
+      "Two she bears",
+      "A swarm of hornets"
+     ],
+     "a": 2,
+     "exp": "There came forth two she bears out of the wood. (2 Kings 2:24)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-g4",
+     "q": "Into which animals did Jesus send the demons from the man of the Gadarenes?",
+     "opts": [
+      "Dogs",
+      "Sheep",
+      "Swine",
+      "Goats"
+     ],
+     "a": 2,
+     "exp": "The herd ran violently down a steep place into the sea. (Mark 5:13)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-g5",
+     "q": "What creature does God describe at length to Job in chapter 41?",
+     "opts": [
+      "Dragon",
+      "Behemoth",
+      "Leviathan",
+      "Unicorn"
+     ],
+     "a": 2,
+     "exp": "Canst thou draw out leviathan with an hook? (Job 41:1)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-g6",
+     "q": "Which animal did Saul's father lose, leading Saul to meet Samuel?",
+     "opts": [
+      "Sheep",
+      "Camels",
+      "Goats",
+      "Donkeys (asses)"
+     ],
+     "a": 3,
+     "exp": "The asses of Kish Saul's father were lost. (1 Samuel 9:3)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-g7",
+     "q": "How many of each clean animal did Noah take into the ark?",
+     "opts": [
+      "Seven (by sevens)",
+      "Twelve",
+      "Ten",
+      "Two"
+     ],
+     "a": 0,
+     "exp": "Of every clean beast thou shalt take to thee by sevens. (Genesis 7:2)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-g8",
+     "q": "Which bird did Jesus say God feeds, though they neither sow nor reap, in Luke 12:24?",
+     "opts": [
+      "Doves",
+      "Ravens",
+      "Eagles",
+      "Sparrows"
+     ],
+     "a": 1,
+     "exp": "Consider the ravens: for they neither sow nor reap. (Luke 12:24)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-g9",
+     "q": "Which animal was the scapegoat sent into the wilderness on the Day of Atonement?",
+     "opts": [
+      "A bullock",
+      "A dove",
+      "A goat",
+      "A lamb"
+     ],
+     "a": 2,
+     "exp": "The goat shall bear upon him all their iniquities. (Leviticus 16:22)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-g10",
+     "q": "Whose blood did the Israelites put on their doorposts at Passover?",
+     "opts": [
+      "A lamb",
+      "A dove",
+      "A bull",
+      "A goat only"
+     ],
+     "a": 0,
+     "exp": "Your lamb shall be without blemish. (Exodus 12:5–7)",
+     "difficulty": "difficult",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-g11",
+     "q": "In Revelation, what animal does Jesus ride when He returns?",
+     "opts": [
+      "A donkey",
+      "A lion",
+      "A chariot of eagles",
+      "A white horse"
+     ],
+     "a": 3,
+     "exp": "Behold a white horse; and he that sat upon him was called Faithful and True. (Revelation 19:11)",
+     "difficulty": "medium",
+     "age8": true,
+     "replace": false
+    },
+    {
+     "kind": "choice",
+     "id": "animals-g12",
+     "q": "Which prophet's donkey saw an angel blocking the road?",
+     "opts": [
+      "Jonah's",
+      "Samuel's",
+      "Balaam's",
+      "Elijah's"
+     ],
+     "a": 2,
+     "exp": "The ass saw the angel of the LORD standing in the way. (Numbers 22:23)",
+     "difficulty": "advanced",
+     "age8": true,
+     "replace": false
+    }
+   ]
+  }
+ ],
+ "academy": [],
+ "breaks": [
+  {
+   "type": "know",
+   "text": "Did you know? About 40 different people wrote the Bible.",
+   "answer": "They wrote over roughly 1,500 years, yet it tells one story."
+  },
+  {
+   "type": "know",
+   "text": "Did you know? Psalm 117 is the shortest chapter in the Bible.",
+   "answer": "It has just two verses. Psalm 119, with 176 verses, is the longest."
+  },
+  {
+   "type": "know",
+   "text": "Did you know? Methuselah lived 969 years!",
+   "answer": "That is the longest life recorded in the Bible. (Genesis 5:27)"
+  },
+  {
+   "type": "know",
+   "text": "Did you know? “Jesus wept” is the shortest verse in the King James Bible.",
+   "answer": "It is John 11:35, when Jesus came to Lazarus' tomb."
+  },
+  {
+   "type": "know",
+   "text": "Did you know? “Gospel” means “good news”.",
+   "answer": "Matthew, Mark, Luke and John tell the good news of Jesus."
+  },
+  {
+   "type": "know",
+   "text": "Did you know? Jesus spoke Aramaic.",
+   "answer": "“Talitha cumi” means “Little girl, arise”. (Mark 5:41)"
+  },
+  {
+   "type": "know",
+   "text": "Did you know? The Old Testament was written mostly in Hebrew.",
+   "answer": "The New Testament was written in Greek."
+  },
+  {
+   "type": "know",
+   "text": "Did you know? The Bible has 1,189 chapters.",
+   "answer": "929 in the Old Testament and 260 in the New Testament."
+  },
+  {
+   "type": "know",
+   "text": "Did you know? Paul wrote some letters from prison.",
+   "answer": "Ephesians, Philippians, Colossians and Philemon are called the prison letters."
+  },
+  {
+   "type": "know",
+   "text": "Did you know? Noah's ark was about 300 cubits long.",
+   "answer": "That is roughly 135 metres, longer than a football pitch! (Genesis 6:15)"
+  },
+  {
+   "type": "riddle",
+   "text": "I was inside a fish for three days and three nights. Who am I?",
+   "answer": "Jonah (Jonah 1:17)"
+  },
+  {
+   "type": "riddle",
+   "text": "I wore a coat of many colours and became a ruler in Egypt. Who am I?",
+   "answer": "Joseph (Genesis 37, 41)"
+  },
+  {
+   "type": "riddle",
+   "text": "I spent a night with lions and woke up safe. Who am I?",
+   "answer": "Daniel (Daniel 6)"
+  },
+  {
+   "type": "riddle",
+   "text": "I was short, so I climbed a sycamore tree to see Jesus. Who am I?",
+   "answer": "Zacchaeus (Luke 19)"
+  },
+  {
+   "type": "riddle",
+   "text": "I fell from the sky each morning and tasted like wafers with honey. What am I?",
+   "answer": "Manna (Exodus 16:31)"
+  },
+  {
+   "type": "riddle",
+   "text": "I was a shepherd boy who beat a giant with one stone. Who am I?",
+   "answer": "David (1 Samuel 17)"
+  },
+  {
+   "type": "riddle",
+   "text": "I built a huge boat before any rain came. Who am I?",
+   "answer": "Noah (Genesis 6)"
+  },
+  {
+   "type": "riddle",
+   "text": "I stood still in the sky so Joshua could win a battle. What am I?",
+   "answer": "The sun (Joshua 10:13)"
+  }
+ ]
+}

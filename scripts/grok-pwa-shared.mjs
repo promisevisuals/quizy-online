@@ -254,9 +254,15 @@ export function grokExtensionsHeadTags(projectId = readGrokProjectId()) {
   return tags;
 }
 
+/** King's Bible Quest builds (VITE_APP_ID=kings) use their own site card and icons. */
+function isKingsBuild() {
+  return String(process.env?.VITE_APP_ID ?? "") === "kings";
+}
+
 export function readOgSite(cwd = process.cwd()) {
   try {
-    const raw = readFileSync(join(cwd, OG_SITE_REL_PATH), "utf8");
+    const rel = isKingsBuild() ? OG_SITE_REL_PATH.replace(/site\.json$/, "site.kings.json") : OG_SITE_REL_PATH;
+    const raw = readFileSync(join(cwd, rel), "utf8");
     const parsed = JSON.parse(raw);
     return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
   } catch {
@@ -266,6 +272,7 @@ export function readOgSite(cwd = process.cwd()) {
 
 /** Public path of an on-disk share card, or "" if neither file exists. */
 export function ogCardPublicPath(cwd = process.cwd()) {
+  if (isKingsBuild() && existsSync(join(cwd, "public/og-kings.jpg"))) return "/og-kings.jpg";
   if (existsSync(join(cwd, "public/og.jpg"))) return "/og.jpg";
   if (existsSync(join(cwd, "public/og.png"))) return "/og.png";
   return "";
@@ -289,7 +296,7 @@ export function snapshotOgIdentity(cwd = process.cwd()) {
     if (siteHasCustomCard(site)) delete site.card;
     if (site.image) delete site.image;
   }
-  if (existsSync(join(cwd, "public/x-banner.jpg"))) {
+  if (!isKingsBuild() && existsSync(join(cwd, "public/x-banner.jpg"))) {
     site.banner = site.banner || "/x-banner.jpg";
   }
   return { site };

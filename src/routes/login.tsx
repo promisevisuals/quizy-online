@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
 import { loadFlags, supabase } from "@/lib/quiz/cloud";
+import { APP, IS_KINGS } from "@/lib/app";
 
 export const Route = createFileRoute("/login")({ component: Login });
 
@@ -53,7 +54,7 @@ function Login() {
         const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim());
         if (resetError) throw resetError;
         setResetStep("verify");
-        setNote("If that Quizy account exists, a eight-digit code is on its way. Enter it here to continue.");
+        setNote(`If that ${APP.name} account exists, a eight-digit code is on its way. Enter it here to continue.`);
         return;
       }
       if (mode === "reset" && resetStep === "verify") {
@@ -66,7 +67,7 @@ function Login() {
         });
         if (verifyError) throw verifyError;
         setResetStep("password");
-        setNote("Code verified. Choose a new password for your Quizy account.");
+        setNote(`Code verified. Choose a new password for your ${APP.name} account.`);
         return;
       }
       if (mode === "reset") {
@@ -84,7 +85,7 @@ function Login() {
         const { data, error: signUpError } = await supabase.auth.signUp({
           email: email.trim(),
           password,
-          options: { data: { display_name: name.trim() || "Explorer", signup_app: "quizy" }, emailRedirectTo: `${window.location.origin}/` },
+          options: { data: { display_name: name.trim() || "Explorer", signup_app: APP.id }, emailRedirectTo: `${window.location.origin}/` },
         });
         if (signUpError) throw signUpError;
         if (!data.session) {
@@ -120,16 +121,16 @@ function Login() {
         <div className="login-hero" aria-hidden="true">
           <img src="/art/horizon.jpg" alt="" className="login-scene" />
         </div>
-        <img src="/quizy-mark.png" alt="Quizy" className="login-logo" />
+        <img src={APP.mark} alt={APP.name} className="login-logo" />
         <div className="login-body">
-        <p className="text-sm font-extrabold uppercase tracking-widest text-gold">Quizy account</p>
+        <p className="text-sm font-extrabold uppercase tracking-widest text-gold">{APP.name} account</p>
         <h1 className="mt-2 font-display text-4xl font-semibold">
           {resetRequest ? "Reset your password" : resetVerify ? "Enter your code" : resetPassword ? "Choose a new password" : "Save your trail"}
         </h1>
         <p className="mt-2 text-muted">
           {resetRequest || resetVerify || resetPassword
-            ? "Recover your existing Quizy account securely with a eight-digit email code."
-            : "Sign in with the Quizy Supabase account. Stars, coins, and an unfinished question follow that account. The owner account opens the Command Center."}
+            ? `Recover your existing ${APP.name} account securely with an eight-digit email code.`
+            : `Sign in with your ${APP.name} account. Stars, coins, and an unfinished question follow that account. The owner account opens the Command Center.`}
         </p>
         <form className="mt-5 space-y-3" onSubmit={submit}>
           {mode === "up" && (

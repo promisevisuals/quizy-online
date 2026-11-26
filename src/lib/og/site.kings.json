@@ -1,0 +1,31 @@
+{
+  "title": "King's Bible Quest",
+  "type": "website",
+  "card": "custom",
+  "color": "22093f",
+  "background": "#fbf6ff",
+  "theme": "#4a1c8a",
+  "icons": [
+    {
+      "src": "/icons/kings-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/kings-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/kings-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shareTitle": "King's Bible Quest – free Bible trivia for kids and grown-ups 👑📖",
+  "description": "Old and New Testament questions with the verse after every answer. Separate questions for kids and grown-ups, memory verses, Who Said It?, daily challenge and fun games. Free, no ads. Made in Nigeria.",
+  "imageAlt": "King's Bible Quest: a smiling child wearing a gold crown above an open Bible"
+}

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Check, Copy, Heart, MessageCircle, Send, Share2, ThumbsUp, X } from "lucide-react";
+import { APP, IS_KINGS } from "@/lib/app";
 
-export const QUIZY_URL = "https://quizy.promisevisuals.com";
+export const QUIZY_URL = APP.siteUrl;
 /** Shared links carry ?ref=share so the Command Center can count visitors who came from a share. */
 const SHARE_URL = `${QUIZY_URL}/?ref=share`;
 
@@ -15,6 +16,7 @@ const MESSAGES = [
 ];
 
 function pickMessage() {
+  if (APP.shareMessages.length) return APP.shareMessages[Math.floor(Math.random() * APP.shareMessages.length)];
   return MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
 }
 
@@ -40,8 +42,8 @@ export function ShareQuizyButton({ variant = "icon", title, note }: { variant?: 
     setStatus("");
     if (typeof navigator !== "undefined" && navigator.share) {
       try {
-        await navigator.share({ title: "Quizy — the jungle quiz adventure", text: next, url: SHARE_URL });
-        setStatus("Thank you for sharing Quizy! 💛");
+        await navigator.share({ title: IS_KINGS ? APP.name : "Quizy — the jungle quiz adventure", text: next, url: SHARE_URL });
+        setStatus(`Thank you for sharing ${APP.name}! 💛`);
         return;
       } catch (error) {
         if (error instanceof Error && error.name === "AbortError") return;
@@ -57,8 +59,8 @@ export function ShareQuizyButton({ variant = "icon", title, note }: { variant?: 
           type="button"
           onClick={() => void share()}
           className="inline-flex size-11 items-center justify-center rounded-2xl border border-line"
-          aria-label="Share Quizy with friends"
-          title="Share Quizy"
+          aria-label={`Share ${APP.name} with friends`}
+          title={`Share ${APP.name}`}
         >
           <Share2 className="size-5" />
         </button>
@@ -69,7 +71,7 @@ export function ShareQuizyButton({ variant = "icon", title, note }: { variant?: 
             {title ?? "Share the adventure"}
           </p>
           <p className="mt-1 text-sm leading-relaxed text-muted">
-            {note ?? "Know a little explorer who'd love Quizy? Send it to friends and family — it's free to play."}
+            {note ?? (IS_KINGS ? "Know someone who'd love a Bible quiz? Send it to friends, family and church — it's free." : "Know a little explorer who'd love Quizy? Send it to friends and family — it's free to play.")}
           </p>
           <button
             type="button"
@@ -77,7 +79,7 @@ export function ShareQuizyButton({ variant = "icon", title, note }: { variant?: 
             className="mt-3 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-gold px-4 font-extrabold text-gold-fg"
           >
             <Share2 className="size-5" aria-hidden />
-            Share Quizy
+            Share {APP.name}
           </button>
           {status && (
             <p aria-live="polite" className="mt-2 text-sm font-bold text-muted">
@@ -126,7 +128,7 @@ function ShareSheet({ message, onClose }: { message: string; onClose: () => void
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Share Quizy"
+        aria-label={`Share ${APP.name}`}
         className="screen-in w-full max-w-md rounded-card border border-gold bg-surface p-5"
         onClick={(event) => event.stopPropagation()}
       >
@@ -136,7 +138,7 @@ function ShareSheet({ message, onClose }: { message: string; onClose: () => void
               <img src="/quizy-mark.png" alt="" />
             </span>
             <div>
-              <h2 className="font-display text-2xl font-semibold leading-none">Share Quizy</h2>
+              <h2 className="font-display text-2xl font-semibold leading-none">Share {APP.name}</h2>
               <p className="mt-1 text-sm text-muted">Your message is ready to send.</p>
             </div>
           </div>

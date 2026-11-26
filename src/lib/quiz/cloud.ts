@@ -3,6 +3,7 @@ import { createClient, type Session, type User } from "@supabase/supabase-js";
 import type { Age, BankQ, Difficulty } from "@/lib/quiz/logic";
 import { sourceFrom } from "@/lib/quiz/visitSource";
 import { useQuiz, type Round, type Screen, type WeeklyResult } from "@/lib/quiz/store";
+import { APP, APP_ID, IS_KINGS } from "@/lib/app";
 
 /** Publishable key already shipped in the existing Quizy client. Never put a service-role key here. */
 const PUBLIC_URL = "https://snxehcpichoskvdtuveh.supabase.co";
@@ -102,7 +103,8 @@ const RESUME = "__resume";
 const META = "__meta";
 
 export function profileKey(name: string) {
-  return (
+  // King's Bible Quest keeps its own progress, separate from Quizy, for the same account.
+  return (IS_KINGS ? "kings-" : "") + (
     String(name || "Explorer")
       .trim()
       .toLowerCase()
@@ -137,7 +139,7 @@ export function useQuizSession() {
 async function invoke(name: string, body: Record<string, unknown>) {
   const { data, error } = await supabase.functions.invoke(name, { body });
   if (error) {
-    let message = error.message || "Quizy cloud is unavailable";
+    let message = error.message || "Cloud is unavailable";
     const context = (error as { context?: Response }).context;
     if (context) {
       try {
@@ -158,7 +160,13 @@ async function invoke(name: string, body: Record<string, unknown>) {
 export async function loadFlags(): Promise<PublicFlags> {
   const { data, error } = await supabase.from("quizy_settings").select("key,value");
   if (error) throw error;
-  const map = new Map<string, unknown>((data ?? []).map((row) => [String(row.key), row.value]));
+  // King's Bible Quest reads its own switches, stored as "kings.<key>".
+  const prefix = IS_KINGS ? "kings." : "";
+  const map = new Map<string, unknown>(
+    (data ?? [])
+      .filter((row) => String(row.key).startsWith(prefix) && (prefix || !String(row.key).includes(".")))
+      .map((row) => [String(row.key).slice(prefix.length), row.value]),
+  );
   const text = (key: string) => (typeof map.get(key) === "string" ? String(map.get(key)) : "");
   const on = (key: string, fallback = true) => (map.has(key) ? map.get(key) !== false : fallback);
   return {
@@ -166,7 +174,7 @@ export async function loadFlags(): Promise<PublicFlags> {
     registrationsEnabled: on("registrations_enabled"),
     featureBattle: on("feature_battle"),
     featureDaily: on("feature_daily_challenge"),
-    featureAcademy: true,
+    featureAcademy: APP.academy,
     featureNews: on("feature_current_affairs"),
     featureSports: on("feature_sports"),
     announcement: text("announcement"),
@@ -357,10 +365,11 @@ export async function saveProfile(userId: string) {
   const row: Record<string, unknown> = {
     user_id: userId,
     profile_key: profileKey(name),
+    app: APP_ID,
     display_name: name,
     age_band: state.age === "old" ? "old" : "young",
     difficulty: state.difficulty === "advanced" ? "advanced" : state.difficulty,
-    avatar: "quizy",
+    avatar: APP_ID,
     total_stars: state.totalStars,
     land_stars: state.landStars,
     land_correct: state.landCorrect,
@@ -393,6 +402,7 @@ export async function logLandAttempt(userId: string, landId: string, correct: nu
   const difficulty = state.difficulty === "advanced" ? "difficult" : state.difficulty;
   const { error } = await supabase.from("quizy_attempts").insert({
     user_id: userId,
+    app: APP_ID,
     profile_id: null,
     land_id: landId,
     age_band: state.age,
@@ -404,6 +414,7 @@ export async function logLandAttempt(userId: string, landId: string, correct: nu
   if (error && state.difficulty === "advanced") {
     await supabase.from("quizy_attempts").insert({
       user_id: userId,
+      app: APP_ID,
       profile_id: null,
       land_id: landId,
       age_band: state.age,
@@ -416,7 +427,7 @@ export async function logLandAttempt(userId: string, landId: string, correct: nu
 }
 
 export async function recordActivity(userId: string, eventType: string, metadata: Record<string, unknown> = {}) {
-  await supabase.from("quizy_activity").insert({ user_id: userId, event_type: eventType, metadata });
+  await supabase.from("quizy_activity").insert({ user_id: userId, app: APP_ID, event_type: eventType, metadata });
 }
 
 export async function recordInstallation(userId: string) {
@@ -428,7 +439,7 @@ export async function recordInstallation(userId: string) {
   const agent = navigator.userAgent || "";
   const platform = /Android/i.test(agent) ? "android" : /iPhone|iPad/i.test(agent) ? "ios" : "web";
   await supabase.from("quizy_installations").upsert(
-    { user_id: userId, install_key: installKey, platform, last_seen_at: new Date().toISOString() },
+    { user_id: userId, app: APP_ID, install_key: installKey, platform, last_seen_at: new Date().toISOString() },
     { onConflict: "user_id,install_key" },
   );
 }
@@ -438,6 +449,7 @@ export async function listMessages(userId: string) {
     .from("quizy_messages")
     .select("id,subject,message,sender_name,created_at")
     .eq("recipient_user_id", userId)
+    .eq("app", APP_ID)
     .is("read_at", null)
     .order("created_at", { ascending: false })
     .limit(5);
@@ -501,7 +513,7 @@ export async function battleCall(action: string, extra: Record<string, unknown> 
 export async function commandCall<T>(action: string, extra: Record<string, unknown> = {}) {
   const { data: sessionData } = await supabase.auth.getSession();
   if (!sessionData.session) throw new Error("Sign in with the owner account.");
-  return (await invoke("quizy-command-center", { action, ...extra })) as T;
+  return (await invoke("quizy-command-center", { action, app: APP_ID, ...extra })) as T;
 }
 
 export type AdminList = {
@@ -587,6 +599,7 @@ export async function sendQuizyFeedback(input: { kind: "rating" | "problem" | "i
     p_context: input.context ?? null,
     p_comment: input.comment ?? null,
     p_name: input.name ?? null,
+    p_app: APP_ID,
   });
   if (error) throw new Error(/quizy_send_feedback|schema cache/i.test(error.message) ? "Feedback isn't switched on yet." : error.message);
 }
@@ -600,7 +613,7 @@ export type FeedbackReport = {
 };
 
 export async function loadFeedbackReport() {
-  const { data, error } = await supabase.rpc("quizy_admin_feedback");
+  const { data, error } = await supabase.rpc("quizy_admin_feedback", { p_app: APP_ID });
   if (error) throw new Error(error.message);
   return data as FeedbackReport;
 }
@@ -618,14 +631,14 @@ export function trackVisit() {
   } catch {
     return;
   }
-  void supabase.rpc("quizy_track_visit", { p_visitor: id, p_source: visitSource() }).then(
+  void supabase.rpc("quizy_track_visit", { p_visitor: id, p_source: visitSource(), p_app: APP_ID }).then(
     () => undefined,
     () => undefined,
   );
 }
 
 export async function loadTraffic() {
-  const { data, error } = await supabase.rpc("quizy_admin_traffic");
+  const { data, error } = await supabase.rpc("quizy_admin_traffic", { p_app: APP_ID });
   if (error) throw new Error(/quizy_admin_traffic|schema cache/i.test(error.message) ? "Visitor counts start once the latest database update is applied." : error.message);
   return data as Traffic;
 }
