@@ -1872,3 +1872,22 @@ textarea {
 .bounce-levels button { width: 2.4rem; height: 2.4rem; border: 1px solid var(--color-line); border-radius: 0.7rem; background: #fffdf8; font-weight: 900; }
 .bounce-levels button.is-active { border: 2px solid var(--color-gold); background: #fff1d4; }
 .bounce-levels button:disabled { opacity: 0.55; }
+
+/* Bouncy Ball 2 */
+.bounce-powers { display: inline-flex; align-items: center; gap: 0.15rem; font-size: 0.95rem; }
+.bounce-pad button.is-fire { width: 4.4rem; height: 4.4rem; border-radius: 999px; background: rgba(239, 106, 26, 0.85); color: #fff; }
+.bounce-worlds { display: grid; gap: 0.35rem; }
+.bounce-world { display: flex; flex-direction: column; align-items: center; gap: 0.15rem; }
+.bounce-world-name { font-size: 0.68rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-muted); }
+.bounce-world .bounce-levels button { width: 2.15rem; height: 2.15rem; }
+.bounce-levels button.is-boss { border: 2px solid #c2361f; background: #fff0eb; }
+.made-by { margin-top: 0.7rem; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.04em; color: var(--color-muted); }
+.made-by-pv { display: inline-grid; width: 1.5rem; height: 1.5rem; place-items: center; border-radius: 0.45rem; background: #2a2416; color: #ffd666; font-size: 0.62rem; font-weight: 900; letter-spacing: 0; }
+
+/* Sweet Swap boosters */
+.match-boosters { display: grid; flex: none; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem; width: 100%; max-width: 30rem; margin: 0 auto; }
+.match-boosters button { position: relative; display: flex; min-height: 2.9rem; align-items: center; justify-content: center; gap: 0.35rem; border: 1px solid var(--color-line); border-radius: 0.9rem; background: var(--color-surface); font-size: 0.8rem; font-weight: 800; box-shadow: 0 3px 0 rgba(196, 146, 48, 0.2); }
+.match-boosters button b { position: absolute; top: -0.4rem; right: -0.3rem; min-width: 1.3rem; border-radius: 999px; background: #e8413f; padding: 0 0.3rem; color: #fff; font-size: 0.72rem; line-height: 1.3rem; }
+.match-boosters button:disabled { opacity: 0.45; }
+.match-boosters button.is-on { border: 2px solid #e8413f; background: #fff0eb; }
+.match-hint { position: absolute; bottom: 0.4rem; left: 50%; transform: translateX(-50%); border-radius: 999px; background: rgba(42, 36, 22, 0.85); padding: 0.25rem 0.8rem; font-size: 0.85rem; font-weight: 800; color: #fff; pointer-events: none; white-space: nowrap; }

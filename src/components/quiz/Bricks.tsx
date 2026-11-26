@@ -22,7 +22,7 @@ import {
 import { sfx } from "@/lib/quiz/sfx";
 import { useQuiz } from "@/lib/quiz/store";
 import { GameStage } from "@/components/quiz/GameStage";
-import { LevelChoice, NoTickets, TicketCount, TicketHint, useTicket } from "@/components/quiz/FunGameKit";
+import { LevelChoice, MadeBy, NoTickets, TicketCount, TicketHint, useTicket } from "@/components/quiz/FunGameKit";
 
 const START: Record<ArcadeLevel, { level: number; ghost: boolean; blurb: string }> = {
   easy: { level: 1, ghost: true, blurb: "Slow bricks and a shadow that shows where they land" },
@@ -452,6 +452,7 @@ export function Bricks() {
                       <TicketHint />
                     </>
                   )}
+                  <MadeBy />
                 </>
               )}
             </div>

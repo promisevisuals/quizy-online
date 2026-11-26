@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { SIZE, collapse, ensureMove, findMove, findRuns, goalDone, levelFor, matchStep, newMatch, seededRng, trySwap, type Grid, type Match, type Piece } from "./match3.ts";
+import { SIZE, cheer, collapse, ensureMove, finaleStep, findMove, findRuns, goalDone, levelFor, matchStep, newMatch, seededRng, shuffleNow, smash, trySwap, type Grid, type Match, type Piece } from "./match3.ts";
 
 let id = 5000;
 function grid(rows: string[]): Grid {
@@ -126,5 +126,56 @@ describe("Sweet Swap", () => {
         assert.ok(m.grid.every((row) => row.every((p) => p !== null)));
       }
     }
+  });
+
+  it("jelly levels: popping a sweet on jelly clears it", () => {
+    const lv = levelFor(4);
+    assert.equal(lv.goal.kind, "jelly");
+    const m = newMatch(lv, seededRng(2));
+    assert.equal(m.jelly.flat().filter(Boolean).length, lv.jelly);
+    const before = m.jellyLeft;
+    const pos = (() => { for (let y = 0; y < SIZE; y++) for (let x = 0; x < SIZE; x++) if (m.jelly[y]![x]) return [x, y] as [number, number]; return [0, 0] as [number, number]; })();
+    smash(m, pos);
+    assert.equal(m.jellyLeft, before - 1);
+  });
+
+  it("the hammer smashes one sweet, and a striped one clears its row", () => {
+    const m = match(BG);
+    const step = smash(m, [3, 3]);
+    assert.equal(step!.cleared.length, 1);
+    m.grid = grid(BG);
+    m.grid[2]![4]!.special = "row";
+    const s2 = smash(m, [4, 2]);
+    assert.equal(s2!.cleared.length, SIZE);
+  });
+
+  it("the finale turns every move left into a blast", () => {
+    const m = newMatch(levelFor(2), seededRng(4));
+    m.movesLeft = 3;
+    const score = m.score;
+    let steps = 0;
+    while (finaleStep(m) && steps < 50) {
+      collapse(m);
+      while (matchStep(m)) collapse(m);
+      steps++;
+    }
+    assert.equal(m.movesLeft, 0);
+    assert.ok(m.score > score + 3 * 100);
+  });
+
+  it("shuffle keeps every sweet and leaves a move", () => {
+    const m = newMatch(levelFor(5), seededRng(8));
+    const count = m.grid.flat().filter((p) => p && p.color >= 0).length;
+    shuffleNow(m);
+    assert.equal(m.grid.flat().filter((p) => p && p.color >= 0).length, count);
+    assert.ok(findMove(m.grid));
+  });
+
+  it("cheers get bigger with bigger combos", () => {
+    assert.equal(cheer(1, 0), "");
+    assert.equal(cheer(3, 0), "Sweet!");
+    assert.equal(cheer(4, 0), "Tasty!");
+    assert.equal(cheer(5, 0), "Delicious!");
+    assert.equal(cheer(2, 3), "Divine!");
   });
 });
