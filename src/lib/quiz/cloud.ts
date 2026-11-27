@@ -63,7 +63,12 @@ export type BattleState = {
   my_submitted?: boolean;
   submitted_count?: number;
   player_count?: number;
-  results?: { player_id: string; correct: boolean }[];
+  results?: { player_id: string; correct: boolean; answer_index?: number }[];
+  /** What this game is (section, level, difficulty), chosen by either player. */
+  settings?: { landId?: string; landName?: string; age?: string; difficulty?: string; mode?: string; count?: number; by?: string };
+  game_no?: number;
+  /** The right answer, sent only once everyone has answered. */
+  answer?: number | null;
 };
 
 export type CommandUser = {
