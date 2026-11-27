@@ -3,7 +3,7 @@
  * Screens here: opening, welcome, home (journey, challenges, games, more), question, break, results, shop.
  * Rarer screens (weekly card, online battle, command center, the fun games) reuse the shared components.
  */
-import { useCallback, useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "@tanstack/react-router";
 import {
@@ -151,10 +151,11 @@ export function KingsApp() {
     });
   }, []);
 
-  useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const done = window.setTimeout(() => setGate(false), reduce ? 1800 : 3600);
-    return () => window.clearTimeout(done);
+  // The opening card waits until the reader taps "Tap to begin".
+  const [gateLeaving, setGateLeaving] = useState(false);
+  const enter = useCallback(() => {
+    setGateLeaving(true);
+    window.setTimeout(() => setGate(false), 450);
   }, []);
 
   useEffect(() => {
@@ -193,7 +194,7 @@ export function KingsApp() {
             </KqLegacy>
           )}
           {screen === "battle" && (
-            <KqLegacy title="Play online" back>
+            <KqLegacy title="Battle a friend" back>
               <BattleRoom />
             </KqLegacy>
           )}
@@ -212,7 +213,7 @@ export function KingsApp() {
         {!immersive && <KqFooter />}
       </div>
       {screen === "map" && <KqNav tab={tab} onTab={setTab} />}
-      {gate && <KqGate onEnter={() => setGate(false)} />}
+      {gate && <KqGate leaving={gateLeaving} onEnter={enter} />}
       {help && <HelpMap onClose={() => setHelp(false)} />}
     </main>
   );
@@ -232,9 +233,14 @@ function KqSky({ dim }: { dim?: boolean }) {
   );
 }
 
-function KqGate({ onEnter }: { onEnter: () => void }) {
+function KqGate({ onEnter, leaving }: { onEnter: () => void; leaving: boolean }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => (e.key === "Enter" || e.key === " ") && onEnter();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onEnter]);
   return (
-    <button type="button" className="kq-gate" onClick={onEnter} aria-label="Enter King's Bible Quest">
+    <button type="button" className={cx("kq-gate", leaving && "is-leaving")} onClick={onEnter} aria-label="Tap to begin King's Bible Quest">
       <span className="kq-gate-rays" aria-hidden />
       <img src="/art/kings/landscape.svg" alt="" className="kq-gate-land" aria-hidden />
       <span className="kq-gate-card">
@@ -920,8 +926,9 @@ function KqPlay() {
   const asking = round.mode === "battle" ? (round.phase === "p2" ? round.p2Name : round.p1Name) : null;
   const seed = round.index * 7 + round.correct * 3 + item.id.length;
 
+  const longQ = item.kind === "choice" && (item.q.length > 110 || item.opts.some((o) => o.length > 42));
   return (
-    <section className="kq-play">
+    <section className={cx("kq-play", round.revealed && "is-revealed", longQ && "is-long")}>
       <div className="kq-play-top">
         <button type="button" className="kq-round" onClick={() => park("map")} aria-label="Leave for now (your place is kept)">
           <X className="size-5" aria-hidden />
@@ -1042,6 +1049,10 @@ function KqChoice({
   const picked = round.picks[round.index];
   const show = round.mode === "battle" ? round.phase === "reveal" : round.revealed;
   const right = show && picked === item.a;
+  const feedbackRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (show) window.setTimeout(() => feedbackRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" }), 120);
+  }, [show, round.index]);
 
   return (
     <>
@@ -1071,7 +1082,7 @@ function KqChoice({
         })}
       </div>
       {show && round.mode !== "battle" && (
-        <div className={cx("kq-feedback", right ? "is-right" : "is-wrong")} role="status">
+        <div ref={feedbackRef} className={cx("kq-feedback", right ? "is-right" : "is-wrong")} role="status">
           <p className="kq-feedback-head">{right ? pickOf(PRAISE, seed) : pickOf(COMFORT, seed)}</p>
           {item.exp && (
             <p className="kq-feedback-verse">

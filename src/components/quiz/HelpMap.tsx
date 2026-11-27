@@ -104,7 +104,7 @@ function Destination({ id, onBack }: { id: Exclude<Pin, "home">; onBack: () => v
         <>
           <h3 className="font-display text-2xl font-semibold text-fg">What's new</h3>
           <p>Accounts save the trail across devices. Online battle rooms use a short code. The owner’s Command Center lives inside the signed-in account. Advanced modes are back. An unfinished question reopens after a refresh.</p>
-          <p>Bluetooth battle still belongs to the Quizy Android app, which can host or join a nearby phone. In the browser, use an online room.</p>
+          <p>Battles: choose Play online (any phone with internet) or Bluetooth (two phones with the Quizy Android app, side by side). Either player can choose the section, level and difficulty, and you see who won each question.</p>
         </>
       )}
       {id === "terms" && (
