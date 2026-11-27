@@ -4,6 +4,7 @@
  * Rarer screens (weekly card, online battle, command center, the fun games) reuse the shared components.
  */
 import { useCallback, useEffect, useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
@@ -15,11 +16,13 @@ import {
   Gamepad2,
   Heart,
   Lightbulb,
+  Lock,
   Medal,
   Shield,
   ShoppingBag,
   Sparkles,
   Swords,
+  Ticket,
   Trophy,
   Users,
   Volume2,
@@ -42,7 +45,8 @@ import { Whot } from "@/components/quiz/Whot";
 import { Match3 } from "@/components/quiz/Match3";
 import { Bounce } from "@/components/quiz/Bounce";
 import { QuickFeedback } from "@/components/quiz/QuickFeedback";
-import { Certificate, Duel, FunGames, Inbox, InstallButton } from "@/components/quiz/QuizApp";
+import { Certificate, Duel, Inbox, InstallButton } from "@/components/quiz/QuizApp";
+import { FUN_GAMES, gameAccess, passMark, passedLands } from "@/lib/quiz/unlocks";
 import { WHATSAPP_LINK } from "@/lib/quiz/contact";
 import { APP } from "@/lib/app";
 
@@ -447,14 +451,7 @@ function KqHome({ tab, flags, onTab }: { tab: HomeTab; flags: PublicFlags; onTab
     <div className="kq-home">
       {tab === "journey" && <KqJourney />}
       {tab === "challenge" && <KqChallenges flags={flags} />}
-      {tab === "games" && (
-        <section className="kq-panel">
-          <KqPageTitle eyebrow="Earned by learning" title="Game Courtyard" />
-          <div className="kq-legacy-body">
-            <FunGames />
-          </div>
-        </section>
-      )}
+      {tab === "games" && <KqGames />}
       {tab === "more" && <KqMore onTab={onTab} />}
     </div>
   );
@@ -628,7 +625,8 @@ function KqSectionSheet({ land, onClose }: { land: Land; onClose: () => void }) 
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  return (
+  if (typeof document === "undefined") return null;
+  return createPortal(
     <div className="kq-sheet-wrap" role="dialog" aria-modal="true" aria-label={land.name} onClick={onClose}>
       <div className="kq-sheet" onClick={(e) => e.stopPropagation()}>
         <button type="button" className="kq-sheet-close" onClick={onClose} aria-label="Close">
@@ -659,7 +657,8 @@ function KqSectionSheet({ land, onClose }: { land: Land; onClose: () => void }) 
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.querySelector("main.kq") ?? document.body,
   );
 }
 
@@ -760,6 +759,78 @@ function KqMore({ onTab }: { onTab: (t: HomeTab) => void }) {
       </div>
       <InstallButton />
       <Inbox />
+    </section>
+  );
+}
+
+const GAME_ART_BG: Record<string, string> = { bricks: "is-night", whot: "is-sea", match: "is-dawn", bounce: "is-olive" };
+
+function KqGames() {
+  const go = useQuiz((s) => s.go);
+  const landCorrect = useQuiz((s) => s.landCorrect);
+  const tickets = useQuiz((s) => s.tickets);
+  const owner = useQuiz((s) => s.role === "owner");
+  const best = useQuiz((s) => s.arcadeBest);
+  const passed = passedLands(landCorrect, lands);
+  const [note, setNote] = useState("");
+  const bestText: Record<string, string> = {
+    bricks: best.bricks ? `Best: ${best.bricks} lines` : "New game",
+    whot: best["whot-wins"] ? `Won ${best["whot-wins"]}` : "New game",
+    match: best.match ? `Best: level ${best.match}` : "New game",
+    bounce: best.bounce ? `Reached level ${best.bounce}` : "New game",
+  };
+  return (
+    <section className="kq-panel">
+      <div className="kq-games-head">
+        <KqPageTitle eyebrow="Earned by learning" title="Game Courtyard" />
+        <span className="kq-tickets" aria-label={owner ? "Owner: free play" : `${tickets} game tickets`}>
+          <Ticket className="size-5" aria-hidden />
+          <b>{owner ? "Free" : tickets}</b>
+          <small>{owner ? "owner" : tickets === 1 ? "ticket" : "tickets"}</small>
+        </span>
+      </div>
+      <p className="kq-sub">
+        Score {passMark(10)}/10 or more in a section to win 3 tickets. Every new section you pass opens another game.
+      </p>
+      <div className="kq-games">
+        {FUN_GAMES.map((game, i) => {
+          const access = gameAccess(game, passed, tickets, owner);
+          const locked = !access.open && access.reason === "locked";
+          return (
+            <button
+              key={game.id}
+              type="button"
+              className={cx("kq-game-card", GAME_ART_BG[game.id], locked && "is-locked")}
+              style={{ animationDelay: `${i * 60}ms` }}
+              onClick={() => {
+                if (access.open) go(game.id);
+                else if (access.reason === "locked")
+                  setNote(`${game.name} opens when you pass ${game.needLands} ${game.needLands === 1 ? "section" : "sections"} with ${passMark(10)}/10 or more. You have passed ${passed}.`);
+                else setNote("No tickets left. Play a section and score 7/10 or more to win 3 more.");
+              }}
+            >
+              <span className="kq-game-art">
+                <img src={game.art} alt="" />
+                {locked && (
+                  <span className="kq-game-lock">
+                    <Lock className="size-6" aria-hidden />
+                    <small>
+                      {passed}/{game.needLands}
+                    </small>
+                  </span>
+                )}
+              </span>
+              <b>{game.name}</b>
+              <small>{locked ? `Pass ${game.needLands} ${game.needLands === 1 ? "section" : "sections"}` : bestText[game.id]}</small>
+            </button>
+          );
+        })}
+      </div>
+      {note && (
+        <p className="kq-scroll kq-done-note" role="status">
+          {note}
+        </p>
+      )}
     </section>
   );
 }

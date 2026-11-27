@@ -2257,3 +2257,24 @@ html[data-app="kings"] body {
 .kq-gate-verse em { display: block; margin-top: 0.2rem; font-style: normal; font-size: 0.85rem; color: var(--kq-gold-2); }
 .kq-gate-tap { margin-top: 0.4rem; border-radius: 999px; padding: 0.4rem 1.2rem; background: rgba(255, 255, 255, 0.2); color: #fff; font-weight: 500; box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.5); animation: kq-sun 1.6s ease-in-out infinite; }
 .kq-gate-credit { position: absolute; bottom: calc(0.8rem + env(safe-area-inset-bottom)); left: 0; right: 0; text-align: center; font-size: 0.78rem; color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); }
+.kq-games-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.6rem; }
+.kq-tickets { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; min-width: 4.4rem; border-radius: 1rem; padding: 0.45rem 0.6rem; background: linear-gradient(180deg, #ffe08a, #f2b322); color: #3a2400; box-shadow: 0 4px 0 #c8860f; }
+.kq-tickets b { font-family: var(--font-display); font-size: 1.4rem; line-height: 1; }
+.kq-tickets small { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.kq-games { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1rem; }
+.kq-game-card { display: flex; flex-direction: column; align-items: center; gap: 0.15rem; border-radius: 1.3rem; padding: 0.6rem 0.6rem 0.8rem; text-align: center; color: #fff; animation: kq-rise 0.45s both; box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2), 0 12px 20px rgba(43, 34, 80, 0.2); }
+.kq-game-card:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2); }
+.kq-game-card.is-night { background: linear-gradient(160deg, #4b3fb0, #2b2270); }
+.kq-game-card.is-sea { background: linear-gradient(160deg, #3fb0e0, #1f6fb0); }
+.kq-game-card.is-dawn { background: linear-gradient(160deg, #ff9fb3, #e0507a); }
+.kq-game-card.is-olive { background: linear-gradient(160deg, #8cc65a, #3f7d2f); }
+.kq-game-art { position: relative; display: block; width: 100%; border-radius: 1rem; background: rgba(255, 255, 255, 0.16); padding: 0.4rem; }
+.kq-game-art img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+.kq-game-lock { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.2rem; border-radius: 1rem; background: rgba(20, 14, 50, 0.55); color: #ffe08a; }
+.kq-game-lock small { font-weight: 600; color: #fff; }
+.kq-game-card b { margin-top: 0.35rem; font-family: var(--font-display); font-weight: 800; font-size: 1.05rem; }
+.kq-game-card small { font-size: 0.82rem; opacity: 0.9; }
+.kq-game-card.is-locked .kq-game-art img { filter: grayscale(0.6); }
+.kq-duel button, .kq-duel input { border-radius: 999px !important; }
+.kq-duel button[type="submit"] { background: var(--kq-royal); color: #fff; }
+.kq-duel form { border: 0; padding: 0.4rem 0 0; background: transparent; }
