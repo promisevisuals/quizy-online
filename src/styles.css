@@ -2388,6 +2388,15 @@ html[data-app="kings"] body {
   .kq-answer { min-height: 3.2rem; }
   .kq-gem { width: 2.3rem; height: 2.3rem; }
 }
+@media (max-height: 600px) {
+  .kq-stage { display: none; }
+  .kq-pebbles { margin-top: 0.3rem; }
+  .kq-question { margin-top: 0.6rem; padding: 0.7rem 0.85rem; }
+  .kq-question h2 { font-size: 1.02rem; line-height: 1.3; }
+  .kq-answers { gap: 0.4rem; margin-top: 0.6rem; }
+  .kq-answer { min-height: 2.8rem; font-size: 0.95rem; }
+  .kq-gem { width: 2rem; height: 2rem; }
+}
 @media (max-width: 360px) {
   .kq-answer { font-size: 1rem; padding-right: 0.8rem; }
   .kq-gem { width: 2.2rem; height: 2.2rem; }
