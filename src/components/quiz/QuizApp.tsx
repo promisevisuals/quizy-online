@@ -305,7 +305,7 @@ function TopBar({ onHelp }: { onHelp: () => void }) {
   );
 }
 
-function AccountChip() {
+export function AccountChip() {
   const { user, pending } = useQuizSession();
   const [busy, setBusy] = useState(false);
   if (pending) return null;
@@ -367,7 +367,7 @@ function ResumeCard() {
   );
 }
 
-function Inbox() {
+export function Inbox() {
   const { user } = useQuizSession();
   const [rows, setRows] = useState<QuizMessage[]>([]);
   useEffect(() => {
@@ -403,7 +403,7 @@ function Inbox() {
   );
 }
 
-function InstallButton() {
+export function InstallButton() {
   const [prompt, setPrompt] = useState<(Event & { prompt: () => Promise<void> }) | null>(null);
   useEffect(() => {
     const onPrompt = (event: Event) => {
@@ -848,7 +848,7 @@ function GameCorner() {
 }
 
 /** Brick Drop, WHOT, Sweet Swap and Bouncy Ball: unlocked by passing lands, played with tickets. */
-function FunGames() {
+export function FunGames() {
   const go = useQuiz((s) => s.go);
   const landCorrect = useQuiz((s) => s.landCorrect);
   const tickets = useQuiz((s) => s.tickets);
@@ -949,7 +949,7 @@ function WeeklyBanner() {
   );
 }
 
-function Duel() {
+export function Duel() {
   const startBattle = useQuiz((s) => s.startBattle);
   const [open, setOpen] = useState(false);
   const [p1, setP1] = useState("");
@@ -1410,7 +1410,7 @@ function Break() {
   );
 }
 
-function Badges() {
+export function Badges() {
   const earned = useQuiz((s) => s.badges);
   const best = useQuiz((s) => s.bestStreak);
   return (
@@ -1435,7 +1435,7 @@ function Badges() {
   );
 }
 
-function Daily() {
+export function Daily() {
   const dailyDone = useQuiz((s) => s.dailyDone);
   const dailyDate = useQuiz((s) => s.dailyDate);
   const dailyScore = useQuiz((s) => s.dailyScore);
@@ -1468,7 +1468,7 @@ function Daily() {
   );
 }
 
-function Board() {
+export function Board() {
   const board = useQuiz((s) => s.board);
   return (
     <section className="mx-auto max-w-xl">
@@ -1550,7 +1550,7 @@ function Summary() {
   );
 }
 
-function Certificate() {
+export function Certificate() {
   const name = useQuiz((s) => s.name);
   const totalStars = useQuiz((s) => s.totalStars);
   const coins = useQuiz((s) => s.coins);

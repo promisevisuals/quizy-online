@@ -21,7 +21,7 @@ export const Route = createRootRoute({
       { rel: "icon", type: "image/png", sizes: "192x192", href: APP.icon192 },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Nunito:wght@500;700;800&display=swap",
+        href: APP.fontsHref,
       },
     ],
   }),

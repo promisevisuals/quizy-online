@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-<defs><radialGradient id="b" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffffff" stop-opacity=".45"/><stop offset=".5" stop-color="#4e342e"/><stop offset="1" stop-color="#2a0b4d"/></radialGradient></defs>
-<rect width="200" height="200" fill="url(#b)"/>
-<circle cx="100" cy="100" r="74" fill="none" stroke="#f4bf3a" stroke-width="6" opacity=".9"/>
-<text x="100" y="128" text-anchor="middle" font-size="82">📖</text>
-</svg>
