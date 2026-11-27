@@ -43,6 +43,7 @@ type AppConfig = {
   jungle: boolean;
   shareText: string;
   siteUrl: string;
+  fontsHref: string;
   shareMessages: string[];
 };
 
@@ -86,6 +87,7 @@ const CONFIGS: Record<AppId, AppConfig> = {
     jungle: true,
     shareText: "Quizy – a free learning adventure for kids",
     siteUrl: "https://quizy.promisevisuals.com",
+    fontsHref: "https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Nunito:wght@500;700;800&display=swap",
     shareMessages: [],
   },
   kings: {
@@ -95,7 +97,7 @@ const CONFIGS: Record<AppId, AppConfig> = {
     mark: "/kings-mark.png",
     icon180: "/icons/kings-180.png",
     icon192: "/icons/kings-192.png",
-    themeColor: "#4a1c8a",
+    themeColor: "#5aa7de",
     gateLine: "Thy word is a lamp",
     gateNote: "Opening the Book… tap to enter",
     playerLabel: "Your name",
@@ -103,7 +105,7 @@ const CONFIGS: Record<AppId, AppConfig> = {
     trailTitle: "The quest",
     landWord: "section",
     landsWord: "sections",
-    banner: "/art/kings/banner.svg",
+    banner: "/art/kings/landscape.svg",
     ages: { young: "Kids", old: "Grown-ups", youngNote: "Bible stories for children.", oldNote: "Deeper questions for teens and adults." },
     blurbs: bibleBlurbs as Record<string, string>,
     learningGames: false,
@@ -111,6 +113,7 @@ const CONFIGS: Record<AppId, AppConfig> = {
     jungle: false,
     shareText: "King's Bible Quest – free Bible trivia for kids and grown-ups",
     siteUrl: "https://kings.promisevisuals.com",
+    fontsHref: "https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Fredoka:wght@400;500;600;700&display=swap",
     shareMessages: [
       "👑📖 Come play King's Bible Quest with me! Free Bible trivia for kids and grown-ups: 16 sections from Creation to Revelation, memory verses, “Who said it?” and more. No ads. 🙌",
       "✨ How well do you know your Bible? King's Bible Quest has Old and New Testament questions with the verse after every answer. Kids and grown-ups each get their own questions. Come and beat my score! 🏆",
@@ -122,6 +125,6 @@ const CONFIGS: Record<AppId, AppConfig> = {
 export const APP: AppConfig = CONFIGS[APP_ID];
 
 export function landArtFor(id: string) {
-  if (IS_KINGS) return `/art/kings/${id}.svg`;
+  if (IS_KINGS) return `/art/kings/scenes/${id}.svg`;
   return id === "body" ? "/art/lands/body.svg" : `/art/lands/${id}.jpg`;
 }
