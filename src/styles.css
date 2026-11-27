@@ -2278,3 +2278,4 @@ html[data-app="kings"] body {
 .kq-duel button, .kq-duel input { border-radius: 999px !important; }
 .kq-duel button[type="submit"] { background: var(--kq-royal); color: #fff; }
 .kq-duel form { border: 0; padding: 0.4rem 0 0; background: transparent; }
+.kq-row, a.kq-row { text-decoration: none; color: var(--kq-ink); }
